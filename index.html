@@ -1206,7 +1206,11 @@ async function launchQuiz(){
     const j = await r.json();
     if(j.error) throw new Error(j.error.message || 'Erreur API');
     // Groq retourne format OpenAI
-    const raw = (j.choices?.[0]?.message?.content || j.content?.map?.(b=>b.text||'')?.join?.('')||'').replace(/```json|```/g, '').trim();
+    const rawText = (j.choices?.[0]?.message?.content || j.content?.map?.(b=>b.text||'')?.join?.('')||'');
+    // Extrait uniquement le bloc JSON même si Groq ajoute du texte autour
+    const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+    if(!jsonMatch) throw new Error('Pas de JSON dans la réponse');
+    const raw = jsonMatch[0].trim();
     ai = JSON.parse(raw);
     if(!ai.films || !Array.isArray(ai.films)) throw new Error('JSON invalide');
   } catch(e) {
