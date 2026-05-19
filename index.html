@@ -1177,9 +1177,7 @@ function buildPlatforms(data, movieTitle){
   const jwSlug = (movieTitle||'').toLowerCase()
     .normalize('NFD').replace(/[̀-ͯ]/g,'')
     .replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
-  const jwUrl  = 'https://www.justwatch.com/fr/recherche?q=' + encodeURIComponent(movieTitle||'');
-
-  el.innerHTML = '';
+  const jwUrl = 'https://www.justwatch.com/fr/film/' + jwSlug;
   platforms.slice(0,6).forEach((p, i) => {
     const isTop = i === 0 && p.typeFr === 'Streaming inclus';
     const logo  = p.logo_path
@@ -1214,7 +1212,7 @@ function buildPlatforms(data, movieTitle){
   const jwDiv = document.createElement('div');
   jwDiv.className = 'platform';
   jwDiv.style.cssText = 'border-color:rgba(255,163,0,.4);background:#fffbf0';
-  jwDiv.innerHTML = '<span style="font-size:14px">🎬</span><span>Voir sur JustWatch</span><span style="font-size:10px;color:var(--text3);margin-left:4px">Toutes les options</span><span style="font-size:12px;margin-left:auto">↗</span>';
+  jwDiv.innerHTML = '<span style="font-size:14px">🎬</span><span>Fiche complète JustWatch</span><span style="font-size:10px;color:var(--text3);margin-left:4px">Tous les liens directs</span><span style="font-size:12px;margin-left:auto">↗</span>';
   jwBtn.appendChild(jwDiv);
   el.appendChild(jwBtn);
 }
