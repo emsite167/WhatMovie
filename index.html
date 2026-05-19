@@ -842,7 +842,7 @@ async function openModal(id,media='movie'){
 
     document.getElementById('msynopsis').textContent=det.overview||'Aucun synopsis disponible.';
     document.getElementById('mgenres').innerHTML=(det.genres||[]).map(g=>`<span class="gtag">${g.name}</span>`).join('');
-    buildPlatforms(provRaw);
+    buildPlatforms(provRaw, title);
 
     const dirs=(creds.crew||[]).filter(c=>c.job==='Director').slice(0,3);
     const prods=(creds.crew||[]).filter(c=>['Producer','Executive Producer'].includes(c.job)).slice(0,2);
@@ -870,21 +870,69 @@ async function openModal(id,media='movie'){
   }catch(e){ document.getElementById('msynopsis').textContent='Erreur : '+e.message; }
 }
 
-function buildPlatforms(data){
+/* URLs directes des plateformes */
+const PLATFORM_URLS = {
+  'Netflix':                'https://www.netflix.com/search?q=',
+  'Canal+':                 'https://www.canalplus.com/recherche/?q=',
+  'Canal Plus':             'https://www.canalplus.com/recherche/?q=',
+  'Amazon Prime Video':     'https://www.amazon.fr/s?k=',
+  'Prime Video':            'https://www.amazon.fr/s?k=',
+  'Disney Plus':            'https://www.disneyplus.com/search/',
+  'Disney+':                'https://www.disneyplus.com/search/',
+  'Apple TV Plus':          'https://tv.apple.com/search?term=',
+  'Apple TV+':              'https://tv.apple.com/search?term=',
+  'Max':                    'https://www.max.com/search?q=',
+  'HBO Max':                'https://www.max.com/search?q=',
+  'Paramount Plus':         'https://www.paramountplus.com/search/',
+  'Paramount+':             'https://www.paramountplus.com/search/',
+  'Crunchyroll':            'https://www.crunchyroll.com/search?q=',
+  'Mubi':                   'https://mubi.com/search?q=',
+  'Shadowz':                'https://www.shadowz.fr/recherche?q=',
+  'Salto':                  'https://www.salto.fr/recherche?q=',
+  'OCS':                    'https://www.ocs.fr/recherche?q=',
+  'Arte':                   'https://www.arte.tv/fr/search/?q=',
+  'France TV':              'https://www.france.tv/recherche?q=',
+  'Mycanal':                'https://www.canalplus.com/recherche/?q=',
+};
+
+function getPlatformUrl(name, title) {
+  const clean = title || '';
+  for(const [key, url] of Object.entries(PLATFORM_URLS)) {
+    if(name.toLowerCase().includes(key.toLowerCase()) || key.toLowerCase().includes(name.toLowerCase().split(' ')[0])) {
+      return url + encodeURIComponent(clean);
+    }
+  }
+  // Fallback : recherche Google
+  return 'https://www.google.com/search?q=' + encodeURIComponent(name + ' ' + clean + ' streaming');
+}
+
+function buildPlatforms(data, movieTitle){
   const el=document.getElementById('mplatforms'), lbl=document.getElementById('plat-label');
   if(!data||!data.results){ el.innerHTML='<span style="font-size:13px;color:var(--text3)">Non disponible</span>'; return; }
   const region=data.results['FR']||data.results['BE']||data.results['US']||Object.values(data.results)[0];
   if(!region){ el.innerHTML='<span style="font-size:13px;color:var(--text3)">Non référencé</span>'; return; }
   const platforms=[];
-  if(region.flatrate) region.flatrate.forEach(p=>{ if(!platforms.find(x=>x.provider_id===p.provider_id)) platforms.push({...p,typeFr:'Streaming'}); });
-  if(!platforms.length&&region.rent) region.rent.slice(0,2).forEach(p=>platforms.push({...p,typeFr:'Location'}));
-  if(!platforms.length&&region.buy)  region.buy.slice(0,2).forEach(p=>platforms.push({...p,typeFr:'Achat'}));
-  if(!platforms.length){ el.innerHTML='<span style="font-size:13px;color:var(--text3)">Non disponible en streaming</span>'; return; }
-  lbl.textContent=data.results['FR']?'Disponible en France :':'Disponible (international) :';
-  el.innerHTML=platforms.slice(0,5).map((p,i)=>{
-    const isB=i===0;
+  if(region.flatrate) region.flatrate.forEach(p=>{ if(!platforms.find(x=>x.provider_id===p.provider_id)) platforms.push({...p,typeFr:'Streaming inclus'}); });
+  if(region.rent) region.rent.forEach(p=>{ if(!platforms.find(x=>x.provider_id===p.provider_id)) platforms.push({...p,typeFr:'Location'}); });
+  if(region.buy)  region.buy.forEach(p=>{ if(!platforms.find(x=>x.provider_id===p.provider_id)) platforms.push({...p,typeFr:'Achat'}); });
+  if(!platforms.length){ el.innerHTML='<span style="font-size:13px;color:var(--text3)">Non disponible en streaming actuellement</span>'; return; }
+  lbl.textContent=data.results['FR']?'Disponible en France — cliquer pour accéder :':'Disponible (international) — cliquer pour accéder :';
+  const streaming=platforms.filter(p=>p.typeFr==='Streaming inclus');
+  const others=platforms.filter(p=>p.typeFr!=='Streaming inclus');
+  const sorted=[...streaming,...others].slice(0,6);
+  el.innerHTML=sorted.map((p,i)=>{
+    const isB=p.typeFr==='Streaming inclus'&&i===0;
     const logo=p.logo_path?`<img class="pico" src="${LOGO}${p.logo_path}" alt="">`:'';
-    return `<div class="platform${isB?' best':''}">${logo}<span>${esc(p.provider_name)}</span><span style="font-size:10px;color:var(--text3);margin-left:3px">${p.typeFr}</span>${isB?`<span class="best-badge">⭐ Recommandé</span>`:''}</div>`;
+    const url=getPlatformUrl(p.provider_name, movieTitle||'');
+    return `<a href="${url}" target="_blank" rel="noopener" style="text-decoration:none">
+      <div class="platform${isB?' best':''}" style="cursor:pointer;transition:transform .15s" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+        ${logo}
+        <span>${esc(p.provider_name)}</span>
+        <span style="font-size:10px;color:var(--text3);margin-left:3px">${p.typeFr}</span>
+        ${isB?`<span class="best-badge">⭐ Recommandé</span>`:''}
+        <span style="font-size:11px;margin-left:auto;color:var(--text3)">↗</span>
+      </div>
+    </a>`;
   }).join('');
 }
 
@@ -1079,6 +1127,25 @@ function nextStep(){
   if(step<QS.length-1){step++;renderStep();}else launchQuiz();
 }
 
+function selectQuizRef(id, title, poster, media){
+  ans['lastfilm'] = title;
+  const inp = document.getElementById('quiz-ref-input');
+  const drop = document.getElementById('quiz-ref-drop');
+  const preview = document.getElementById('quiz-ref-preview');
+  if(inp){ inp.value = title; inp.style.borderRadius=''; inp.style.borderBottomColor=''; }
+  if(drop){ drop.style.display='none'; }
+  if(preview){
+    const ph = poster
+      ? '<img style="width:46px;height:68px;border-radius:6px;object-fit:cover;flex-shrink:0;border:1px solid var(--border)" src="'+IMG+poster+'">'
+      : '<div style="width:46px;height:68px;border-radius:6px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0">🎬</div>';
+    preview.innerHTML = ph
+      + '<div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--text)">'+esc(title)+'</div>'
+      + '<div style="font-size:12px;color:var(--green);margin-top:4px">✓ Sélectionné comme film de référence</div>'
+      + '<div style="font-size:11px;color:var(--text3);margin-top:2px">L\'IA va s\'en inspirer pour ses recommandations</div></div>';
+    preview.style.display='flex';
+  }
+}
+
 async function launchQuiz(){
   document.getElementById('qform').style.display='none';
   document.getElementById('qload').style.display='block';
@@ -1103,7 +1170,7 @@ async function launchQuiz(){
 
   let ai;
   try{
-    const r = await fetch('https://api.anthropic.com/v1/messages', {
+    const r = await fetch('/api/ai', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1400, messages: [{ role: 'user', content: prompt }] })
