@@ -875,7 +875,10 @@ function makeCard(f){
   bL.onclick = e => { e.stopPropagation(); if(inWL(fData.id)){remWL(fData.id);bL.classList.remove('on');bL.textContent='❤️ À voir plus tard';}else{addWL(fData);bL.classList.add('on');bL.textContent='❤️ En liste';} };
   bS.onclick = e => { e.stopPropagation(); addSL(fData); bS.classList.add('on'); bS.textContent='✅ Vu !'; };
   actDiv.appendChild(bL); actDiv.appendChild(bS);
-  card.querySelector('.fbody').appendChild(actDiv);
+  const fbodyEl = card.querySelector('.fbody');
+  console.log('makeCard fbody found:', !!fbodyEl, 'for:', title);
+  if(fbodyEl) fbodyEl.appendChild(actDiv);
+  else card.appendChild(actDiv); // fallback: ajoute directement sur la carte
   return card;
 }
 
