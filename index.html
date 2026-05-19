@@ -15,11 +15,9 @@
   --gold:#d4860a;--gbg:rgba(212,134,10,.1);
   --green:#2a7a4e;--shadow:rgba(100,60,20,.09);
   --blue:#2a5fa5;--bbg:rgba(42,95,165,.08);
-  --purple:#7c3aed;--pbg:rgba(124,58,237,.08);
 }
 html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:16px;line-height:1.6}
 
-/* ── HEADER ── */
 header{position:sticky;top:0;z-index:200;background:rgba(250,247,242,.97);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:2rem;height:62px;box-shadow:0 1px 14px var(--shadow)}
 .logo{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--text);letter-spacing:-.5px;flex-shrink:0;cursor:pointer}
 .logo em{font-style:italic;color:var(--accent)}
@@ -28,7 +26,6 @@ nav{display:flex;gap:4px;margin-left:auto}
 .tab:hover{color:var(--text2);background:var(--bg2)}
 .tab.active{color:var(--accent);background:var(--abg)}
 
-/* ── SETUP ── */
 #setup-banner{background:#fff8f0;border-bottom:1px solid rgba(212,134,10,.25);padding:1rem 2rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
 .setup-text{font-size:13px;color:var(--text2);flex:1;min-width:200px}
 .setup-text strong{color:var(--gold)}
@@ -39,16 +36,12 @@ nav{display:flex;gap:4px;margin-left:auto}
 .btn-save{background:var(--gold);color:#fff;font-family:inherit;font-size:13px;font-weight:500;border:none;border-radius:8px;padding:8px 16px;cursor:pointer}
 .key-ok{font-size:12px;color:var(--green);font-weight:500;display:none}
 
-/* ── MAIN ── */
 main{max-width:880px;margin:0 auto;padding:2.5rem 2rem 5rem}
 .page{display:none}.page.active{display:block}
 h1.ptitle{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--text);margin-bottom:.3rem}
 .psub{font-size:14px;color:var(--text3);margin-bottom:2rem}
 
-/* ── BARRE UNIVERSELLE ── */
-.search-hero{margin-bottom:2rem}
-.search-hero-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--text);margin-bottom:.8rem}
-
+/* BARRE */
 .sbar{display:flex;gap:10px;margin-bottom:.8rem}
 .swrap{flex:1;position:relative}
 .swrap svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text3);pointer-events:none}
@@ -64,21 +57,15 @@ h1.ptitle{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;co
 .search-tag{font-size:12px;padding:4px 12px;border-radius:20px;border:1px solid var(--border);background:var(--bg2);color:var(--text3)}
 .shint{font-size:12px;color:var(--text3);margin-bottom:1.5rem}
 
-/* ── DROPDOWN UNIVERSEL ── */
-.sdrop{position:absolute;top:100%;left:0;right:0;z-index:400;background:#fff;border:1.5px solid var(--accent);border-top:none;border-radius:0 0 12px 12px;box-shadow:0 10px 32px rgba(100,60,20,.16);max-height:400px;overflow-y:auto;display:none}
+/* DROPDOWN */
+.sdrop{position:absolute;top:100%;left:0;right:0;z-index:400;background:#fff;border:1.5px solid var(--accent);border-top:none;border-radius:0 0 12px 12px;box-shadow:0 10px 32px rgba(100,60,20,.16);max-height:420px;overflow-y:auto;display:none}
 .sdrop.open{display:block}
-
-.drop-section{padding:6px 0}
-.drop-section-label{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);padding:6px 14px 4px;display:flex;align-items:center;gap:6px}
-.drop-section-label::after{content:'';flex:1;height:1px;background:var(--border)}
-
+.drop-sec{padding:4px 0}
+.drop-lbl{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);padding:6px 14px 4px;display:flex;align-items:center;gap:8px}
+.drop-lbl::after{content:'';flex:1;height:1px;background:var(--border)}
 .sitem{display:flex;align-items:center;gap:12px;padding:9px 14px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .1s}
 .sitem:last-child{border-bottom:none}
 .sitem:hover,.sitem.on{background:var(--abg)}
-.sitem-type{font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;flex-shrink:0}
-.sitem-type.movie{background:var(--abg);color:var(--accent)}
-.sitem-type.tv{background:rgba(42,122,78,.1);color:var(--green)}
-.sitem-type.person{background:var(--bbg);color:var(--blue)}
 .sposter{width:34px;height:50px;border-radius:5px;object-fit:cover;background:var(--bg3);flex-shrink:0;border:1px solid var(--border)}
 .sposter-ph{width:34px;height:50px;border-radius:5px;background:var(--bg3);border:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.85rem;color:var(--text3)}
 .sname{flex:1;min-width:0}
@@ -87,7 +74,7 @@ h1.ptitle{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;co
 .sname-s{font-size:11px;color:var(--text3);margin-top:1px}
 .sscore{font-size:11px;color:var(--text3);flex-shrink:0}
 
-/* ── LOADER ── */
+/* LOADER */
 .loader{display:none;text-align:center;padding:4rem 0}
 .reel{display:flex;justify-content:center;gap:5px;margin-bottom:1.5rem}
 .rh{width:20px;height:28px;border:1.5px solid var(--border2);border-radius:3px;background:var(--bg2);animation:blink 1.4s ease-in-out infinite}
@@ -96,29 +83,39 @@ h1.ptitle{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;co
 @keyframes blink{0%,100%{opacity:.3}50%{opacity:1;border-color:var(--accent);background:var(--abg)}}
 .loader-txt{font-size:14px;color:var(--text3)}
 
-/* ── RÉSULTATS ── */
+/* RÉSULTATS */
 .rres{display:none}
 .rmeta{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem}
 .rlabel{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--text3)}
 .rclear{font-size:12px;color:var(--text3);background:none;border:none;cursor:pointer;font-family:inherit}
 .rclear:hover{color:var(--accent)}
 
-/* ── FICHE ACTEUR ── */
+/* FICHE PERSONNE */
 .actor-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:1.5rem;box-shadow:0 2px 12px var(--shadow);animation:fup .35s ease both}
-.actor-top{display:flex;gap:20px;align-items:flex-start;margin-bottom:1.4rem}
+.actor-top{display:flex;gap:20px;align-items:flex-start;margin-bottom:1.2rem}
 .actor-photo{width:110px;height:110px;border-radius:50%;object-fit:cover;flex-shrink:0;border:3px solid var(--bg2);box-shadow:0 4px 16px var(--shadow)}
 .actor-photo-ph{width:110px;height:110px;border-radius:50%;background:var(--bg3);border:3px solid var(--bg2);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:2.5rem;color:var(--text3)}
 .actor-name{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--text);margin-bottom:5px}
-.actor-badge{display:inline-block;font-size:12px;font-weight:500;padding:3px 12px;border-radius:20px;border:1px solid var(--accent);color:var(--accent);background:var(--abg);margin-bottom:10px}
-.actor-pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.actor-badge{display:inline-block;font-size:12px;font-weight:500;padding:3px 12px;border-radius:20px;border:1px solid var(--accent);color:var(--accent);background:var(--abg);margin-bottom:8px}
+.actor-pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
 .actor-pill{font-size:12px;padding:3px 10px;border-radius:20px;background:var(--bg2);border:1px solid var(--border);color:var(--text2)}
-.actor-bio-wrap{position:relative}
+
+/* RÉCOMPENSES PERSONNE */
+.person-awards{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
+.person-award{display:flex;align-items:center;gap:5px;font-size:12px;padding:4px 12px;border-radius:20px;font-weight:500;cursor:default}
+.person-award.oscar{background:#fff8e6;border:1px solid rgba(212,134,10,.4);color:#7a5200}
+.person-award.cesar{background:#f0f4ff;border:1px solid rgba(80,100,200,.3);color:#3a4a9a}
+.person-award.globe{background:#f0fff4;border:1px solid rgba(42,122,78,.3);color:#1a5e38}
+.person-award.bafta{background:#fff0f8;border:1px solid rgba(180,50,150,.25);color:#8a1a6a}
+.person-award.other{background:var(--bg2);border:1px solid var(--border);color:var(--text2)}
+
+/* BIO */
 .actor-bio{font-size:13px;color:var(--text2);line-height:1.7;background:var(--bg2);border-radius:10px;padding:14px 16px;border-left:3px solid var(--accent)}
 .actor-bio.truncated{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
-.btn-bio-more{margin-top:8px;font-size:12px;font-weight:500;color:var(--accent);background:none;border:none;cursor:pointer;font-family:inherit;padding:0;display:flex;align-items:center;gap:4px}
-.btn-bio-more:hover{text-decoration:underline}
+.btn-bio{margin-top:8px;font-size:12px;font-weight:500;color:var(--accent);background:none;border:none;cursor:pointer;font-family:inherit;padding:0}
+.btn-bio:hover{text-decoration:underline}
 
-/* ── FILM CARDS ── */
+/* FILM CARD */
 .flist{display:flex;flex-direction:column;gap:12px}
 .fcard{display:flex;gap:16px;background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px;align-items:flex-start;cursor:pointer;transition:border-color .2s,box-shadow .2s,transform .15s;animation:fup .35s ease both;box-shadow:0 2px 8px var(--shadow)}
 .fcard:nth-child(2){animation-delay:.05s}.fcard:nth-child(3){animation-delay:.1s}
@@ -135,10 +132,16 @@ h1.ptitle{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;co
 .foverview{font-size:13px;color:var(--text2);line-height:1.55;margin-bottom:6px}
 .fhint{font-size:11px;color:var(--accent);font-style:italic}
 .fchips{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+/* Award chips sur les cartes */
+.award-chip{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:3px 9px;border-radius:20px;font-weight:500;white-space:nowrap}
+.award-chip.oscar{background:#fff8e6;border:1px solid rgba(212,134,10,.4);color:#7a5200}
+.award-chip.cesar{background:#f0f4ff;border:1px solid rgba(80,100,200,.3);color:#3a4a9a}
+.award-chip.other{background:var(--bg2);border:1px solid var(--border);color:var(--text2)}
 .chip{font-size:11px;padding:3px 10px;border-radius:20px;border:1px solid var(--border);color:var(--text3);background:var(--bg2);white-space:nowrap}
 .chip.hl{border-color:rgba(196,75,43,.35);color:var(--accent);background:var(--abg)}
 .chip.genre{border-color:rgba(42,95,165,.25);color:var(--blue);background:var(--bbg)}
 .chip.serie{border-color:rgba(42,122,78,.25);color:var(--green);background:rgba(42,122,78,.08)}
+.chip.tvshow{border-color:rgba(160,120,80,.25);color:var(--text3);background:var(--bg2)}
 .fscore{font-size:12px;font-weight:600;padding:4px 10px;border-radius:20px;flex-shrink:0;margin-left:auto;align-self:flex-start}
 .fscore.g{background:rgba(42,122,78,.1);color:#1a5e38;border:1px solid rgba(42,122,78,.2)}
 .fscore.m{background:var(--gbg);color:#7a5200;border:1px solid rgba(212,134,10,.25)}
@@ -147,6 +150,10 @@ h1.ptitle{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;co
 .nores{text-align:center;padding:4rem 0;font-size:14px;color:var(--text3);line-height:2}
 .nores span{display:block;font-size:2rem;margin-bottom:.5rem}
 .errbox{font-size:13px;color:var(--accent2);background:var(--abg);border:1px solid rgba(196,75,43,.2);border-radius:8px;padding:10px 14px;margin-bottom:1.2rem;display:none}
+
+/* SECTION HEADER dans résultats */
+.section-header{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);padding:12px 0 8px;display:flex;align-items:center;gap:8px}
+.section-header::after{content:'';flex:1;height:1px;background:var(--border)}
 
 /* ════ MODAL ════ */
 #overlay{position:fixed;inset:0;z-index:500;background:rgba(20,10,3,.72);backdrop-filter:blur(8px);overflow-y:auto;padding:2rem 1rem;display:none}
@@ -169,18 +176,24 @@ h1.ptitle{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;co
 .mbody{padding:74px 28px 32px}
 .mtitle{font-family:'Playfair Display',serif;font-size:1.75rem;font-weight:700;color:var(--text);line-height:1.2;margin-bottom:4px}
 .morig{font-size:13px;color:var(--text3);font-style:italic;margin-bottom:.8rem}
-.mpills{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:1.2rem}
+.mpills{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:1rem}
 .mpill{font-size:12px;padding:4px 12px;border-radius:20px;border:1px solid var(--border);background:var(--bg2);color:var(--text2)}
 .mpill.serie{border-color:rgba(42,122,78,.3);color:var(--green);background:rgba(42,122,78,.08)}
+
+/* RÉCOMPENSES MODAL */
+.awards-block{background:linear-gradient(135deg,#fffbf0,#fff8e6);border:1px solid rgba(212,134,10,.25);border-radius:12px;padding:14px 16px;margin-bottom:1.2rem}
+.awards-block-title{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.awards-list{display:flex;flex-direction:column;gap:5px}
+.award-item{display:flex;align-items:flex-start;gap:10px;font-size:13px;padding:6px 10px;border-radius:8px;background:rgba(255,255,255,.6)}
+.award-item-ico{font-size:16px;flex-shrink:0;margin-top:1px}
+.award-item-info{}
+.award-item-title{font-weight:600;color:var(--text);font-size:13px}
+.award-item-detail{font-size:12px;color:var(--text3);margin-top:1px}
+
 .slabel{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:.65rem;margin-top:1.4rem}
 .synopsis{font-size:14px;color:var(--text2);line-height:1.75;background:var(--bg2);border-radius:10px;padding:14px 18px;border-left:3px solid var(--accent)}
 .gtags{display:flex;flex-wrap:wrap;gap:6px}
 .gtag{font-size:12px;padding:4px 12px;border-radius:20px;border:1px solid var(--border2);color:var(--text2);background:var(--bg2)}
-.awards-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1.3rem}
-.award{display:flex;align-items:center;gap:6px;font-size:12px;padding:5px 12px;border-radius:20px;font-weight:500}
-.award.oscar{background:#fff8e6;border:1px solid rgba(212,134,10,.35);color:#7a5200}
-.award.cesar{background:#f0f4ff;border:1px solid rgba(80,100,200,.25);color:#3a4a9a}
-.award.other{background:var(--bg2);border:1px solid var(--border);color:var(--text2)}
 .ratings{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1.4rem}
 .rbox{display:flex;flex-direction:column;align-items:center;background:#fff;border:1px solid var(--border);border-radius:12px;padding:10px 16px;min-width:82px;box-shadow:0 1px 4px var(--shadow)}
 .rsrc{font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--text3);margin-bottom:5px}
@@ -190,7 +203,7 @@ h1.ptitle{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;co
 .stars{display:flex;gap:2px;margin:4px 0}
 .star{font-size:20px;cursor:pointer;color:var(--border2);transition:color .1s,transform .1s;line-height:1}
 .star:hover,.star.on{color:var(--gold);transform:scale(1.18)}
-.platforms{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:.5rem}
+.platforms{display:flex;flex-wrap:wrap;gap:8px}
 .platform{display:flex;align-items:center;gap:7px;padding:7px 14px;border-radius:10px;border:1px solid var(--border);background:#fff;font-size:13px;font-weight:500;color:var(--text2);box-shadow:0 1px 4px var(--shadow)}
 .platform.best{border-color:var(--gold);background:#fffbf0}
 .platform .pico{width:22px;height:22px;border-radius:5px;object-fit:contain}
@@ -212,7 +225,7 @@ h1.ptitle{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;co
 .caname{font-size:11px;font-weight:500;color:var(--text);line-height:1.3}
 .cachar{font-size:10px;color:var(--text3)}
 
-/* ── QUIZ ── */
+/* QUIZ */
 .steps{display:flex;gap:6px;margin-bottom:2.5rem}
 .sdot{height:3px;width:28px;border-radius:2px;background:var(--border2);transition:background .3s,width .3s}
 .sdot.active{background:var(--accent);width:44px}.sdot.done{background:var(--text3)}
@@ -226,6 +239,12 @@ h1.ptitle{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;co
 .oicon{font-size:1.6rem;display:block;margin-bottom:.5rem}
 .olab{font-size:13px;font-weight:500;color:var(--text);display:block}
 .osub{font-size:11px;color:var(--text3);display:block;margin-top:2px}
+
+/* Champ texte libre quiz */
+.qinput{width:100%;background:#fff;border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:inherit;font-size:14px;padding:12px 14px;outline:none;transition:border-color .15s;box-shadow:0 1px 4px var(--shadow);margin-bottom:2.5rem}
+.qinput:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(196,75,43,.1)}
+.qinput::placeholder{color:var(--text3)}
+
 .qnav{display:flex;justify-content:space-between;align-items:center}
 .bbk{background:none;border:none;color:var(--text3);font-size:13px;cursor:pointer;font-family:inherit;padding:0}
 .bbk:hover{color:var(--accent)}
@@ -270,50 +289,41 @@ footer a{color:var(--text3);text-decoration:underline}
 </div>
 
 <main>
-  <!-- PAGE RECHERCHE -->
   <div class="page active" id="page-search">
-    <div class="search-hero">
-      <h1 class="ptitle">Recherche universelle</h1>
-      <p class="psub">Films, séries, acteurs, réalisateurs, producteurs — tout en une seule recherche.</p>
-
-      <div class="sbar">
-        <div class="swrap" id="swrap">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input class="sinp" id="sinp" type="text"
-            placeholder="Recherche un film, une série, un acteur, un réalisateur…"
-            autocomplete="off" oninput="onInp()" onkeydown="onKD(event)"/>
-          <div class="sdrop" id="sdrop"></div>
-        </div>
-        <button class="sbtn" id="sbtn" onclick="doSearch()" disabled>Rechercher</button>
+    <h1 class="ptitle">Recherche universelle</h1>
+    <p class="psub">Films, séries, acteurs, réalisateurs, producteurs — tout en une seule recherche.</p>
+    <div class="sbar">
+      <div class="swrap" id="swrap">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input class="sinp" id="sinp" type="text" placeholder="Film, série, acteur, réalisateur…" autocomplete="off" oninput="onInp()" onkeydown="onKD(event)"/>
+        <div class="sdrop" id="sdrop"></div>
       </div>
-      <div class="search-tags">
-        <span class="search-tag">🎬 Films</span>
-        <span class="search-tag">📺 Séries</span>
-        <span class="search-tag">🎭 Acteurs</span>
-        <span class="search-tag">🎥 Réalisateurs</span>
-        <span class="search-tag">🎙 Producteurs</span>
-      </div>
-      <div class="shint" id="shint">Tape au moins 2 lettres — films, séries et personnes apparaissent ensemble</div>
+      <button class="sbtn" id="sbtn" onclick="doSearch()" disabled>Rechercher</button>
     </div>
-
+    <div class="search-tags">
+      <span class="search-tag">🎬 Films</span>
+      <span class="search-tag">📺 Séries</span>
+      <span class="search-tag">🎭 Acteurs</span>
+      <span class="search-tag">🎥 Réalisateurs</span>
+      <span class="search-tag">🎙 Producteurs</span>
+    </div>
+    <div class="shint">Tape au moins 2 lettres — films, séries et personnes apparaissent ensemble</div>
     <div class="errbox" id="serr"></div>
     <div class="loader" id="sload"><div class="reel"><div class="rh"></div><div class="rh"></div><div class="rh"></div><div class="rh"></div><div class="rh"></div><div class="rh"></div></div><div class="loader-txt">Recherche en cours…</div></div>
-
     <div class="rres" id="rres">
       <div class="rmeta"><div class="rlabel" id="rlabel"></div><button class="rclear" onclick="clearSearch()">✕ Effacer</button></div>
       <div id="actor-detail"></div>
-      <div class="flist" id="flist"></div>
+      <div id="flist-wrap"></div>
     </div>
   </div>
 
-  <!-- PAGE QUIZ -->
   <div class="page" id="page-quiz">
     <div id="qform">
       <div class="steps" id="steps"></div>
       <div class="qmeta" id="qmeta"></div>
       <div class="qtitle" id="qtitle"></div>
       <div class="errbox" id="qerr"></div>
-      <div class="ogrid" id="ogrid"></div>
+      <div id="qoptions"></div>
       <div class="qnav">
         <button class="bbk" id="bbk" onclick="prevStep()">← Retour</button>
         <button class="bnxt" id="bnxt" onclick="nextStep()">Suivant →</button>
@@ -345,7 +355,7 @@ footer a{color:var(--text3);text-decoration:underline}
       <div class="mtitle" id="mtitle">Chargement…</div>
       <div class="morig"  id="morig"></div>
       <div class="mpills" id="mpills"></div>
-      <div class="awards-row" id="mawards"></div>
+      <div id="mawards-block"></div>
       <div class="ratings" id="mratings"></div>
       <div class="slabel">Synopsis</div>
       <div class="synopsis" id="msynopsis">Chargement…</div>
@@ -362,7 +372,7 @@ footer a{color:var(--text3);text-decoration:underline}
   </div>
 </div>
 
-<footer><div class="vbadge">v7.0</div><br>WhatMovie — <a href="https://www.anthropic.com" target="_blank">Claude AI</a> &amp; <a href="https://www.themoviedb.org" target="_blank">TMDB</a></footer>
+<footer><div class="vbadge">v8.0</div><br>WhatMovie — <a href="https://www.anthropic.com" target="_blank">Claude AI</a> &amp; <a href="https://www.themoviedb.org" target="_blank">TMDB</a></footer>
 
 <script>
 const IMG  = 'https://image.tmdb.org/t/p/w500';
@@ -374,8 +384,132 @@ const LOGO = 'https://image.tmdb.org/t/p/w45';
 let trailerKey = null;
 let userRatings = JSON.parse(localStorage.getItem('wm_r') || '{}');
 
-const GENRES_MOVIE = {28:'Action',12:'Aventure',16:'Animation',35:'Comédie',80:'Crime',99:'Documentaire',18:'Drame',10751:'Famille',14:'Fantastique',36:'Histoire',27:'Horreur',10402:'Musique',9648:'Mystère',10749:'Romance',878:'Sci-fi',10770:'Téléfilm',53:'Thriller',10752:'Guerre',37:'Western'};
-const GENRES_TV    = {10759:'Action',16:'Animation',35:'Comédie',80:'Crime',99:'Documentaire',18:'Drame',10751:'Famille',10762:'Enfants',9648:'Mystère',10763:'News',10764:'Reality',10765:'Sci-fi',10766:'Soap',10767:'Talk',10768:'Guerre',37:'Western'};
+const GM = {28:'Action',12:'Aventure',16:'Animation',35:'Comédie',80:'Crime',99:'Documentaire',18:'Drame',10751:'Famille',14:'Fantastique',36:'Histoire',27:'Horreur',10402:'Musique',9648:'Mystère',10749:'Romance',878:'Sci-fi',53:'Thriller',10752:'Guerre',37:'Western'};
+const GT = {10759:'Action',16:'Animation',35:'Comédie',80:'Crime',99:'Documentaire',18:'Drame',10751:'Famille',9648:'Mystère',10765:'Sci-fi',37:'Western'};
+
+/* ══ BASE RÉCOMPENSES ══ */
+const AWARDS_DB = {
+  // Films — Oscar Meilleur Film
+  'parasite':         [{t:'Oscar',cat:'Meilleur Film · Meilleur Réalisateur · Film International',y:'2020',cls:'oscar',ico:'🏆'}],
+  'nomadland':        [{t:'Oscar',cat:'Meilleur Film · Meilleure Réalisatrice',y:'2021',cls:'oscar',ico:'🏆'}],
+  'coda':             [{t:'Oscar',cat:'Meilleur Film',y:'2022',cls:'oscar',ico:'🏆'}],
+  'everything everywhere all at once':[{t:'Oscar',cat:'Meilleur Film · Meilleur Réalisateur',y:'2023',cls:'oscar',ico:'🏆'}],
+  'oppenheimer':      [{t:'Oscar',cat:'Meilleur Film · Meilleur Réalisateur',y:'2024',cls:'oscar',ico:'🏆'}],
+  'the shape of water':[{t:'Oscar',cat:'Meilleur Film · Meilleur Réalisateur',y:'2018',cls:'oscar',ico:'🏆'}],
+  'birdman':          [{t:'Oscar',cat:'Meilleur Film · Meilleur Réalisateur',y:'2015',cls:'oscar',ico:'🏆'}],
+  '12 years a slave': [{t:'Oscar',cat:'Meilleur Film',y:'2014',cls:'oscar',ico:'🏆'}],
+  'argo':             [{t:'Oscar',cat:'Meilleur Film',y:'2013',cls:'oscar',ico:'🏆'}],
+  'the artist':       [{t:'Oscar',cat:'Meilleur Film',y:'2012',cls:'oscar',ico:'🏆'},{t:'César',cat:'Meilleur Film',y:'2012',cls:'cesar',ico:'🎭'}],
+  'the king\'s speech':[{t:'Oscar',cat:'Meilleur Film',y:'2011',cls:'oscar',ico:'🏆'}],
+  'the hurt locker':  [{t:'Oscar',cat:'Meilleur Film · Meilleure Réalisatrice',y:'2010',cls:'oscar',ico:'🏆'}],
+  'slumdog millionaire':[{t:'Oscar',cat:'Meilleur Film · Meilleur Réalisateur',y:'2009',cls:'oscar',ico:'🏆'}],
+  'no country for old men':[{t:'Oscar',cat:'Meilleur Film · Meilleur Réalisateur',y:'2008',cls:'oscar',ico:'🏆'}],
+  'the departed':     [{t:'Oscar',cat:'Meilleur Film · Meilleur Réalisateur',y:'2007',cls:'oscar',ico:'🏆'}],
+  'crash':            [{t:'Oscar',cat:'Meilleur Film',y:'2006',cls:'oscar',ico:'🏆'}],
+  'million dollar baby':[{t:'Oscar',cat:'Meilleur Film · Meilleur Réalisateur',y:'2005',cls:'oscar',ico:'🏆'}],
+  'the lord of the rings: the return of the king':[{t:'Oscar',cat:'Meilleur Film · Meilleur Réalisateur',y:'2004',cls:'oscar',ico:'🏆'}],
+  'chicago':          [{t:'Oscar',cat:'Meilleur Film',y:'2003',cls:'oscar',ico:'🏆'}],
+  'a beautiful mind': [{t:'Oscar',cat:'Meilleur Film · Meilleur Réalisateur',y:'2002',cls:'oscar',ico:'🏆'}],
+  'gladiator':        [{t:'Oscar',cat:'Meilleur Film',y:'2001',cls:'oscar',ico:'🏆'}],
+  'american beauty':  [{t:'Oscar',cat:'Meilleur Film · Meilleur Réalisateur',y:'2000',cls:'oscar',ico:'🏆'}],
+  'shakespeare in love':[{t:'Oscar',cat:'Meilleur Film',y:'1999',cls:'oscar',ico:'🏆'}],
+  'titanic':          [{t:'Oscar',cat:'Meilleur Film · Meilleur Réalisateur',y:'1998',cls:'oscar',ico:'🏆'}],
+  'the english patient':[{t:'Oscar',cat:'Meilleur Film',y:'1997',cls:'oscar',ico:'🏆'}],
+  'braveheart':       [{t:'Oscar',cat:'Meilleur Film · Meilleur Réalisateur',y:'1996',cls:'oscar',ico:'🏆'}],
+  'forrest gump':     [{t:'Oscar',cat:'Meilleur Film · Meilleur Réalisateur',y:'1995',cls:'oscar',ico:'🏆'}],
+  'schindler\'s list':[{t:'Oscar',cat:'Meilleur Film · Meilleur Réalisateur',y:'1994',cls:'oscar',ico:'🏆'}],
+  'unforgiven':       [{t:'Oscar',cat:'Meilleur Film · Meilleur Réalisateur',y:'1993',cls:'oscar',ico:'🏆'}],
+  'the silence of the lambs':[{t:'Oscar',cat:'Meilleur Film',y:'1992',cls:'oscar',ico:'🏆'}],
+  'dances with wolves':[{t:'Oscar',cat:'Meilleur Film · Meilleur Réalisateur',y:'1991',cls:'oscar',ico:'🏆'}],
+  'driving miss daisy':[{t:'Oscar',cat:'Meilleur Film',y:'1990',cls:'oscar',ico:'🏆'}],
+  'rain man':         [{t:'Oscar',cat:'Meilleur Film · Meilleur Réalisateur',y:'1989',cls:'oscar',ico:'🏆'}],
+  'the last emperor':  [{t:'Oscar',cat:'Meilleur Film · Meilleur Réalisateur',y:'1988',cls:'oscar',ico:'🏆'}],
+  'platoon':          [{t:'Oscar',cat:'Meilleur Film · Meilleur Réalisateur',y:'1987',cls:'oscar',ico:'🏆'}],
+  'out of africa':    [{t:'Oscar',cat:'Meilleur Film · Meilleur Réalisateur',y:'1986',cls:'oscar',ico:'🏆'}],
+  'amadeus':          [{t:'Oscar',cat:'Meilleur Film · Meilleur Réalisateur',y:'1985',cls:'oscar',ico:'🏆'}],
+  'terms of endearment':[{t:'Oscar',cat:'Meilleur Film',y:'1984',cls:'oscar',ico:'🏆'}],
+  'gandhi':           [{t:'Oscar',cat:'Meilleur Film · Meilleur Réalisateur',y:'1983',cls:'oscar',ico:'🏆'}],
+  'chariots of fire': [{t:'Oscar',cat:'Meilleur Film',y:'1982',cls:'oscar',ico:'🏆'}],
+  'ordinary people':  [{t:'Oscar',cat:'Meilleur Film · Meilleur Réalisateur',y:'1981',cls:'oscar',ico:'🏆'}],
+  'kramer vs. kramer':[{t:'Oscar',cat:'Meilleur Film · Meilleur Réalisateur',y:'1980',cls:'oscar',ico:'🏆'}],
+  'the deer hunter':  [{t:'Oscar',cat:'Meilleur Film · Meilleur Réalisateur',y:'1979',cls:'oscar',ico:'🏆'}],
+  'annie hall':       [{t:'Oscar',cat:'Meilleur Film · Meilleur Réalisateur',y:'1978',cls:'oscar',ico:'🏆'}],
+  'rocky':            [{t:'Oscar',cat:'Meilleur Film · Meilleur Réalisateur',y:'1977',cls:'oscar',ico:'🏆'}],
+  'one flew over the cuckoo\'s nest':[{t:'Oscar',cat:'Meilleur Film · Meilleur Réalisateur',y:'1976',cls:'oscar',ico:'🏆'}],
+  'the godfather part ii':[{t:'Oscar',cat:'Meilleur Film · Meilleur Réalisateur',y:'1975',cls:'oscar',ico:'🏆'}],
+  'the sting':        [{t:'Oscar',cat:'Meilleur Film',y:'1974',cls:'oscar',ico:'🏆'}],
+  'the godfather':    [{t:'Oscar',cat:'Meilleur Film',y:'1973',cls:'oscar',ico:'🏆'}],
+  // Films nommés / récompensés (autres)
+  'la la land':       [{t:'Oscar',cat:'Meilleur Réalisateur · 14 nominations',y:'2017',cls:'oscar',ico:'🏆'}],
+  'green book':       [{t:'Oscar',cat:'Meilleur Film',y:'2019',cls:'oscar',ico:'🏆'}],
+  'spotlight':        [{t:'Oscar',cat:'Meilleur Film',y:'2016',cls:'oscar',ico:'🏆'}],
+  'moonlight':        [{t:'Oscar',cat:'Meilleur Film',y:'2017',cls:'oscar',ico:'🏆'}],
+  'three billboards outside ebbing, missouri':[{t:'Oscar',cat:'Meilleure Actrice · Meilleur Second Rôle',y:'2018',cls:'oscar',ico:'🏆'}],
+  'the revenant':     [{t:'Oscar',cat:'Meilleur Acteur (DiCaprio)',y:'2016',cls:'oscar',ico:'🏆'}],
+  'inception':        [{t:'Oscar',cat:'4 Oscars techniques',y:'2011',cls:'oscar',ico:'🏆'}],
+  'the dark knight':  [{t:'Oscar',cat:'Meilleur Second Rôle (Heath Ledger)',y:'2009',cls:'oscar',ico:'🏆'}],
+  'avatar':           [{t:'Oscar',cat:'3 Oscars techniques',y:'2010',cls:'oscar',ico:'🏆'}],
+  // Césars
+  'anatomie d\'une chute':[{t:'César',cat:'Meilleur Film · Meilleur Réalisateur · Meilleur Scénario',y:'2024',cls:'cesar',ico:'🎭'},{t:'Palme d\'Or',cat:'Cannes 2023',y:'2023',cls:'other',ico:'🌴'}],
+  'titane':           [{t:'César',cat:'Meilleur Film · Meilleure Réalisatrice',y:'2022',cls:'cesar',ico:'🎭'},{t:'Palme d\'Or',cat:'Cannes 2021',y:'2021',cls:'other',ico:'🌴'}],
+  'les misérables':   [{t:'César',cat:'Meilleur Film · Meilleur Réalisateur',y:'2020',cls:'cesar',ico:'🎭'}],
+  'portrait de la jeune fille en feu':[{t:'César',cat:'Meilleure Réalisatrice · Meilleure Photographie',y:'2020',cls:'cesar',ico:'🎭'}],
+  'au revoir les enfants':[{t:'César',cat:'Meilleur Film · Meilleur Réalisateur',y:'1988',cls:'cesar',ico:'🎭'}],
+  'intouchables':     [{t:'César',cat:'Meilleur Film',y:'2012',cls:'cesar',ico:'🎭'}],
+  'entre les murs':   [{t:'Palme d\'Or',cat:'Cannes 2008',y:'2008',cls:'other',ico:'🌴'},{t:'César',cat:'Meilleur Film',y:'2009',cls:'cesar',ico:'🎭'}],
+  'persepolis':       [{t:'César',cat:'Meilleur Film',y:'2008',cls:'cesar',ico:'🎭'}],
+  // Séries
+  'breaking bad':     [{t:'Emmy',cat:'Meilleure Série Dramatique × 2',y:'2013-2014',cls:'other',ico:'📺'}],
+  'game of thrones':  [{t:'Emmy',cat:'Meilleure Série Dramatique × 4',y:'2015-2019',cls:'other',ico:'📺'}],
+  'chernobyl':        [{t:'Emmy',cat:'Meilleure Minisérie',y:'2019',cls:'other',ico:'📺'}],
+  'the crown':        [{t:'Emmy',cat:'Meilleure Série Dramatique',y:'2021',cls:'other',ico:'📺'}],
+  'succession':       [{t:'Emmy',cat:'Meilleure Série Dramatique × 3',y:'2022-2024',cls:'other',ico:'📺'}],
+  'the bear':         [{t:'Emmy',cat:'Meilleure Comédie × 2',y:'2023-2024',cls:'other',ico:'📺'}],
+  'true detective':   [{t:'Emmy',cat:'Meilleure Réalisation (Fukunaga)',y:'2014',cls:'other',ico:'📺'}],
+  'band of brothers': [{t:'Emmy',cat:'Meilleure Minisérie',y:'2002',cls:'other',ico:'📺'}],
+};
+
+/* Récompenses par personne (acteurs/réalisateurs) */
+const PERSON_AWARDS = {
+  'leonardo dicaprio': [{t:'Oscar',cat:'Meilleur Acteur — The Revenant',y:'2016',cls:'oscar',ico:'🏆'},{t:'Golden Globe',cat:'Meilleur Acteur × 4',y:'mult.',cls:'other',ico:'🌟'}],
+  'martin scorsese':   [{t:'Oscar',cat:'Meilleur Réalisateur — Les Infiltrés',y:'2007',cls:'oscar',ico:'🏆'},{t:'Golden Globe',cat:'Meilleur Réalisateur × 3',y:'mult.',cls:'other',ico:'🌟'}],
+  'steven spielberg':  [{t:'Oscar',cat:'Meilleur Réalisateur — Schindler\'s List · Il faut sauver le soldat Ryan',y:'1994/1999',cls:'oscar',ico:'🏆'}],
+  'christopher nolan': [{t:'Oscar',cat:'Meilleur Réalisateur — Oppenheimer',y:'2024',cls:'oscar',ico:'🏆'}],
+  'cate blanchett':    [{t:'Oscar',cat:'Meilleure Actrice × 2',y:'2005/2023',cls:'oscar',ico:'🏆'}],
+  'meryl streep':      [{t:'Oscar',cat:'Meilleure Actrice × 3 (record)',y:'mult.',cls:'oscar',ico:'🏆'}],
+  'daniel day-lewis':  [{t:'Oscar',cat:'Meilleur Acteur × 3 (record)',y:'mult.',cls:'oscar',ico:'🏆'}],
+  'anthony hopkins':   [{t:'Oscar',cat:'Meilleur Acteur × 2',y:'1992/2021',cls:'oscar',ico:'🏆'}],
+  'denzel washington': [{t:'Oscar',cat:'Meilleur Acteur × 2',y:'mult.',cls:'oscar',ico:'🏆'}],
+  'tom hanks':         [{t:'Oscar',cat:'Meilleur Acteur × 2 (consécutifs)',y:'1994/1995',cls:'oscar',ico:'🏆'}],
+  'frances mcdormand': [{t:'Oscar',cat:'Meilleure Actrice × 3',y:'mult.',cls:'oscar',ico:'🏆'}],
+  'joaquin phoenix':   [{t:'Oscar',cat:'Meilleur Acteur — Joker',y:'2020',cls:'oscar',ico:'🏆'}],
+  'brad pitt':         [{t:'Oscar',cat:'Meilleur Second Rôle — Once Upon a Time in Hollywood',y:'2020',cls:'oscar',ico:'🏆'}],
+  'al pacino':         [{t:'Oscar',cat:'Meilleur Acteur — Le temps d\'une valse',y:'1993',cls:'oscar',ico:'🏆'}],
+  'robert de niro':    [{t:'Oscar',cat:'Meilleur Acteur × 2',y:'mult.',cls:'oscar',ico:'🏆'}],
+  'natalie portman':   [{t:'Oscar',cat:'Meilleure Actrice — Black Swan',y:'2011',cls:'oscar',ico:'🏆'}],
+  'charlize theron':   [{t:'Oscar',cat:'Meilleure Actrice — Monster',y:'2004',cls:'oscar',ico:'🏆'}],
+  'halle berry':       [{t:'Oscar',cat:'Meilleure Actrice — À l\'ombre de la haine',y:'2002',cls:'oscar',ico:'🏆'}],
+  'russell crowe':     [{t:'Oscar',cat:'Meilleur Acteur — Gladiator',y:'2001',cls:'oscar',ico:'🏆'}],
+  'hillary swank':     [{t:'Oscar',cat:'Meilleure Actrice × 2',y:'mult.',cls:'oscar',ico:'🏆'}],
+  'ridley scott':      [{t:'Golden Globe',cat:'Cecil B. DeMille Award',y:'2024',cls:'other',ico:'🌟'}],
+  'denis villeneuve':  [{t:'BAFTA',cat:'Meilleur Réalisateur — Dune',y:'2022',cls:'other',ico:'🎬'}],
+  'quentin tarantino': [{t:'Oscar',cat:'Meilleur Scénario × 2',y:'1995/2013',cls:'oscar',ico:'🏆'}],
+  'james cameron':     [{t:'Oscar',cat:'Meilleur Réalisateur × 2',y:'1998/2010',cls:'oscar',ico:'🏆'}],
+  'peter jackson':     [{t:'Oscar',cat:'Meilleur Réalisateur — LOTR',y:'2004',cls:'oscar',ico:'🏆'}],
+  'francis ford coppola':[{t:'Oscar',cat:'Meilleur Réalisateur — Le Parrain II',y:'1975',cls:'oscar',ico:'🏆'}],
+  'jane campion':      [{t:'Oscar',cat:'Meilleure Réalisatrice — La Leçon de Piano · The Power of the Dog',y:'mult.',cls:'oscar',ico:'🏆'}],
+  'kathryn bigelow':   [{t:'Oscar',cat:'Meilleure Réalisatrice — Démineurs (1ère femme)',y:'2010',cls:'oscar',ico:'🏆'}],
+};
+
+function getFilmAwards(det){
+  const t = (det.title||det.name||'').toLowerCase();
+  const o = (det.original_title||det.original_name||'').toLowerCase();
+  return AWARDS_DB[t] || AWARDS_DB[o] || [];
+}
+function getPersonAwards(name){
+  const n = (name||'').toLowerCase();
+  return PERSON_AWARDS[n] || [];
+}
 
 /* ══ CLÉ / TMDB ══ */
 function getKey(){ return localStorage.getItem('wm_k') || ''; }
@@ -388,132 +522,97 @@ function saveKey(){
 }
 async function tmdb(path, lang='fr-FR'){
   const k = getKey(); if(!k) throw new Error('Clé TMDB manquante');
-  const sep = path.includes('?') ? '&' : '?';
+  const sep = path.includes('?')?'&':'?';
   const r = await fetch(`https://api.themoviedb.org/3${path}${sep}api_key=${k}&language=${lang}`);
-  if(!r.ok){ const e = await r.json().catch(()=>{}); throw new Error((e&&e.status_message)||`Erreur TMDB ${r.status}`); }
+  if(!r.ok){ const e=await r.json().catch(()=>{}); throw new Error((e&&e.status_message)||`Erreur TMDB ${r.status}`); }
   return r.json();
 }
 
 /* ══ INIT ══ */
 window.addEventListener('DOMContentLoaded', () => {
   const k = getKey();
-  if(k){ document.getElementById('tmdb-inp').value = k; document.getElementById('setup-banner').style.display = 'none'; }
+  if(k){ document.getElementById('tmdb-inp').value=k; document.getElementById('setup-banner').style.display='none'; }
   renderStep();
   document.addEventListener('click', e => { if(!document.getElementById('swrap').contains(e.target)) closeDrop(); });
 });
 
-function goHome(){ clearSearch(); document.getElementById('sinp').value = ''; document.getElementById('sbtn').disabled = true; }
+function goHome(){ clearSearch(); document.getElementById('sinp').value=''; document.getElementById('sbtn').disabled=true; }
 function switchTab(n){ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); document.getElementById('page-'+n).classList.add('active'); document.getElementById('tab-'+n).classList.add('active'); }
 
-/* ══ AUTOCOMPLETE UNIVERSEL ══ */
-let sugT = null, sugI = -1, sugL = [];
-
+/* ══ AUTOCOMPLETE ══ */
+let sugT=null, sugI=-1, sugL=[];
 function onInp(){
-  const q = document.getElementById('sinp').value.trim();
-  document.getElementById('sbtn').disabled = q.length < 2;
+  const q=document.getElementById('sinp').value.trim();
+  document.getElementById('sbtn').disabled=q.length<2;
   clearTimeout(sugT);
-  if(q.length < 2){ closeDrop(); return; }
-  sugT = setTimeout(() => fetchSug(q), 280);
+  if(q.length<2){closeDrop();return;}
+  sugT=setTimeout(()=>fetchSug(q),280);
 }
-
 async function fetchSug(q){
   if(!getKey()) return;
   try{
-    // Recherche en parallèle : films + séries + personnes
-    const [movies, shows, people] = await Promise.all([
+    const [mv,tv,pe]=await Promise.all([
       tmdb(`/search/movie?query=${enc(q)}&include_adult=false`),
       tmdb(`/search/tv?query=${enc(q)}&include_adult=false`),
       tmdb(`/search/person?query=${enc(q)}`)
     ]);
-    // Mélange et trie par popularité
-    const allMovies = (movies.results||[]).slice(0,4).map(r=>({...r,_type:'movie'}));
-    const allShows  = (shows.results ||[]).slice(0,3).map(r=>({...r,_type:'tv'}));
-    const allPeople = (people.results||[]).slice(0,3).map(r=>({...r,_type:'person'}));
-    // Interleave intelligemment
-    const combined = [...allMovies,...allShows,...allPeople]
-      .sort((a,b)=>(b.popularity||0)-(a.popularity||0))
-      .slice(0,10);
-    showDrop(combined, q);
+    const movies=(mv.results||[]).slice(0,4).map(r=>({...r,_t:'movie'}));
+    const shows=(tv.results||[]).slice(0,3).map(r=>({...r,_t:'tv'}));
+    const people=(pe.results||[]).slice(0,3).map(r=>({...r,_t:'person'}));
+    const all=[...movies,...shows,...people].sort((a,b)=>(b.popularity||0)-(a.popularity||0)).slice(0,10);
+    showDrop(all,q);
   }catch(e){}
 }
-
-function showDrop(items, q){
-  const box = document.getElementById('sdrop'), inp = document.getElementById('sinp');
-  if(!items.length){ closeDrop(); return; }
-  sugL = items; sugI = -1;
-
-  // Sépare par catégorie pour les labels
-  const movies = items.filter(i=>i._type==='movie');
-  const shows  = items.filter(i=>i._type==='tv');
-  const people = items.filter(i=>i._type==='person');
-
-  let html = '';
-  if(movies.length){
-    html += `<div class="drop-section"><div class="drop-section-label">🎬 Films</div>`;
-    html += movies.map(r=>{
-      const i = items.indexOf(r);
-      const yr = (r.release_date||'').slice(0,4);
-      const sc = r.vote_average ? (Math.round(r.vote_average*10)/10).toFixed(1) : '';
-      const ph = r.poster_path ? `<img class="sposter" src="${IMGS}${r.poster_path}" loading="lazy">` : `<div class="sposter-ph">🎬</div>`;
+function showDrop(items,q){
+  const box=document.getElementById('sdrop'), inp=document.getElementById('sinp');
+  if(!items.length){closeDrop();return;}
+  sugL=items; sugI=-1;
+  const movies=items.filter(i=>i._t==='movie');
+  const shows=items.filter(i=>i._t==='tv');
+  const people=items.filter(i=>i._t==='person');
+  let html='';
+  function itemHtml(r){
+    const i=items.indexOf(r);
+    if(r._t==='movie'){
+      const yr=(r.release_date||'').slice(0,4);
+      const sc=r.vote_average?(Math.round(r.vote_average*10)/10).toFixed(1):'';
+      const ph=r.poster_path?`<img class="sposter" src="${IMGS}${r.poster_path}" loading="lazy">`:`<div class="sposter-ph">🎬</div>`;
       return `<div class="sitem" onmousedown="pickSug(${i})">${ph}<div class="sname"><div class="sname-t">${hl(esc(r.title),q)}</div><div class="sname-s">${yr}${r.original_title&&r.original_title!==r.title?' · '+esc(r.original_title):''}</div></div>${sc?`<div class="sscore">★ ${sc}</div>`:''}</div>`;
-    }).join('');
-    html += `</div>`;
-  }
-  if(shows.length){
-    html += `<div class="drop-section"><div class="drop-section-label">📺 Séries</div>`;
-    html += shows.map(r=>{
-      const i = items.indexOf(r);
-      const yr = (r.first_air_date||'').slice(0,4);
-      const sc = r.vote_average ? (Math.round(r.vote_average*10)/10).toFixed(1) : '';
-      const ph = r.poster_path ? `<img class="sposter" src="${IMGS}${r.poster_path}" loading="lazy">` : `<div class="sposter-ph">📺</div>`;
+    } else if(r._t==='tv'){
+      const yr=(r.first_air_date||'').slice(0,4);
+      const sc=r.vote_average?(Math.round(r.vote_average*10)/10).toFixed(1):'';
+      const ph=r.poster_path?`<img class="sposter" src="${IMGS}${r.poster_path}" loading="lazy">`:`<div class="sposter-ph">📺</div>`;
       return `<div class="sitem" onmousedown="pickSug(${i})">${ph}<div class="sname"><div class="sname-t">${hl(esc(r.name),q)}</div><div class="sname-s">${yr}</div></div>${sc?`<div class="sscore">★ ${sc}</div>`:''}</div>`;
-    }).join('');
-    html += `</div>`;
+    } else {
+      const kn=(r.known_for||[]).map(f=>f.title||f.name).slice(0,2).join(', ');
+      const dept=r.known_for_department||'';
+      const dFr=dept==='Acting'?'Acteur·rice':dept==='Directing'?'Réalisateur':dept==='Production'?'Producteur':dept;
+      const ph=r.profile_path?`<img class="sposter" src="${IMGS}${r.profile_path}" loading="lazy" style="border-radius:50%">`:`<div class="sposter-ph" style="border-radius:50%">👤</div>`;
+      return `<div class="sitem" onmousedown="pickSug(${i})">${ph}<div class="sname"><div class="sname-t">${hl(esc(r.name),q)}</div><div class="sname-s">${dFr}${kn?' · '+esc(kn):''}</div></div></div>`;
+    }
   }
-  if(people.length){
-    html += `<div class="drop-section"><div class="drop-section-label">👤 Personnes</div>`;
-    html += people.map(r=>{
-      const i = items.indexOf(r);
-      const kn = (r.known_for||[]).map(f=>f.title||f.name).slice(0,2).join(', ');
-      const ph = r.profile_path ? `<img class="sposter" src="${IMGS}${r.profile_path}" loading="lazy" style="border-radius:50%">` : `<div class="sposter-ph" style="border-radius:50%">👤</div>`;
-      const dept = r.known_for_department||'';
-      const deptFr = dept==='Acting'?'Acteur·rice':dept==='Directing'?'Réalisateur':dept==='Production'?'Producteur':dept;
-      return `<div class="sitem" onmousedown="pickSug(${i})">${ph}<div class="sname"><div class="sname-t">${hl(esc(r.name),q)}</div><div class="sname-s">${deptFr}${kn?' · '+esc(kn):''}</div></div></div>`;
-    }).join('');
-    html += `</div>`;
-  }
-
-  box.innerHTML = html;
-  box.classList.add('open');
-  inp.classList.add('open');
+  if(movies.length) html+=`<div class="drop-sec"><div class="drop-lbl">🎬 Films</div>${movies.map(itemHtml).join('')}</div>`;
+  if(shows.length)  html+=`<div class="drop-sec"><div class="drop-lbl">📺 Séries</div>${shows.map(itemHtml).join('')}</div>`;
+  if(people.length) html+=`<div class="drop-sec"><div class="drop-lbl">👤 Personnes</div>${people.map(itemHtml).join('')}</div>`;
+  box.innerHTML=html; box.classList.add('open'); inp.classList.add('open');
 }
-
-function hl(t, q){ try{ return t.replace(new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi'),'<mark>$1</mark>'); }catch{ return t; } }
+function hl(t,q){ try{return t.replace(new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi'),'<mark>$1</mark>');}catch{return t;} }
 function closeDrop(){ document.getElementById('sdrop').classList.remove('open'); document.getElementById('sinp').classList.remove('open'); sugI=-1; }
-
 function pickSug(i){
-  const it = sugL[i]; if(!it) return;
-  const name = it._type==='person' ? it.name : (it.title||it.name||'');
-  document.getElementById('sinp').value = name;
-  document.getElementById('sbtn').disabled = false;
+  const it=sugL[i]; if(!it) return;
+  const name=it._t==='person'?it.name:(it.title||it.name||'');
+  document.getElementById('sinp').value=name;
+  document.getElementById('sbtn').disabled=false;
   closeDrop();
-  if(it._type === 'movie' || it._type === 'tv'){
-    openModal(it.id, it._type);
-  } else {
-    // Personne → détermine le rôle
-    const dept = it.known_for_department||'';
-    const role = dept==='Directing'?'director':dept==='Production'?'producer':'actor';
-    loadPersonPage(it.id, it.name, role);
-  }
+  if(it._t==='movie'||it._t==='tv') openModal(it.id,it._t);
+  else { const dept=it.known_for_department||''; const role=dept==='Directing'?'director':dept==='Production'?'producer':'actor'; loadPerson(it.id,it.name,role); }
 }
-
 function onKD(e){
-  const box = document.getElementById('sdrop');
-  const items = box.querySelectorAll('.sitem');
+  const box=document.getElementById('sdrop'); const items=box.querySelectorAll('.sitem');
   if(!box.classList.contains('open')){ if(e.key==='Enter') doSearch(); return; }
   if(e.key==='ArrowDown'){ e.preventDefault(); sugI=Math.min(sugI+1,items.length-1); items.forEach((el,i)=>el.classList.toggle('on',i===sugI)); }
   else if(e.key==='ArrowUp'){ e.preventDefault(); sugI=Math.max(sugI-1,-1); items.forEach((el,i)=>el.classList.toggle('on',i===sugI)); }
-  else if(e.key==='Enter'){ e.preventDefault(); if(sugI>=0) pickSug(sugI); else{ closeDrop(); doSearch(); } }
+  else if(e.key==='Enter'){ e.preventDefault(); if(sugI>=0) pickSug(sugI); else{closeDrop();doSearch();} }
   else if(e.key==='Escape') closeDrop();
 }
 
@@ -522,107 +621,106 @@ function clearSearch(){
   document.getElementById('rres').style.display='none';
   document.getElementById('serr').style.display='none';
   document.getElementById('actor-detail').innerHTML='';
-  document.getElementById('flist').innerHTML='';
+  document.getElementById('flist-wrap').innerHTML='';
   document.getElementById('rlabel').textContent='';
 }
-
 async function doSearch(){
-  const q = document.getElementById('sinp').value.trim();
-  if(q.length < 2) return;
+  const q=document.getElementById('sinp').value.trim();
+  if(q.length<2) return;
   if(!getKey()){ document.getElementById('setup-banner').style.display='flex'; showErr('serr',"⚠️ Entre d'abord ta clé TMDB en haut."); return; }
   closeDrop(); clearSearch(); document.getElementById('serr').style.display='none';
   document.getElementById('sload').style.display='block';
   try{
-    // Recherche multi-type
-    const [movies, shows, people] = await Promise.all([
+    const [mv,tv,pe]=await Promise.all([
       tmdb(`/search/movie?query=${enc(q)}&include_adult=false`),
       tmdb(`/search/tv?query=${enc(q)}&include_adult=false`),
       tmdb(`/search/person?query=${enc(q)}`)
     ]);
-    const allMovies = (movies.results||[]).slice(0,5).map(r=>({...r,_type:'movie'}));
-    const allShows  = (shows.results ||[]).slice(0,4).map(r=>({...r,_type:'tv'}));
-    const allPeople = (people.results||[]).slice(0,3);
-
-    let totalCount = allMovies.length + allShows.length + allPeople.length;
-    if(!totalCount){ noRes(q); document.getElementById('sload').style.display='none'; return; }
-
-    document.getElementById('rlabel').textContent = totalCount + ' résultat' + (totalCount>1?'s':'') + ' pour "' + q + '"';
-
-    // Affiche la personne si elle est la première
-    if(allPeople.length && (allPeople[0].popularity||0) > 10){
-      const dept = allPeople[0].known_for_department||'';
-      const role = dept==='Directing'?'director':dept==='Production'?'producer':'actor';
-      await renderActorDetail(allPeople[0].id, role);
+    const movies=(mv.results||[]).slice(0,5).map(r=>({...r,_t:'movie'}));
+    const shows=(tv.results||[]).slice(0,4).map(r=>({...r,_t:'tv'}));
+    const people=(pe.results||[]).slice(0,2);
+    let total=movies.length+shows.length+people.length;
+    if(!total){noRes(q);document.getElementById('sload').style.display='none';return;}
+    document.getElementById('rlabel').textContent=total+' résultat'+(total>1?'s':'')+' pour "'+q+'"';
+    if(people.length&&(people[0].popularity||0)>8){
+      const dept=people[0].known_for_department||'';
+      const role=dept==='Directing'?'director':dept==='Production'?'producer':'actor';
+      await renderActorCard(people[0].id,role);
     }
-
-    // Films + séries mélangés triés par popularité
-    const combined = [...allMovies,...allShows].sort((a,b)=>(b.popularity||0)-(a.popularity||0));
-    renderCards(combined);
+    const wrap=document.getElementById('flist-wrap'); wrap.innerHTML='';
+    const combined=[...movies,...shows].sort((a,b)=>(b.popularity||0)-(a.popularity||0));
+    if(combined.length){
+      const list=document.createElement('div'); list.className='flist';
+      combined.forEach(f=>list.appendChild(makeCard(f)));
+      wrap.appendChild(list);
+    }
     document.getElementById('rres').style.display='block';
-  }catch(e){ console.error(e); showErr('serr','❌ '+(e.message||'Erreur réseau')); }
+  }catch(e){console.error(e);showErr('serr','❌ '+(e.message||'Erreur réseau'));}
   document.getElementById('sload').style.display='none';
 }
 
 /* ══ PAGE PERSONNE ══ */
-async function loadPersonPage(personId, name, role){
-  clearSearch();
-  document.getElementById('sload').style.display='block';
+async function loadPerson(pid,name,role){
+  clearSearch(); document.getElementById('sload').style.display='block';
   try{
-    await renderActorDetail(personId, role);
-    const cr = await tmdb(`/person/${personId}/combined_credits`);
-    let films = [];
+    await renderActorCard(pid,role);
+    const cr=await tmdb(`/person/${pid}/combined_credits`);
+    // Filtre et trie : films puis séries, TV show en dernier, par popularité
+    let cast=[];
     if(role==='actor'){
-      films = (cr.cast||[]).filter(f=>f.poster_path&&(f.vote_count||0)>5)
-        .sort((a,b)=>(b.popularity||0)-(a.popularity||0)).slice(0,14)
-        .map(f=>({...f,_r:'Acteur',_type:f.media_type||'movie'}));
+      const raw=(cr.cast||[]).filter(f=>f.poster_path&&(f.vote_count||0)>3);
+      // Sépare films, séries, tv shows
+      const films=raw.filter(f=>f.media_type==='movie').sort((a,b)=>(b.popularity||0)-(a.popularity||0));
+      const series=raw.filter(f=>f.media_type==='tv'&&(f.episode_count||0)>2).sort((a,b)=>(b.popularity||0)-(a.popularity||0));
+      const tvShows=raw.filter(f=>f.media_type==='tv'&&(f.episode_count||0)<=2).sort((a,b)=>(b.popularity||0)-(a.popularity||0));
+      cast=[...films.slice(0,12),...series.slice(0,6),...tvShows.slice(0,4)].map((f,i)=>({...f,_t:f.media_type,_r:'Acteur',_istvshow:f.media_type==='tv'&&(f.episode_count||0)<=2}));
     } else if(role==='director'){
-      films = (cr.crew||[]).filter(f=>f.job==='Director'&&f.poster_path)
-        .sort((a,b)=>(b.vote_count||0)-(a.vote_count||0)).slice(0,14)
-        .map(f=>({...f,_r:'Réalisateur',_type:f.media_type||'movie'}));
+      cast=(cr.crew||[]).filter(f=>f.job==='Director'&&f.poster_path).sort((a,b)=>(b.vote_count||0)-(a.vote_count||0)).slice(0,14).map(f=>({...f,_t:f.media_type||'movie',_r:'Réalisateur'}));
     } else {
-      films = (cr.crew||[]).filter(f=>['Producer','Executive Producer'].includes(f.job)&&f.poster_path)
-        .sort((a,b)=>(b.vote_count||0)-(a.vote_count||0)).slice(0,14)
-        .map(f=>({...f,_r:'Producteur',_type:f.media_type||'movie'}));
+      cast=(cr.crew||[]).filter(f=>['Producer','Executive Producer'].includes(f.job)&&f.poster_path).sort((a,b)=>(b.vote_count||0)-(a.vote_count||0)).slice(0,14).map(f=>({...f,_t:f.media_type||'movie',_r:'Producteur'}));
     }
-    const roleLabels = {actor:'Acteur·rice',director:'Réalisateur',producer:'Producteur'};
-    document.getElementById('rlabel').textContent = 'Filmographie de '+name+' ('+films.length+' œuvres)';
-    renderCards(films);
+    document.getElementById('rlabel').textContent='Filmographie ('+cast.length+' œuvres)';
+    const wrap=document.getElementById('flist-wrap'); wrap.innerHTML='';
+    // Section films
+    const filmsOnly=cast.filter(f=>f._t==='movie');
+    const seriesOnly=cast.filter(f=>f._t==='tv'&&!f._istvshow);
+    const tvOnly=cast.filter(f=>f._istvshow);
+    if(filmsOnly.length){
+      const h=document.createElement('div'); h.className='section-header'; h.textContent='🎬 Films'; wrap.appendChild(h);
+      const list=document.createElement('div'); list.className='flist';
+      filmsOnly.forEach(f=>list.appendChild(makeCard(f))); wrap.appendChild(list);
+    }
+    if(seriesOnly.length){
+      const h=document.createElement('div'); h.className='section-header'; h.textContent='📺 Séries'; wrap.appendChild(h);
+      const list=document.createElement('div'); list.className='flist';
+      seriesOnly.forEach(f=>list.appendChild(makeCard(f))); wrap.appendChild(list);
+    }
+    if(tvOnly.length){
+      const h=document.createElement('div'); h.className='section-header'; h.textContent='📡 Émissions & Apparitions TV'; wrap.appendChild(h);
+      const list=document.createElement('div'); list.className='flist';
+      tvOnly.forEach(f=>list.appendChild(makeCard(f))); wrap.appendChild(list);
+    }
     document.getElementById('rres').style.display='block';
-  }catch(e){ console.error(e); showErr('serr','❌ '+e.message); }
+  }catch(e){console.error(e);showErr('serr','❌ '+e.message);}
   document.getElementById('sload').style.display='none';
 }
 
-async function renderActorDetail(personId, role){
-  const roleLabels = {actor:'Acteur / Actrice',director:'Réalisateur',producer:'Producteur'};
+async function renderActorCard(pid,role){
+  const roleLabels={actor:'Acteur / Actrice',director:'Réalisateur',producer:'Producteur'};
   try{
-    const [det, detEN] = await Promise.all([
-      tmdb(`/person/${personId}`),
-      tmdb(`/person/${personId}`, 'en-US')
-    ]);
-
-    const ph = det.profile_path
-      ? `<img class="actor-photo" src="${IMGM}${det.profile_path}" alt="${esc(det.name)}">`
-      : `<div class="actor-photo-ph">👤</div>`;
-
-    let age = '';
-    if(det.birthday){
-      const b = new Date(det.birthday);
-      if(!det.deathday) age = Math.floor((new Date()-b)/(365.25*24*3600*1000))+' ans';
-      else age = Math.floor((new Date(det.deathday)-b)/(365.25*24*3600*1000))+' ans (†'+det.deathday.slice(0,4)+')';
-    }
-
-    const pills = [
-      age,
-      det.place_of_birth ? '📍 '+det.place_of_birth : '',
-      det.birthday ? '🎂 '+det.birthday.split('-').reverse().join('/') : ''
-    ].filter(Boolean).map(x=>`<span class="actor-pill">${esc(x)}</span>`).join('');
-
-    // Bio : préfère FR si dispo et suffisamment longue, sinon EN
-    let bio = det.biography || '';
-    if(bio.length < 100 && detEN.biography) bio = detEN.biography;
-    const bioId = 'bio-'+personId;
-
-    document.getElementById('actor-detail').innerHTML = `
+    const [det,detEN]=await Promise.all([tmdb(`/person/${pid}`),tmdb(`/person/${pid}`,'en-US')]);
+    const ph=det.profile_path?`<img class="actor-photo" src="${IMGM}${det.profile_path}" alt="">`:`<div class="actor-photo-ph">👤</div>`;
+    let age='';
+    if(det.birthday){ const b=new Date(det.birthday); if(!det.deathday) age=Math.floor((new Date()-b)/(365.25*24*3600*1000))+' ans'; else age=Math.floor((new Date(det.deathday)-b)/(365.25*24*3600*1000))+' ans (†'+det.deathday.slice(0,4)+')'; }
+    const pills=[age,det.place_of_birth?'📍 '+det.place_of_birth:'',det.birthday?'🎂 '+det.birthday.split('-').reverse().join('/'):''].filter(Boolean).map(x=>`<span class="actor-pill">${esc(x)}</span>`).join('');
+    // Bio
+    let bio=det.biography||'';
+    if(bio.length<100&&detEN.biography) bio=detEN.biography;
+    const bioId='bio-'+pid;
+    // Récompenses personne
+    const pAwards=getPersonAwards(det.name);
+    const awardsHtml=pAwards.length?`<div class="person-awards">${pAwards.map(a=>`<div class="person-award ${a.cls}" title="${esc(a.cat)} (${a.y})">${a.ico} ${a.t} — ${esc(a.cat)}</div>`).join('')}</div>`:'';
+    document.getElementById('actor-detail').innerHTML=`
       <div class="actor-card">
         <div class="actor-top">
           ${ph}
@@ -632,85 +730,76 @@ async function renderActorDetail(personId, role){
             <div class="actor-pills">${pills}</div>
           </div>
         </div>
-        ${bio ? `
-        <div class="actor-bio-wrap">
+        ${awardsHtml}
+        ${bio?`<div>
           <div class="actor-bio truncated" id="${bioId}">${esc(bio)}</div>
-          <button class="btn-bio-more" id="btn-${bioId}" onclick="toggleBio('${bioId}')">
-            <span id="lbl-${bioId}">Lire la biographie complète</span> <span>↓</span>
-          </button>
-        </div>` : ''}
+          <button class="btn-bio" id="btn-${bioId}" onclick="toggleBio('${bioId}')">Lire la biographie complète ↓</button>
+        </div>`:''}
       </div>`;
   }catch(e){ document.getElementById('actor-detail').innerHTML=''; }
 }
 
 function toggleBio(id){
-  const el = document.getElementById(id);
-  const lbl = document.getElementById('lbl-'+id);
-  const btn = document.getElementById('btn-'+id);
-  if(el.classList.contains('truncated')){
-    el.classList.remove('truncated');
-    lbl.textContent = 'Réduire la biographie';
-    btn.querySelector('span:last-child').textContent = '↑';
-  } else {
-    el.classList.add('truncated');
-    lbl.textContent = 'Lire la biographie complète';
-    btn.querySelector('span:last-child').textContent = '↓';
-  }
+  const el=document.getElementById(id), btn=document.getElementById('btn-'+id);
+  if(el.classList.contains('truncated')){ el.classList.remove('truncated'); btn.textContent='Réduire ↑'; }
+  else { el.classList.add('truncated'); btn.textContent='Lire la biographie complète ↓'; }
 }
 
-/* ══ RENDER CARDS ══ */
-function renderCards(items){
-  const list = document.getElementById('flist'); list.innerHTML='';
-  items.forEach(f=>{
-    const card = document.createElement('div'); card.className='fcard';
-    const media = f._type || 'movie';
-    card.onclick = () => openModal(f.id, media);
-    const raw = f.vote_average; const sc = raw?(Math.round(raw*10)/10).toFixed(1):null; const cls=sc>=7?'g':sc>=5?'m':'l';
-    const title = f.title||f.name||'';
-    const yr = (f.release_date||f.first_air_date||'').slice(0,4);
-    const ph = f.poster_path ? `<img class="fthumb" src="${IMGS}${f.poster_path}" loading="lazy">` : `<div class="fthumb-ph">${media==='tv'?'📺':'🎬'}</div>`;
-    const ov = f.overview ? f.overview.slice(0,160)+(f.overview.length>160?'…':'') : '';
-    let chips = '';
-    if(f._r){ const ri=f._r==='Acteur'?'🎭':f._r==='Réalisateur'?'🎥':'🎙'; chips+=`<span class="chip hl">${ri} ${f._r}</span>`; }
-    if(media==='tv') chips+=`<span class="chip serie">📺 Série</span>`;
-    const gmap = media==='tv'?GENRES_TV:GENRES_MOVIE;
-    if(f.genre_ids) f.genre_ids.slice(0,2).forEach(id=>{ if(gmap[id]) chips+=`<span class="chip genre">${gmap[id]}</span>`; });
-    card.innerHTML = ph+`<div class="fbody"><div class="ftitle">${esc(title)}</div><div class="fmeta">${yr}</div>${ov?`<div class="foverview">${ov}</div>`:''}<div class="fhint">Cliquer pour la fiche complète →</div>${chips?`<div class="fchips">${chips}</div>`:''}</div>${sc?`<div class="fscore ${cls}">★ ${sc}</div>`:''}`;
-    list.appendChild(card);
-  });
+/* ══ MAKE CARD ══ */
+function makeCard(f){
+  const card=document.createElement('div'); card.className='fcard';
+  const media=f._t||'movie';
+  card.onclick=()=>openModal(f.id,media);
+  const raw=f.vote_average; const sc=raw?(Math.round(raw*10)/10).toFixed(1):null; const cls=sc>=7?'g':sc>=5?'m':'l';
+  const title=f.title||f.name||'';
+  const yr=(f.release_date||f.first_air_date||'').slice(0,4);
+  const ph=f.poster_path?`<img class="fthumb" src="${IMGS}${f.poster_path}" loading="lazy">`:`<div class="fthumb-ph">${media==='tv'?'📺':'🎬'}</div>`;
+  const ov=f.overview?f.overview.slice(0,160)+(f.overview.length>160?'…':''):'';
+  // Récompenses sur la carte
+  const filmKey=(title||'').toLowerCase();
+  const origKey=(f.original_title||f.original_name||'').toLowerCase();
+  const filmAw=AWARDS_DB[filmKey]||AWARDS_DB[origKey]||[];
+  let chips='';
+  if(f._r){ const ri=f._r==='Acteur'?'🎭':f._r==='Réalisateur'?'🎥':'🎙'; chips+=`<span class="chip hl">${ri} ${f._r}</span>`; }
+  if(media==='tv'&&!f._istvshow) chips+=`<span class="chip serie">📺 Série</span>`;
+  if(f._istvshow) chips+=`<span class="chip tvshow">📡 Émission TV</span>`;
+  const gmap=media==='tv'?GT:GM;
+  if(f.genre_ids) f.genre_ids.slice(0,2).forEach(id=>{ if(gmap[id]) chips+=`<span class="chip genre">${gmap[id]}</span>`; });
+  filmAw.slice(0,1).forEach(a=>{ chips+=`<span class="award-chip ${a.cls}">${a.ico} ${a.t} — ${a.y}</span>`; });
+  card.innerHTML=ph+`<div class="fbody"><div class="ftitle">${esc(title)}</div><div class="fmeta">${yr}</div>${ov?`<div class="foverview">${ov}</div>`:''}<div class="fhint">Cliquer pour la fiche complète →</div>${chips?`<div class="fchips">${chips}</div>`:''}</div>${sc?`<div class="fscore ${cls}">★ ${sc}</div>`:''}`;
+  return card;
 }
 
-function noRes(q){ document.getElementById('flist').innerHTML=`<div class="nores"><span>🎞</span>Aucun résultat pour "<strong>${esc(q)}</strong>".</div>`; document.getElementById('rres').style.display='block'; }
+function noRes(q){ document.getElementById('flist-wrap').innerHTML=`<div class="nores"><span>🎞</span>Aucun résultat pour "<strong>${esc(q)}</strong>".</div>`; document.getElementById('rres').style.display='block'; }
 
-/* ══ MODAL FILM/SÉRIE ══ */
-async function openModal(id, media='movie'){
+/* ══ MODAL ══ */
+async function openModal(id,media='movie'){
   trailerKey=null;
   document.getElementById('overlay').style.display='block';
   document.body.style.overflow='hidden';
-  ['mtitle','morig','mpills','mawards','mratings','msynopsis','mgenres','mplatforms','mcrew','mcast','plat-label'].forEach(i=>{ const el=document.getElementById(i); if(el) el.innerHTML=i==='mtitle'?'Chargement…':i==='msynopsis'?'Chargement…':''; });
+  ['mtitle','morig','mpills','mawards-block','mratings','msynopsis','mgenres','mplatforms','mcrew','mcast','plat-label'].forEach(k=>{ const el=document.getElementById(k); if(el) el.innerHTML=k==='mtitle'?'Chargement…':k==='msynopsis'?'Chargement…':''; });
   document.getElementById('mback').innerHTML='<div class="mback-ph"></div>';
   document.getElementById('mpwrap').innerHTML='<div class="mposter-ph">🎬</div>';
   document.getElementById('playbtn').style.opacity='1'; document.getElementById('playbtn').style.pointerEvents='auto';
   document.getElementById('playlbl').textContent='▶ Bande-annonce';
-
   try{
-    const ep = media==='tv'?'tv':'movie';
-    const [det, vids, provRaw] = await Promise.all([
+    const ep=media==='tv'?'tv':'movie';
+    const [det,vids,provRaw]=await Promise.all([
       tmdb(`/${ep}/${id}?append_to_response=credits`),
       tmdb(`/${ep}/${id}/videos`),
       fetch(`https://api.themoviedb.org/3/${ep}/${id}/watch/providers?api_key=${getKey()}`).then(r=>r.json()).catch(()=>null)
     ]);
-    const creds = det.credits || {cast:[],crew:[]};
+    const creds=det.credits||{cast:[],crew:[]};
     if(!det.credits){ try{ const c=await tmdb(`/${ep}/${id}/credits`); creds.cast=c.cast||[]; creds.crew=c.crew||[]; }catch{} }
 
     if(det.backdrop_path) document.getElementById('mback').innerHTML=`<img class="mback" src="${IMGB}${det.backdrop_path}" loading="lazy">`;
-    if(det.poster_path) document.getElementById('mpwrap').innerHTML=`<img class="mposter" src="${IMG}${det.poster_path}" onclick="openTrailer()" title="Voir la bande-annonce">`;
+    if(det.poster_path) document.getElementById('mpwrap').innerHTML=`<img class="mposter" src="${IMG}${det.poster_path}" onclick="openTrailer()" title="▶ Voir la bande-annonce">`;
 
     const tr=(vids.results||[]).find(v=>v.type==='Trailer'&&v.site==='YouTube')||(vids.results||[]).find(v=>v.site==='YouTube');
     if(tr) trailerKey=tr.key;
     else{ document.getElementById('playbtn').style.opacity='.3'; document.getElementById('playbtn').style.pointerEvents='none'; document.getElementById('playlbl').textContent='Pas de bande-annonce'; }
 
-    const title = det.title||det.name||'';
+    const title=det.title||det.name||'';
     document.getElementById('mtitle').textContent=title;
     const orig=det.original_title||det.original_name||'';
     if(orig&&orig!==title) document.getElementById('morig').textContent=orig;
@@ -721,8 +810,25 @@ async function openModal(id, media='movie'){
     const pills=[yr,rt,seas,media==='tv'?'📺 Série':'🎬 Film'].filter(Boolean);
     document.getElementById('mpills').innerHTML=pills.map(p=>`<span class="mpill${p==='📺 Série'?' serie':''}">${p}</span>`).join('');
 
-    document.getElementById('mawards').innerHTML=getAwards(det).map(a=>`<div class="award ${a.cls}"><span>${a.ico}</span> ${a.text}</div>`).join('');
+    // RÉCOMPENSES FILM — bloc dédié
+    const aw=getFilmAwards(det);
+    if(aw.length){
+      document.getElementById('mawards-block').innerHTML=`
+        <div class="awards-block">
+          <div class="awards-block-title">🏆 Récompenses</div>
+          <div class="awards-list">${aw.map(a=>`
+            <div class="award-item">
+              <div class="award-item-ico">${a.ico}</div>
+              <div class="award-item-info">
+                <div class="award-item-title">${a.t} ${a.y}</div>
+                <div class="award-item-detail">${esc(a.cat)}</div>
+              </div>
+            </div>`).join('')}
+          </div>
+        </div>`;
+    }
 
+    // NOTES
     const sc=det.vote_average?(Math.round(det.vote_average*10)/10).toFixed(1):null;
     const cls=sc>=7?'green':sc>=5?'gold':'red';
     const ur=userRatings[id]||0;
@@ -732,7 +838,6 @@ async function openModal(id, media='movie'){
 
     document.getElementById('msynopsis').textContent=det.overview||'Aucun synopsis disponible.';
     document.getElementById('mgenres').innerHTML=(det.genres||[]).map(g=>`<span class="gtag">${g.name}</span>`).join('');
-
     buildPlatforms(provRaw);
 
     const dirs=(creds.crew||[]).filter(c=>c.job==='Director').slice(0,3);
@@ -740,8 +845,8 @@ async function openModal(id, media='movie'){
     document.getElementById('mcrew').innerHTML=[...dirs,...prods].map(c=>{
       const ph=c.profile_path?`<img class="cphoto" src="${IMGS}${c.profile_path}">`:`<div class="cphoto-ph">👤</div>`;
       const j=c.job==='Director'?'Réalisateur':c.job==='Producer'?'Producteur':'Prod. Exécutif';
-      const role=c.job==='Director'?'director':'producer';
-      return `<div class="crew-card" onclick="byPerson(${c.id},'${role}')">${ph}<div><div class="cname">${esc(c.name)}</div><div class="cjob">${j}</div></div></div>`;
+      const cr=c.job==='Director'?'director':'producer';
+      return `<div class="crew-card" onclick="byPerson(${c.id},'${cr}')">${ph}<div><div class="cname">${esc(c.name)}</div><div class="cjob">${j}</div></div></div>`;
     }).join('');
 
     document.getElementById('mcast').innerHTML=(creds.cast||[]).slice(0,16).map(a=>{
@@ -756,31 +861,18 @@ function buildPlatforms(data){
   const el=document.getElementById('mplatforms'), lbl=document.getElementById('plat-label');
   if(!data||!data.results){ el.innerHTML='<span style="font-size:13px;color:var(--text3)">Non disponible</span>'; return; }
   const region=data.results['FR']||data.results['BE']||data.results['US']||Object.values(data.results)[0];
-  if(!region){ el.innerHTML='<span style="font-size:13px;color:var(--text3)">Non référencé en streaming</span>'; return; }
+  if(!region){ el.innerHTML='<span style="font-size:13px;color:var(--text3)">Non référencé</span>'; return; }
   const platforms=[];
   if(region.flatrate) region.flatrate.forEach(p=>{ if(!platforms.find(x=>x.provider_id===p.provider_id)) platforms.push({...p,typeFr:'Streaming'}); });
-  if(!platforms.length && region.rent) region.rent.slice(0,2).forEach(p=>platforms.push({...p,typeFr:'Location'}));
-  if(!platforms.length && region.buy)  region.buy.slice(0,2).forEach(p=>platforms.push({...p,typeFr:'Achat'}));
-  if(!platforms.length){ el.innerHTML='<span style="font-size:13px;color:var(--text3)">Non disponible en streaming actuellement</span>'; return; }
-  const best=platforms[0];
+  if(!platforms.length&&region.rent) region.rent.slice(0,2).forEach(p=>platforms.push({...p,typeFr:'Location'}));
+  if(!platforms.length&&region.buy)  region.buy.slice(0,2).forEach(p=>platforms.push({...p,typeFr:'Achat'}));
+  if(!platforms.length){ el.innerHTML='<span style="font-size:13px;color:var(--text3)">Non disponible en streaming</span>'; return; }
   lbl.textContent=data.results['FR']?'Disponible en France :':'Disponible (international) :';
   el.innerHTML=platforms.slice(0,5).map((p,i)=>{
     const isB=i===0;
     const logo=p.logo_path?`<img class="pico" src="${LOGO}${p.logo_path}" alt="">`:'';
     return `<div class="platform${isB?' best':''}">${logo}<span>${esc(p.provider_name)}</span><span style="font-size:10px;color:var(--text3);margin-left:3px">${p.typeFr}</span>${isB?`<span class="best-badge">⭐ Recommandé</span>`:''}</div>`;
   }).join('');
-}
-
-function getAwards(det){
-  const awards=[];
-  const t=(det.title||det.name||'').toLowerCase();
-  const o=(det.original_title||det.original_name||'').toLowerCase();
-  const oscars={'parasite':['Meilleur Film','Meilleur Réalisateur'],'nomadland':['Meilleur Film'],'coda':['Meilleur Film'],'everything everywhere all at once':['Meilleur Film','Meilleur Réalisateur'],'oppenheimer':['Meilleur Film','Meilleur Réalisateur'],'the shape of water':['Meilleur Film','Meilleur Réalisateur'],'birdman':['Meilleur Film'],'12 years a slave':['Meilleur Film'],'argo':['Meilleur Film'],'no country for old men':['Meilleur Film','Meilleur Réalisateur'],'slumdog millionaire':['Meilleur Film'],'the king\'s speech':['Meilleur Film'],'green book':['Meilleur Film'],'spotlight':['Meilleur Film'],'moonlight':['Meilleur Film'],'titanic':['Meilleur Film','Meilleur Réalisateur'],'schindler\'s list':['Meilleur Film','Meilleur Réalisateur'],'the silence of the lambs':['Meilleur Film'],'forrest gump':['Meilleur Film'],'gladiator':['Meilleur Film'],'american beauty':['Meilleur Film'],'a beautiful mind':['Meilleur Film'],'chicago':['Meilleur Film'],'la la land':['Meilleur Réalisateur'],'braveheart':['Meilleur Film'],'the godfather':['Meilleur Film'],'amadeus':['Meilleur Film']};
-  const cesars={'anatomie d\'une chute':['Meilleur Film','Meilleur Réalisateur'],'titane':['Meilleur Film'],'les misérables':['Meilleur Film'],'portrait de la jeune fille en feu':['Meilleure Réalisatrice'],'the artist':['Meilleur Film'],'entre les murs':['Meilleur Film'],'intouchables':['Meilleur Film'],'au revoir les enfants':['Meilleur Film']};
-  const k=t in oscars?t:(o in oscars?o:null); if(k) oscars[k].forEach(c=>awards.push({cls:'oscar',ico:'🏆',text:'Oscar — '+c}));
-  const ck=t in cesars?t:(o in cesars?o:null); if(ck) cesars[ck].forEach(c=>awards.push({cls:'cesar',ico:'🎭',text:'César — '+c}));
-  if(!awards.length&&det.vote_average>=8&&det.vote_count>2000) awards.push({cls:'other',ico:'⭐',text:`Score exceptionnel · ${(Math.round(det.vote_average*10)/10).toFixed(1)}/10`});
-  return awards;
 }
 
 function setRating(mid,v){
@@ -792,19 +884,19 @@ function openTrailer(){ if(trailerKey) window.open(`https://www.youtube.com/watc
 function closeModal(){ document.getElementById('overlay').style.display='none'; document.body.style.overflow=''; }
 function overlayClick(e){ if(e.target===document.getElementById('overlay')) closeModal(); }
 
-async function byPerson(pid, role){
+async function byPerson(pid,role){
   closeModal();
   try{
-    const d = await tmdb(`/person/${pid}`);
-    document.getElementById('sinp').value = d.name;
+    const d=await tmdb(`/person/${pid}`);
+    document.getElementById('sinp').value=d.name;
     switchTab('search');
-    await loadPersonPage(pid, d.name, role);
+    await loadPerson(pid,d.name,role);
   }catch(e){ console.error(e); }
 }
 
 /* ══ QUIZ ══ */
 const QS=[
-  {id:'mood',meta:"Étape 1 — État d'esprit",title:'Comment tu te sens ce soir ?',opts:[
+  {id:'mood',meta:"Étape 1 — État d'esprit",title:'Comment tu te sens ce soir ?',type:'grid',opts:[
     {v:'aventurier et énergique',i:'⚡',l:'Aventurier',s:"Envie d'action"},
     {v:'mélancolique et nostalgique',i:'🌧',l:'Mélancolique',s:'Pensif, nostalgique'},
     {v:'curieux et intellectuel',i:'🔍',l:'Curieux',s:'Envie de réfléchir'},
@@ -812,60 +904,99 @@ const QS=[
     {v:"tendu, besoin d'adrénaline",i:'🔥',l:'Tendu',s:'Besoin de décharge'},
     {v:"émotif, envie d'être touché",i:'💫',l:'Touché',s:"Envie d'être ému"},
   ]},
-  {id:'depth',meta:"Étape 2 — Engagement",title:'Tu veux quelque chose qui te demande quoi ?',opts:[
-    {v:'réflexion profonde',i:'🧠',l:'Réfléchir',s:'Prise de tête'},
-    {v:'narration captivante',i:'📖',l:'Être absorbé',s:'Bonne histoire'},
-    {v:'beauté visuelle',i:'🎨',l:'Contempler',s:'Beau à regarder'},
-    {v:'divertissement pur',i:'🍿',l:'Se divertir',s:'Sans prise de tête'},
-  ]},
-  {id:'media',meta:"Étape 3 — Format",title:'Film ou série ?',opts:[
+  {id:'media',meta:"Étape 2 — Format",title:'Film ou série ?',type:'grid',opts:[
     {v:'film',i:'🎬',l:'Film',s:'Expérience unique'},
-    {v:'mini-série',i:'📺',l:'Mini-série',s:'3-8 épisodes'},
-    {v:'série longue',i:'🎭',l:'Série',s:'Plusieurs saisons'},
-    {v:'peu importe',i:'✨',l:'Surprise',s:'Peu importe'},
+    {v:'mini-série (3-8 épisodes)',i:'📺',l:'Mini-série',s:'Court mais intense'},
+    {v:'série longue (plusieurs saisons)',i:'🎭',l:'Série',s:'Pour s\'installer'},
+    {v:'peu importe',i:'✨',l:'Peu importe',s:'Surprise-moi'},
   ]},
-  {id:'theme',meta:'Étape 4 — Univers',title:'Dans quel univers tu veux plonger ?',opts:[
-    {v:'crime enquête thriller',i:'🕵',l:'Thriller',s:'Crime, enquête'},
-    {v:'science-fiction',i:'🚀',l:'Sci-fi',s:'Futur, tech'},
-    {v:'drame humain',i:'🎭',l:'Drame',s:'Émotions'},
-    {v:'horreur psychologique',i:'👁',l:'Horreur',s:'Angoisse'},
-    {v:'histoire vraie biopic',i:'📰',l:'Histoire vraie',s:'Faits réels'},
-    {v:'fantastique mystère',i:'🌀',l:'Fantastique',s:'Magie, mystère'},
-    {v:'comédie humour',i:'😂',l:'Comédie',s:'Rires garantis'},
-    {v:'romance amour',i:'💕',l:'Romance',s:'Amour, relations'},
+  {id:'depth',meta:"Étape 3 — Engagement",title:'Tu veux quelque chose qui te demande quoi ?',type:'grid',opts:[
+    {v:'réflexion profonde et complexe',i:'🧠',l:'Réfléchir',s:'Prise de tête'},
+    {v:'narration captivante du début à la fin',i:'📖',l:'Être absorbé',s:'Bonne histoire'},
+    {v:'beauté visuelle et atmosphère',i:'🎨',l:'Contempler',s:'Beau à regarder'},
+    {v:'divertissement pur sans prise de tête',i:'🍿',l:'Se divertir',s:'Facile à regarder'},
   ]},
-  {id:'duration',meta:'Étape 5 — Durée',title:'Tu as combien de temps ?',opts:[
-    {v:'moins de 1h30',i:'⏱',l:'Court',s:'< 1h30'},
-    {v:'1h30 à 2h',i:'🎬',l:'Standard',s:'1h30 — 2h'},
-    {v:'plus de 2h',i:'🌃',l:'Long',s:'> 2h'},
-    {v:'peu importe',i:'∞',l:'Peu importe',s:'Pas de contrainte'},
+  {id:'theme',meta:'Étape 4 — Univers',title:'Dans quel univers tu veux plonger ?',type:'grid',opts:[
+    {v:'crime enquête thriller',i:'🕵',l:'Thriller',s:'Crime, suspense'},
+    {v:'science-fiction technologie futur',i:'🚀',l:'Sci-fi',s:'Futur, tech'},
+    {v:'drame humain relations émotions',i:'🎭',l:'Drame',s:'Émotions profondes'},
+    {v:'horreur psychologique angoisse',i:'👁',l:'Horreur',s:'Tension, peur'},
+    {v:'histoire vraie biopic faits réels',i:'📰',l:'Histoire vraie',s:'Basé sur des faits'},
+    {v:'fantastique mystère étrange',i:'🌀',l:'Fantastique',s:'Magie, mystère'},
+    {v:'comédie humour légèreté',i:'😂',l:'Comédie',s:'Rires garantis'},
+    {v:'romance amour relations',i:'💕',l:'Romance',s:'Amour, relations'},
   ]},
+  {id:'era',meta:"Étape 5 — Époque",title:'Tu préfères un film récent ou un classique ?',type:'grid',opts:[
+    {v:'très récent (moins de 3 ans)',i:'✨',l:'Récent',s:'< 3 ans'},
+    {v:'années 2000-2020',i:'📽',l:'Années 2000',s:'2000 — 2020'},
+    {v:'classique (avant 2000)',i:'🎞',l:'Classique',s:'Avant 2000'},
+    {v:'peu importe',i:'∞',l:'Peu importe',s:'Toutes époques'},
+  ]},
+  {id:'alone',meta:"Étape 6 — Contexte",title:'Tu regardes avec qui ?',type:'grid',opts:[
+    {v:'seul, soirée solo',i:'🛋',l:'Seul·e',s:'Soirée solo'},
+    {v:'en couple, soirée romantique',i:'💑',l:'En couple',s:'Soirée à deux'},
+    {v:'entre amis, soirée animée',i:'👥',l:'Entre amis',s:'Bonne ambiance'},
+    {v:'en famille avec enfants',i:'👨‍👩‍👧',l:'En famille',s:'Tout public'},
+  ]},
+  {id:'lastfilm',meta:"Étape 7 — Référence (optionnel)",title:'Quel est ton dernier film coup de cœur ?',type:'text',placeholder:'Ex : Inception, Interstellar, Breaking Bad… (laisse vide si tu ne sais pas)'},
 ];
 let step=0; const ans={};
+
 function renderStep(){
   const q=QS[step];
   document.getElementById('steps').innerHTML=QS.map((_,i)=>`<div class="sdot ${i===step?'active':i<step?'done':''}"></div>`).join('');
   document.getElementById('qmeta').textContent=q.meta;
   document.getElementById('qtitle').textContent=q.title;
-  const g=document.getElementById('ogrid'); g.innerHTML='';
-  q.opts.forEach(o=>{ const d=document.createElement('div'); d.className='opt'+(ans[q.id]===o.v?' sel':''); d.innerHTML=`<span class="oicon">${o.i}</span><span class="olab">${o.l}</span><span class="osub">${o.s}</span>`; d.onclick=()=>{ans[q.id]=o.v;renderStep();}; g.appendChild(d); });
+  const container=document.getElementById('qoptions'); container.innerHTML='';
+  if(q.type==='text'){
+    const inp=document.createElement('input');
+    inp.type='text'; inp.className='qinput';
+    inp.placeholder=q.placeholder||'';
+    inp.value=ans[q.id]||'';
+    inp.oninput=()=>{ ans[q.id]=inp.value; };
+    container.appendChild(inp);
+    // Texte optionnel → toujours actif
+    document.getElementById('bnxt').disabled=false;
+  } else {
+    const grid=document.createElement('div'); grid.className='ogrid';
+    q.opts.forEach(o=>{ const d=document.createElement('div'); d.className='opt'+(ans[q.id]===o.v?' sel':''); d.innerHTML=`<span class="oicon">${o.i}</span><span class="olab">${o.l}</span><span class="osub">${o.s}</span>`; d.onclick=()=>{ans[q.id]=o.v;renderStep();}; grid.appendChild(d); });
+    container.appendChild(grid);
+    document.getElementById('bnxt').disabled=!ans[q.id];
+  }
   document.getElementById('bbk').style.visibility=step===0?'hidden':'visible';
   const last=step===QS.length-1;
   document.getElementById('bnxt').textContent=last?'Trouver mes films ✦':'Suivant →';
-  document.getElementById('bnxt').disabled=!ans[q.id];
   document.getElementById('qerr').style.display='none';
 }
+
 function prevStep(){ if(step>0){step--;renderStep();} }
-function nextStep(){ if(!ans[QS[step].id])return; if(step<QS.length-1){step++;renderStep();}else launchQuiz(); }
+function nextStep(){
+  const q=QS[step];
+  if(q.type!=='text'&&!ans[q.id]) return;
+  if(step<QS.length-1){step++;renderStep();}else launchQuiz();
+}
 
 async function launchQuiz(){
   document.getElementById('qform').style.display='none';
   document.getElementById('qload').style.display='block';
-  const isSerie=ans.media==='mini-série'||ans.media==='série longue';
-  const prompt=`Tu es un expert cinéma et séries. Profil utilisateur :\n- Humeur : ${ans.mood}\n- Engagement : ${ans.depth}\n- Format : ${ans.media}\n- Univers : ${ans.theme}\n- Durée : ${ans.duration}\n\nPropose 4 ${isSerie?'séries/mini-séries':'films'} parfaitement adaptés.\nPour chaque titre : title (français si possible), year, genre, duration (durée ou nb saisons), reason (2 phrases personnalisées), tags (3 mots).\nJSON strict sans markdown : {"intro":"...","films":[{"title":"","year":"","genre":"","duration":"","reason":"","tags":["",""]}]}`;
+  const isSerie=ans.media&&(ans.media.includes('série')||ans.media.includes('mini'));
+  const prompt=`Tu es un expert en cinéma et séries passionné. Profil détaillé de l'utilisateur :
+- Humeur : ${ans.mood}
+- Format souhaité : ${ans.media}
+- Engagement : ${ans.depth}
+- Univers : ${ans.theme}
+- Époque : ${ans.era}
+- Contexte de visionnage : ${ans.alone}
+${ans.lastfilm?`- Dernier coup de cœur : ${ans.lastfilm} (utilise ça pour calibrer le niveau et le style)`:''} 
+
+Propose exactement 4 ${isSerie?'séries ou mini-séries':'films'} parfaitement adaptés à ce profil précis. Tiens compte de TOUS les critères simultanément.
+Pour chaque titre : title (en français si possible), year, genre, duration (durée pour film, ou "X saisons" pour série), reason (2 phrases très personnalisées qui expliquent POURQUOI ce titre colle à CE profil précis), tags (3 mots-clés évocateurs).
+JSON strict sans markdown :
+{"intro":"...","films":[{"title":"","year":"","genre":"","duration":"","reason":"","tags":["",""]}]}`;
+
   let ai;
   try{
-    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,messages:[{role:'user',content:prompt}]})});
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1400,messages:[{role:'user',content:prompt}]})});
     const j=await r.json();
     const raw=j.content.map(b=>b.text||'').join('').replace(/```json|```/g,'').trim();
     ai=JSON.parse(raw);
@@ -873,30 +1004,29 @@ async function launchQuiz(){
 
   const st=isSerie?'tv':'movie';
   for(const f of ai.films){
-    f.poster=null; f.tmdbId=null; f.tmdbMedia=st;
+    f.poster=null; f.tmdbId=null;
     try{ const d=await tmdb(`/search/${st}?query=${enc(f.title)}&include_adult=false`); if(d.results&&d.results[0]){f.poster=d.results[0].poster_path;f.tmdbId=d.results[0].id;} }catch{}
   }
 
-  // Construit le texte "parfait pour toi"
-  const moodTxt={'aventurier et énergique':'l\'aventure et l\'action','mélancolique et nostalgique':'la mélancolie et l\'émotion','curieux et intellectuel':'la réflexion et les idées','détendu et calme':'te relaxer sans effort',"tendu, besoin d'adrénaline":'l\'adrénaline et le suspense',"émotif, envie d'être touché":'être ému et touché'};
-  const depthTxt={'réflexion profonde':'qui te fait vraiment réfléchir','narration captivante':'qui t\'absorbe du début à la fin','beauté visuelle':'visuellement bluffant','divertissement pur':'sans prise de tête'};
-  const mood=moodTxt[ans.mood]||ans.mood;
-  const depth=depthTxt[ans.depth]||ans.depth;
-  const format=ans.media==='film'?'ce film':ans.media==='mini-série'?'cette mini-série':'cette série';
+  const moodTxt={'aventurier et énergique':'l\'aventure','mélancolique et nostalgique':'la mélancolie','curieux et intellectuel':'la réflexion',"tendu, besoin d'adrénaline":'l\'adrénaline',"émotif, envie d'être touché":'l\'émotion','détendu et calme':'la détente'};
+  const depthTxt={'réflexion profonde et complexe':'faire vraiment réfléchir','narration captivante du début à la fin':'captiver du début à la fin','beauté visuelle et atmosphère':'offrir un spectacle visuel','divertissement pur sans prise de tête':'divertir sans effort'};
 
   document.getElementById('rintro').textContent=ai.intro;
   const list=document.getElementById('qflist'); list.innerHTML='';
   ai.films.forEach((f,i)=>{
     const card=document.createElement('div'); card.className='fcard';
-    if(f.tmdbId) card.onclick=()=>openModal(f.tmdbId,f.tmdbMedia);
+    if(f.tmdbId) card.onclick=()=>openModal(f.tmdbId,st);
     const ph=f.poster?`<img class="fthumb" src="${IMGS}${f.poster}">`:`<div class="fthumb-ph">${isSerie?'📺':'🎬'}</div>`;
     const tags=(f.tags||[]).map(t=>`<span class="ftag">${esc(t)}</span>`).join('');
-    const perfectText=`${format.charAt(0).toUpperCase()+format.slice(1)} est fait pour toi si tu cherches ${mood} avec quelque chose ${depth}.`;
+    const mood=moodTxt[ans.mood]||ans.mood;
+    const depth=depthTxt[ans.depth]||ans.depth;
+    const fmt=ans.media==='film'?'Ce film':ans.media&&ans.media.includes('mini')?'Cette mini-série':'Cette série';
+    const perfectText=`${fmt} est parfait pour toi ce soir : il va te donner ${mood} tout en ${depth}.${ans.alone&&!ans.alone.includes('seul')?` Idéal pour ${ans.alone}.`:''}`;
     card.innerHTML=ph+`<div class="fbody">
       <div class="fnum">Sélection ${i+1}</div>
       <div class="ftitle">${esc(f.title)}</div>
       <div class="fmeta">${[f.year,f.genre,f.duration].filter(Boolean).join(' · ')}</div>
-      <div class="perfect-box"><div class="perfect-ico">✨</div><div><div class="perfect-title">Parfait pour toi si…</div><div class="perfect-text">${perfectText}</div></div></div>
+      <div class="perfect-box"><div class="perfect-ico">✨</div><div><div class="perfect-title">Parfait pour toi ce soir</div><div class="perfect-text">${perfectText}</div></div></div>
       <div class="freason">${esc(f.reason)}</div>
       <div class="ftags">${tags}</div>
       ${f.tmdbId?'<div class="fhint" style="margin-top:8px">Cliquer pour la fiche complète →</div>':''}
