@@ -1030,18 +1030,17 @@ async function launchQuiz(){
   document.getElementById('qform').style.display='none';
   document.getElementById('qload').style.display='block';
   // Nouvelles questions
-  const prompt=`Tu es un expert en cinéma et séries passionné. Profil précis :
-${ans.lastfilm?`- Film/série de référence : "${ans.lastfilm}" (calibre le niveau et le style)` : ''}
-- Humeur : ${ans.mood}
-- Engagement : ${ans.depth}
-- Univers : ${ans.theme}
-- Tolérance : ${ans.tolerance}
-- Rapport nouveauté : ${ans.surprise}
-
-Propose 4 films ou séries (choisis le format le plus adapté). Pour chaque :
-title (français si possible), year, genre, duration, media_type ("movie" ou "tv"), reason (2 phrases perso), tags (3 mots).
-JSON strict : {"intro":"...","films":[{"title":"","year":"","genre":"","duration":"","media_type":"movie","reason":"","tags":["",""]}]}`;
-
+  const refLine = ans.lastfilm ? '- Film/série de référence : "' + ans.lastfilm + '" (calibre le niveau et le style)\n' : '';
+  const prompt = 'Tu es un expert en cinéma et séries passionné. Profil précis :\n'
+    + refLine
+    + '- Humeur : ' + ans.mood + '\n'
+    + '- Engagement : ' + ans.depth + '\n'
+    + '- Univers : ' + ans.theme + '\n'
+    + '- Tolérance : ' + ans.tolerance + '\n'
+    + '- Rapport nouveauté : ' + ans.surprise + '\n\n'
+    + 'Propose 4 films ou séries (choisis le format le plus adapté). Pour chaque :\n'
+    + 'title (français si possible), year, genre, duration, media_type ("movie" ou "tv"), reason (2 phrases perso), tags (3 mots).\n'
+    + 'JSON strict sans markdown : {"intro":"...","films":[{"title":"","year":"","genre":"","duration":"","media_type":"movie","reason":"","tags":["",""]}]}';
   let ai;
   try{
     const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1400,messages:[{role:'user',content:prompt}]})});
