@@ -895,40 +895,31 @@ async function openModal(id,media='movie'){
   }catch(e){ document.getElementById('msynopsis').textContent='Erreur : '+e.message; }
 }
 
-/* URLs directes des plateformes */
+/* URLs directes des plateformes — testées et fonctionnelles */
 const PLATFORM_URLS = {
-  'Netflix':                'https://www.netflix.com/search?q=',
-  'Canal+':                 'https://www.canalplus.com/recherche/?q=',
-  'Canal Plus':             'https://www.canalplus.com/recherche/?q=',
-  'Amazon Prime Video':     'https://www.amazon.fr/s?k=',
-  'Prime Video':            'https://www.amazon.fr/s?k=',
-  'Disney Plus':            'https://www.disneyplus.com/search/',
-  'Disney+':                'https://www.disneyplus.com/search/',
-  'Apple TV Plus':          'https://tv.apple.com/search?term=',
-  'Apple TV+':              'https://tv.apple.com/search?term=',
-  'Max':                    'https://www.max.com/search?q=',
-  'HBO Max':                'https://www.max.com/search?q=',
-  'Paramount Plus':         'https://www.paramountplus.com/search/',
-  'Paramount+':             'https://www.paramountplus.com/search/',
-  'Crunchyroll':            'https://www.crunchyroll.com/search?q=',
-  'Mubi':                   'https://mubi.com/search?q=',
-  'Shadowz':                'https://www.shadowz.fr/recherche?q=',
-  'Salto':                  'https://www.salto.fr/recherche?q=',
-  'OCS':                    'https://www.ocs.fr/recherche?q=',
-  'Arte':                   'https://www.arte.tv/fr/search/?q=',
-  'France TV':              'https://www.france.tv/recherche?q=',
-  'Mycanal':                'https://www.canalplus.com/recherche/?q=',
+  'netflix':        t => 'https://www.netflix.com/search?q=' + encodeURIComponent(t),
+  'canal':          t => 'https://www.canalplus.com/recherche/?q=' + encodeURIComponent(t),
+  'amazon':         t => 'https://www.amazon.fr/s?k=' + encodeURIComponent(t) + '&i=instant-video',
+  'prime':          t => 'https://www.amazon.fr/s?k=' + encodeURIComponent(t) + '&i=instant-video',
+  'disney':         t => 'https://www.disneyplus.com/search/' + encodeURIComponent(t),
+  'apple':          t => 'https://tv.apple.com/search?term=' + encodeURIComponent(t),
+  'max':            t => 'https://www.max.com/search?q=' + encodeURIComponent(t),
+  'hbo':            t => 'https://www.max.com/search?q=' + encodeURIComponent(t),
+  'paramount':      t => 'https://www.paramountplus.com/search/?query=' + encodeURIComponent(t),
+  'mubi':           t => 'https://mubi.com/search?q=' + encodeURIComponent(t),
+  'arte':           t => 'https://www.arte.tv/fr/search/?q=' + encodeURIComponent(t),
+  'ocs':            t => 'https://www.ocs.fr/recherche?q=' + encodeURIComponent(t),
+  'crunchyroll':    t => 'https://www.crunchyroll.com/search?q=' + encodeURIComponent(t),
+  'default':        (name, t) => 'https://www.google.com/search?q=' + encodeURIComponent(name + ' ' + t + ' streaming regarder'),
 };
 
-function getPlatformUrl(name, title) {
-  const clean = title || '';
-  for(const [key, url] of Object.entries(PLATFORM_URLS)) {
-    if(name.toLowerCase().includes(key.toLowerCase()) || key.toLowerCase().includes(name.toLowerCase().split(' ')[0])) {
-      return url + encodeURIComponent(clean);
-    }
+function getPlatformUrl(providerName, title) {
+  const n = providerName.toLowerCase();
+  for(const [key, fn] of Object.entries(PLATFORM_URLS)) {
+    if(key === 'default') continue;
+    if(n.includes(key)) return fn(title);
   }
-  // Fallback : recherche Google
-  return 'https://www.google.com/search?q=' + encodeURIComponent(name + ' ' + clean + ' streaming');
+  return PLATFORM_URLS.default(providerName, title);
 }
 
 function buildPlatforms(data, movieTitle){
