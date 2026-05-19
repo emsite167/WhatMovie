@@ -1130,34 +1130,95 @@ function getPlatformUrl(providerName, title) {
 }
 
 function buildPlatforms(data, movieTitle){
-  const el=document.getElementById('mplatforms'), lbl=document.getElementById('plat-label');
-  if(!data||!data.results){ el.innerHTML='<span style="font-size:13px;color:var(--text3)">Non disponible</span>'; return; }
-  const region=data.results['FR']||data.results['BE']||data.results['US']||Object.values(data.results)[0];
-  if(!region){ el.innerHTML='<span style="font-size:13px;color:var(--text3)">Non référencé</span>'; return; }
-  const platforms=[];
-  if(region.flatrate) region.flatrate.forEach(p=>{ if(!platforms.find(x=>x.provider_id===p.provider_id)) platforms.push({...p,typeFr:'Streaming inclus'}); });
-  if(region.rent) region.rent.forEach(p=>{ if(!platforms.find(x=>x.provider_id===p.provider_id)) platforms.push({...p,typeFr:'Location'}); });
-  if(region.buy)  region.buy.forEach(p=>{ if(!platforms.find(x=>x.provider_id===p.provider_id)) platforms.push({...p,typeFr:'Achat'}); });
-  if(!platforms.length){ el.innerHTML='<span style="font-size:13px;color:var(--text3)">Non disponible en streaming actuellement</span>'; return; }
-  lbl.textContent=data.results['FR']?'Disponible en France — cliquer pour accéder :':'Disponible (international) — cliquer pour accéder :';
-  const streaming=platforms.filter(p=>p.typeFr==='Streaming inclus');
-  const others=platforms.filter(p=>p.typeFr!=='Streaming inclus');
-  const sorted=[...streaming,...others].slice(0,6);
-  el.innerHTML=sorted.map((p,i)=>{
-    const isB=p.typeFr==='Streaming inclus'&&i===0;
-    const logo=p.logo_path?`<img class="pico" src="${LOGO}${p.logo_path}" alt="">`:'';
-    const url=getPlatformUrl(p.provider_name, movieTitle||'');
-    return `<a href="${url}" target="_blank" rel="noopener" style="text-decoration:none">
-      <div class="platform${isB?' best':''}" style="cursor:pointer;transition:transform .15s" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
-        ${logo}
-        <span>${esc(p.provider_name)}</span>
-        <span style="font-size:10px;color:var(--text3);margin-left:3px">${p.typeFr}</span>
-        ${isB?`<span class="best-badge">⭐ Recommandé</span>`:''}
-        <span style="font-size:11px;margin-left:auto;color:var(--text3)">↗</span>
-      </div>
-    </a>`;
-  }).join('');
+  const el  = document.getElementById('mplatforms');
+  const lbl = document.getElementById('plat-label');
+
+  if(!data || !data.results){
+    el.innerHTML = '<span style="font-size:13px;color:var(--text3)">Non disponible</span>';
+    return;
+  }
+
+  const region = data.results['FR'] || data.results['BE'] || data.results['US'] || Object.values(data.results)[0];
+
+  if(!region){
+    el.innerHTML = '<span style="font-size:13px;color:var(--text3)">Non référencé</span>';
+    return;
+  }
+
+  // Collecte toutes les options
+  const platforms = [];
+  if(region.flatrate) region.flatrate.forEach(p => {
+    if(!platforms.find(x => x.provider_id === p.provider_id))
+      platforms.push({...p, typeFr: 'Streaming inclus'});
+  });
+  if(region.rent) region.rent.forEach(p => {
+    if(!platforms.find(x => x.provider_id === p.provider_id))
+      platforms.push({...p, typeFr: 'Location'});
+  });
+  if(region.buy) region.buy.forEach(p => {
+    if(!platforms.find(x => x.provider_id === p.provider_id))
+      platforms.push({...p, typeFr: 'Achat'});
+  });
+
+  if(!platforms.length){
+    el.innerHTML = '<span style="font-size:13px;color:var(--text3)">Non disponible en streaming actuellement</span>';
+    lbl.textContent = '';
+    return;
+  }
+
+  // Trie : streaming d'abord
+  platforms.sort((a,b) => (a.typeFr==='Streaming inclus'?0:1) - (b.typeFr==='Streaming inclus'?0:1));
+
+  const regionCode = data.results['FR'] ? 'FR' : 'US';
+  lbl.textContent = (regionCode==='FR' ? 'Disponible en France' : 'Disponible') + ' — cliquer pour accéder :';
+
+  // Génère les boutons — chaque bouton ouvre JustWatch sur la page du film
+  // JustWatch est le lien le plus fiable : il redirige vers la plateforme avec la session
+  const jwSlug = (movieTitle||'').toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g,'')
+    .replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  const jwUrl  = 'https://www.justwatch.com/fr/recherche?q=' + encodeURIComponent(movieTitle||'');
+
+  el.innerHTML = '';
+  platforms.slice(0,6).forEach((p, i) => {
+    const isTop = i === 0 && p.typeFr === 'Streaming inclus';
+    const logo  = p.logo_path
+      ? '<img class="pico" src="' + LOGO + p.logo_path + '" alt="">'
+      : '';
+
+    const a = document.createElement('a');
+    a.href   = getPlatformUrl(p.provider_name, movieTitle||'');
+    a.target = '_blank';
+    a.rel    = 'noopener noreferrer';
+    a.style.textDecoration = 'none';
+
+    const div = document.createElement('div');
+    div.className = 'platform' + (isTop ? ' best' : '');
+    div.title = 'Ouvrir sur ' + p.provider_name;
+    div.innerHTML = logo
+      + '<span>' + esc(p.provider_name) + '</span>'
+      + '<span style="font-size:10px;color:var(--text3);margin-left:4px">' + p.typeFr + '</span>'
+      + (isTop ? '<span class="best-badge">⭐ Meilleur choix</span>' : '')
+      + '<span style="font-size:12px;margin-left:auto">↗</span>';
+
+    a.appendChild(div);
+    el.appendChild(a);
+  });
+
+  // Bouton JustWatch universel
+  const jwBtn = document.createElement('a');
+  jwBtn.href = jwUrl;
+  jwBtn.target = '_blank';
+  jwBtn.rel = 'noopener noreferrer';
+  jwBtn.style.textDecoration = 'none';
+  const jwDiv = document.createElement('div');
+  jwDiv.className = 'platform';
+  jwDiv.style.cssText = 'border-color:rgba(255,163,0,.4);background:#fffbf0';
+  jwDiv.innerHTML = '<span style="font-size:14px">🎬</span><span>Voir sur JustWatch</span><span style="font-size:10px;color:var(--text3);margin-left:4px">Toutes les options</span><span style="font-size:12px;margin-left:auto">↗</span>';
+  jwBtn.appendChild(jwDiv);
+  el.appendChild(jwBtn);
 }
+
 
 function setRating(mid,v){
   userRatings[mid]=v; localStorage.setItem('wm_r',JSON.stringify(userRatings));
