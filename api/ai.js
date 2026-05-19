@@ -1,18 +1,26 @@
-export default async function handler(req, res) {
-  if (req.method === 'OPTIONS') {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    return res.status(200).end();
-  }
-  if (req.method !== 'POST') return res.status(405).end();
+export const config = { runtime: 'edge' };
 
-  res.setHeader('Access-Control-Allow-Origin', '*');
+export default async function handler(req) {
+  if (req.method === 'OPTIONS') {
+    return new Response(null, {
+      status: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type',
+      }
+    });
+  }
+
+  if (req.method !== 'POST') {
+    return new Response('Method not allowed', { status: 405 });
+  }
 
   try {
-    const { messages, max_tokens } = req.body;
+    const body = await req.json();
+    const { messages, max_tokens } = body;
 
-    // Appel API Groq
-    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -21,25 +29,32 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: 'llama-3.3-70b-versatile',
         max_tokens: max_tokens || 1400,
-        messages: messages,
-        temperature: 0.7
+        temperature: 0.7,
+        messages: messages
       })
     });
 
-    if (!response.ok) {
-      const err = await response.text();
-      return res.status(response.status).json({ error: { message: err } });
+    if (!groqRes.ok) {
+      const errText = await groqRes.text();
+      return new Response(JSON.stringify({ error: { message: errText } }), {
+        status: groqRes.status,
+        headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+      });
     }
 
-    const data = await response.json();
-
-    // Reformate la réponse au format Anthropic pour que le front ne change pas
+    const data = await groqRes.json();
     const text = data.choices?.[0]?.message?.content || '';
-    res.status(200).json({
-      content: [{ type: 'text', text }]
+
+    // Reformate en format compatible avec le front-end
+    return new Response(JSON.stringify({ content: [{ type: 'text', text }] }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
     });
 
   } catch(e) {
-    res.status(500).json({ error: { message: e.message } });
+    return new Response(JSON.stringify({ error: { message: e.message } }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+    });
   }
 }
