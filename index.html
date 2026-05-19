@@ -848,67 +848,81 @@ function makeCard(f){
   const sc  = raw ? (Math.round(raw*10)/10).toFixed(1) : null;
   const cls = sc>=7?'g':sc>=5?'m':'l';
   const title = f.title || f.name || '';
-  const yr    = (f.release_date || f.first_air_date || '').slice(0,4);
-  const ov    = f.overview ? f.overview.slice(0,160) + (f.overview.length>160?'…':'') : '';
+  const yr = (f.release_date || f.first_air_date || '').slice(0,4);
+  const ov = f.overview ? f.overview.slice(0,160) + (f.overview.length>160?'…':'') : '';
 
   // Poster
-  const ph = f.poster_path
-    ? '<img class="fthumb" src="' + IMGS + f.poster_path + '" loading="lazy">'
-    : '<div class="fthumb-ph">' + (media==='tv'?'📺':'🎬') + '</div>';
+  const imgEl = document.createElement('div');
+  if(f.poster_path){
+    const img = document.createElement('img');
+    img.className = 'fthumb'; img.src = IMGS + f.poster_path; img.loading = 'lazy';
+    card.appendChild(img);
+  } else {
+    const ph = document.createElement('div');
+    ph.className = 'fthumb-ph'; ph.textContent = media==='tv'?'📺':'🎬';
+    card.appendChild(ph);
+  }
 
-  // Chips genre + récompenses
-  const filmKey = title.toLowerCase();
-  const origKey = (f.original_title||f.original_name||'').toLowerCase();
-  const filmAw  = AWARDS_DB[filmKey] || AWARDS_DB[origKey] || [];
-  let chips = '';
-  if(f._r){ const ri=f._r==='Acteur'?'🎭':f._r==='Réalisateur'?'🎥':'🎙'; chips+='<span class="chip hl">'+ri+' '+f._r+'</span>'; }
-  if(media==='tv'&&!f._istvshow) chips+='<span class="chip serie">📺 Série</span>';
-  if(f._istvshow) chips+='<span class="chip tvshow">📡 Émission TV</span>';
+  // Body
+  const body = document.createElement('div');
+  body.className = 'fbody';
+
+  const titleEl = document.createElement('div');
+  titleEl.className = 'ftitle'; titleEl.textContent = title;
+  body.appendChild(titleEl);
+
+  const metaEl = document.createElement('div');
+  metaEl.className = 'fmeta'; metaEl.textContent = yr;
+  body.appendChild(metaEl);
+
+  if(ov){
+    const ovEl = document.createElement('div');
+    ovEl.className = 'foverview'; ovEl.textContent = ov;
+    body.appendChild(ovEl);
+  }
+
+  const hintEl = document.createElement('div');
+  hintEl.className = 'fhint'; hintEl.textContent = 'Cliquer pour la fiche complète →';
+  body.appendChild(hintEl);
+
+  // Chips
+  const chipsRow = document.createElement('div');
+  chipsRow.className = 'fchips';
+  if(f._r){
+    const ri = f._r==='Acteur'?'🎭':f._r==='Réalisateur'?'🎥':'🎙';
+    const ch = document.createElement('span'); ch.className='chip hl'; ch.textContent=ri+' '+f._r;
+    chipsRow.appendChild(ch);
+  }
+  if(media==='tv'&&!f._istvshow){ const ch=document.createElement('span'); ch.className='chip serie'; ch.textContent='📺 Série'; chipsRow.appendChild(ch); }
+  if(f._istvshow){ const ch=document.createElement('span'); ch.className='chip tvshow'; ch.textContent='📡 Émission TV'; chipsRow.appendChild(ch); }
   const gmap = media==='tv'?GT:GM;
-  if(f.genre_ids) f.genre_ids.slice(0,2).forEach(id=>{ if(gmap[id]) chips+='<span class="chip genre">'+gmap[id]+'</span>'; });
-  filmAw.slice(0,1).forEach(a=>{ chips+='<span class="award-chip '+a.cls+'">'+a.ico+' '+a.t+' — '+a.y+'</span>'; });
-
-  // HTML de la carte
-  card.innerHTML = ph
-    + '<div class="fbody">'
-    + '<div class="ftitle">' + esc(title) + '</div>'
-    + '<div class="fmeta">' + yr + '</div>'
-    + (ov ? '<div class="foverview">' + ov + '</div>' : '')
-    + '<div class="fhint">Cliquer pour la fiche complète →</div>'
-    + (chips ? '<div class="fchips">' + chips + '</div>' : '')
-    + '</div>'
-    + (sc ? '<div class="fscore ' + cls + '">★ ' + sc + '</div>' : '');
+  if(f.genre_ids) f.genre_ids.slice(0,2).forEach(id=>{ if(gmap[id]){const ch=document.createElement('span');ch.className='chip genre';ch.textContent=gmap[id];chipsRow.appendChild(ch);} });
+  const filmAw = AWARDS_DB[title.toLowerCase()] || AWARDS_DB[(f.original_title||f.original_name||'').toLowerCase()] || [];
+  filmAw.slice(0,1).forEach(a=>{ const ch=document.createElement('span');ch.className='award-chip '+a.cls;ch.textContent=a.ico+' '+a.t+' — '+a.y;chipsRow.appendChild(ch); });
+  if(chipsRow.children.length) body.appendChild(chipsRow);
 
   // Boutons ❤️ / ✅
   const fData = {id: f.id, title, poster: f.poster_path||null, year: yr, genre: '', media};
-  const actDiv = document.createElement('div');
-  actDiv.className = 'card-btns';
-
+  const actDiv = document.createElement('div'); actDiv.className = 'card-btns';
   const bL = document.createElement('button');
-  bL.className = 'cbtn like' + (inWL(f.id) ? ' on' : '');
+  bL.className = 'cbtn like' + (inWL(f.id)?' on':'');
   bL.textContent = inWL(f.id) ? '❤️ En liste' : '❤️ À voir plus tard';
-  bL.onclick = e => {
-    e.stopPropagation();
-    if(inWL(fData.id)){ remWL(fData.id); bL.classList.remove('on'); bL.textContent='❤️ À voir plus tard'; }
-    else { addWL(fData); bL.classList.add('on'); bL.textContent='❤️ En liste'; }
-  };
-
+  bL.onclick = e => { e.stopPropagation(); if(inWL(fData.id)){remWL(fData.id);bL.classList.remove('on');bL.textContent='❤️ À voir plus tard';}else{addWL(fData);bL.classList.add('on');bL.textContent='❤️ En liste';}};
   const bS = document.createElement('button');
-  bS.className = 'cbtn seen' + (inSL(f.id) ? ' on' : '');
+  bS.className = 'cbtn seen' + (inSL(f.id)?' on':'');
   bS.textContent = inSL(f.id) ? '✅ Vu !' : "✅ Je l'ai vu";
-  bS.onclick = e => {
-    e.stopPropagation();
-    addSL(fData);
-    bS.classList.add('on');
-    bS.textContent = '✅ Vu !';
-  };
+  bS.onclick = e => { e.stopPropagation(); addSL(fData); bS.classList.add('on'); bS.textContent='✅ Vu !'; };
+  actDiv.appendChild(bL); actDiv.appendChild(bS);
+  body.appendChild(actDiv);
 
-  actDiv.appendChild(bL);
-  actDiv.appendChild(bS);
+  card.appendChild(body);
 
-  const fbody = card.querySelector('.fbody');
-  if(fbody) fbody.appendChild(actDiv);
-  else card.appendChild(actDiv);
+  // Score
+  if(sc){
+    const scEl = document.createElement('div');
+    scEl.className = 'fscore '+cls; scEl.textContent = '★ '+sc;
+    card.appendChild(scEl);
+  }
 
   return card;
 }
