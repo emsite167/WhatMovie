@@ -1191,7 +1191,8 @@ async function launchQuiz(){
     + '- Tolérance : ' + tolerance + '\n'
     + '- Rapport nouveauté : ' + surprise + '\n\n'
     + 'Propose 4 films ou séries adaptés (choisis toi-même film ou série). title, year, genre, duration, media_type ("movie"/"tv"), reason (2 phrases perso), tags (3 mots).\n'
-    + 'JSON uniquement : {"intro":"...","films":[{"title":"","year":"","genre":"","duration":"","media_type":"movie","reason":"","tags":["",""]}]}';
+    + 'IMPORTANT : Réponds UNIQUEMENT avec le JSON brut. Aucun texte avant ou après. Dans les valeurs JSON, utilise uniquement des guillemets doubles et n\'utilise jamais d\'apostrophes dans les textes. Remplace les apostrophes par des espaces.\n'
+    + '{"intro":"...","films":[{"title":"","year":"","genre":"","duration":"","media_type":"movie","reason":"","tags":["",""]}]}';
 
   let ai;
   try{
@@ -1207,11 +1208,37 @@ async function launchQuiz(){
     if(j.error) throw new Error(j.error.message || 'Erreur API');
     // Groq retourne format OpenAI
     const rawText = (j.choices?.[0]?.message?.content || j.content?.map?.(b=>b.text||'')?.join?.('')||'');
-    // Extrait uniquement le bloc JSON même si Groq ajoute du texte autour
+    // Extrait le bloc JSON
     const jsonMatch = rawText.match(/\{[\s\S]*\}/);
     if(!jsonMatch) throw new Error('Pas de JSON dans la réponse');
-    const raw = jsonMatch[0].trim();
-    ai = JSON.parse(raw);
+    let raw = jsonMatch[0].trim();
+    // Nettoie les caractères problématiques dans les valeurs string
+    // Remplace les guillemets non échappés à l'intérieur des valeurs
+    raw = raw.replace(/[\u0000-\u001F\u007F]/g, ' '); // Supprime caractères de contrôle
+    try {
+      ai = JSON.parse(raw);
+    } catch(parseErr) {
+      // Tentative de réparation : demande à Groq un JSON plus simple
+      console.warn('JSON invalide, tentative de réparation...', parseErr.message);
+      // Extrait manuellement les titres avec une regex de secours
+      const titles = [...rawText.matchAll(/"title"\s*:\s*"([^"]+)"/g)].map(m=>m[1]);
+      const reasons = [...rawText.matchAll(/"reason"\s*:\s*"([^"]+)"/g)].map(m=>m[1]);
+      const years = [...rawText.matchAll(/"year"\s*:\s*"([^"]+)"/g)].map(m=>m[1]);
+      const genres = [...rawText.matchAll(/"genre"\s*:\s*"([^"]+)"/g)].map(m=>m[1]);
+      if(titles.length < 2) throw new Error('Réponse IA illisible, réessaie');
+      ai = {
+        intro: rawText.match(/"intro"\s*:\s*"([^"]+)"/)?.[1] || 'Voici mes sélections pour toi :',
+        films: titles.slice(0,4).map((t,i) => ({
+          title: t,
+          year: years[i]||'',
+          genre: genres[i]||'',
+          duration: '',
+          media_type: 'movie',
+          reason: reasons[i]||'Un excellent choix pour ce soir.',
+          tags: []
+        }))
+      };
+    }
     if(!ai.films || !Array.isArray(ai.films)) throw new Error('JSON invalide');
   } catch(e) {
     console.error(e);
