@@ -1075,31 +1075,58 @@ async function openModal(id,media='movie'){
   }catch(e){ document.getElementById('msynopsis').textContent='Erreur : '+e.message; }
 }
 
-/* URLs directes des plateformes — testées et fonctionnelles */
-const PLATFORM_URLS = {
-  'netflix':        t => 'https://www.netflix.com/search?q=' + encodeURIComponent(t),
-  'canal':          t => 'https://www.canalplus.com/recherche/?q=' + encodeURIComponent(t),
-  'amazon':         t => 'https://www.amazon.fr/s?k=' + encodeURIComponent(t) + '&i=instant-video',
-  'prime':          t => 'https://www.amazon.fr/s?k=' + encodeURIComponent(t) + '&i=instant-video',
-  'disney':         t => 'https://www.disneyplus.com/search/' + encodeURIComponent(t),
-  'apple':          t => 'https://tv.apple.com/search?term=' + encodeURIComponent(t),
-  'max':            t => 'https://www.max.com/search?q=' + encodeURIComponent(t),
-  'hbo':            t => 'https://www.max.com/search?q=' + encodeURIComponent(t),
-  'paramount':      t => 'https://www.paramountplus.com/search/?query=' + encodeURIComponent(t),
-  'mubi':           t => 'https://mubi.com/search?q=' + encodeURIComponent(t),
-  'arte':           t => 'https://www.arte.tv/fr/search/?q=' + encodeURIComponent(t),
-  'ocs':            t => 'https://www.ocs.fr/recherche?q=' + encodeURIComponent(t),
-  'crunchyroll':    t => 'https://www.crunchyroll.com/search?q=' + encodeURIComponent(t),
-  'default':        (name, t) => 'https://www.google.com/search?q=' + encodeURIComponent(name + ' ' + t + ' streaming regarder'),
-};
-
+/* URLs plateformes — JustWatch comme source fiable + liens directs quand possible */
 function getPlatformUrl(providerName, title) {
   const n = providerName.toLowerCase();
-  for(const [key, fn] of Object.entries(PLATFORM_URLS)) {
-    if(key === 'default') continue;
-    if(n.includes(key)) return fn(title);
-  }
-  return PLATFORM_URLS.default(providerName, title);
+  const t = encodeURIComponent(title);
+  const slug = title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+
+  // Netflix : URL de recherche directe (fonctionne si connecté)
+  if(n.includes('netflix'))
+    return 'https://www.netflix.com/search?q=' + t;
+
+  // Canal+ / MyCanal
+  if(n.includes('canal') || n.includes('mycanal'))
+    return 'https://www.canalplus.com/recherche/?q=' + t;
+
+  // Amazon Prime Video
+  if(n.includes('amazon') || n.includes('prime'))
+    return 'https://www.primevideo.com/search/ref=atv_nb_sr?phrase=' + t + '&ie=UTF8';
+
+  // Disney+
+  if(n.includes('disney'))
+    return 'https://www.disneyplus.com/fr-fr/search?q=' + t;
+
+  // Apple TV+
+  if(n.includes('apple'))
+    return 'https://tv.apple.com/fr/search?term=' + t;
+
+  // Max / HBO Max
+  if(n.includes('max') || n.includes('hbo'))
+    return 'https://www.max.com/fr/fr/search?q=' + t;
+
+  // Paramount+
+  if(n.includes('paramount'))
+    return 'https://www.paramountplus.com/fr/search/?query=' + t;
+
+  // MUBI
+  if(n.includes('mubi'))
+    return 'https://mubi.com/fr/search?q=' + t;
+
+  // Arte
+  if(n.includes('arte'))
+    return 'https://www.arte.tv/fr/search/?q=' + t;
+
+  // OCS
+  if(n.includes('ocs'))
+    return 'https://www.ocs.fr/recherche?q=' + t;
+
+  // Crunchyroll
+  if(n.includes('crunchyroll'))
+    return 'https://www.crunchyroll.com/fr/search?q=' + t;
+
+  // Fallback universel : JustWatch — le meilleur agrégateur, toujours à jour
+  return 'https://www.justwatch.com/fr/recherche?q=' + t;
 }
 
 function buildPlatforms(data, movieTitle){
