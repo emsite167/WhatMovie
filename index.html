@@ -610,7 +610,7 @@ function pickSug(i){
 
 /* Bouton "Films similaires" depuis la recherche texte */
 function triggerSimilar(movieId, title, media){ loadSimilar(movieId, title, media); }
-}
+
 function onKD(e){
   const box=document.getElementById('sdrop'); const items=box.querySelectorAll('.sitem');
   if(!box.classList.contains('open')){ if(e.key==='Enter') doSearch(); return; }
