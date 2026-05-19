@@ -1050,7 +1050,21 @@ const QS=[
 let step=0; const ans={};
 
 function renderStep(){
-  const q=QS[step];
+  let q=QS[step];
+  // Si étape "surprise" et pas de film de référence → retire l'option "Même style"
+  if(q.id==='surprise' && !ans.lastfilm){
+    q = {
+      ...q,
+      title: 'Tu veux découvrir quoi ce soir ?',
+      opts: [
+        {v:'surprends-moi, je veux découvrir quelque chose de nouveau',i:'🎲',l:'Surprends-moi',s:'Nouveauté totale'},
+        {v:'un mélange, dans mon genre mais avec une surprise',i:'⚖️',l:'Mélange',s:'Dans mon genre'},
+        {v:'quelque chose de très bien noté que je connais pas',i:'⭐',l:'Valeur sûre',s:'Top noté'},
+      ]
+    };
+    // Si la réponse précédente était "même style", on la réinitialise
+    if(ans.surprise === "quelque chose dans le même style que ce que j'aime") ans.surprise = null;
+  }
   document.getElementById('steps').innerHTML=QS.map((_,i)=>`<div class="sdot ${i===step?'active':i<step?'done':''}"></div>`).join('');
   document.getElementById('qmeta').textContent=q.meta;
   document.getElementById('qtitle').textContent=q.title;
