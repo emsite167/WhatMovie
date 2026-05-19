@@ -607,6 +607,10 @@ function pickSug(i){
   if(it._t==='movie'||it._t==='tv') openModal(it.id,it._t);
   else { const dept=it.known_for_department||''; const role=dept==='Directing'?'director':dept==='Production'?'producer':'actor'; loadPerson(it.id,it.name,role); }
 }
+
+/* Bouton "Films similaires" depuis la recherche texte */
+function triggerSimilar(movieId, title, media){ loadSimilar(movieId, title, media); }
+}
 function onKD(e){
   const box=document.getElementById('sdrop'); const items=box.querySelectorAll('.sitem');
   if(!box.classList.contains('open')){ if(e.key==='Enter') doSearch(); return; }
@@ -854,6 +858,15 @@ async function openModal(id,media='movie'){
       return `<div class="castcard" onclick="byPerson(${a.id},'actor')">${ph}<div class="caname">${esc(a.name)}</div><div class="cachar">${esc(a.character||'')}</div></div>`;
     }).join('');
 
+    // Bouton films similaires
+    const simBtn = document.createElement('button');
+    simBtn.style.cssText='margin-top:1.5rem;width:100%;font-family:inherit;font-size:14px;font-weight:500;color:var(--accent);background:var(--abg);border:1.5px solid rgba(196,75,43,.25);border-radius:10px;padding:12px;cursor:pointer;transition:background .15s';
+    simBtn.textContent='🎬 Voir 10 films similaires →';
+    simBtn.onmouseover=()=>simBtn.style.background='rgba(196,75,43,.14)';
+    simBtn.onmouseout=()=>simBtn.style.background='var(--abg)';
+    simBtn.onclick=()=>{ closeModal(); loadSimilar(id, title, media); switchTab('search'); };
+    document.getElementById('mcast').after(simBtn);
+
   }catch(e){ document.getElementById('msynopsis').textContent='Erreur : '+e.message; }
 }
 
@@ -896,49 +909,79 @@ async function byPerson(pid,role){
 
 /* ══ QUIZ ══ */
 const QS=[
-  {id:'mood',meta:"Étape 1 — État d'esprit",title:'Comment tu te sens ce soir ?',type:'grid',opts:[
-    {v:'aventurier et énergique',i:'⚡',l:'Aventurier',s:"Envie d'action"},
-    {v:'mélancolique et nostalgique',i:'🌧',l:'Mélancolique',s:'Pensif, nostalgique'},
-    {v:'curieux et intellectuel',i:'🔍',l:'Curieux',s:'Envie de réfléchir'},
-    {v:'détendu et calme',i:'🌙',l:'Détendu',s:'Soirée tranquille'},
-    {v:"tendu, besoin d'adrénaline",i:'🔥',l:'Tendu',s:'Besoin de décharge'},
-    {v:"émotif, envie d'être touché",i:'💫',l:'Touché',s:"Envie d'être ému"},
-  ]},
-  {id:'media',meta:"Étape 2 — Format",title:'Film ou série ?',type:'grid',opts:[
-    {v:'film',i:'🎬',l:'Film',s:'Expérience unique'},
-    {v:'mini-série (3-8 épisodes)',i:'📺',l:'Mini-série',s:'Court mais intense'},
-    {v:'série longue (plusieurs saisons)',i:'🎭',l:'Série',s:'Pour s\'installer'},
-    {v:'peu importe',i:'✨',l:'Peu importe',s:'Surprise-moi'},
-  ]},
-  {id:'depth',meta:"Étape 3 — Engagement",title:'Tu veux quelque chose qui te demande quoi ?',type:'grid',opts:[
-    {v:'réflexion profonde et complexe',i:'🧠',l:'Réfléchir',s:'Prise de tête'},
-    {v:'narration captivante du début à la fin',i:'📖',l:'Être absorbé',s:'Bonne histoire'},
-    {v:'beauté visuelle et atmosphère',i:'🎨',l:'Contempler',s:'Beau à regarder'},
-    {v:'divertissement pur sans prise de tête',i:'🍿',l:'Se divertir',s:'Facile à regarder'},
-  ]},
-  {id:'theme',meta:'Étape 4 — Univers',title:'Dans quel univers tu veux plonger ?',type:'grid',opts:[
-    {v:'crime enquête thriller',i:'🕵',l:'Thriller',s:'Crime, suspense'},
-    {v:'science-fiction technologie futur',i:'🚀',l:'Sci-fi',s:'Futur, tech'},
-    {v:'drame humain relations émotions',i:'🎭',l:'Drame',s:'Émotions profondes'},
-    {v:'horreur psychologique angoisse',i:'👁',l:'Horreur',s:'Tension, peur'},
-    {v:'histoire vraie biopic faits réels',i:'📰',l:'Histoire vraie',s:'Basé sur des faits'},
-    {v:'fantastique mystère étrange',i:'🌀',l:'Fantastique',s:'Magie, mystère'},
-    {v:'comédie humour légèreté',i:'😂',l:'Comédie',s:'Rires garantis'},
-    {v:'romance amour relations',i:'💕',l:'Romance',s:'Amour, relations'},
-  ]},
-  {id:'era',meta:"Étape 5 — Époque",title:'Tu préfères un film récent ou un classique ?',type:'grid',opts:[
-    {v:'très récent (moins de 3 ans)',i:'✨',l:'Récent',s:'< 3 ans'},
-    {v:'années 2000-2020',i:'📽',l:'Années 2000',s:'2000 — 2020'},
-    {v:'classique (avant 2000)',i:'🎞',l:'Classique',s:'Avant 2000'},
-    {v:'peu importe',i:'∞',l:'Peu importe',s:'Toutes époques'},
-  ]},
-  {id:'alone',meta:"Étape 6 — Contexte",title:'Tu regardes avec qui ?',type:'grid',opts:[
-    {v:'seul, soirée solo',i:'🛋',l:'Seul·e',s:'Soirée solo'},
-    {v:'en couple, soirée romantique',i:'💑',l:'En couple',s:'Soirée à deux'},
-    {v:'entre amis, soirée animée',i:'👥',l:'Entre amis',s:'Bonne ambiance'},
-    {v:'en famille avec enfants',i:'👨‍👩‍👧',l:'En famille',s:'Tout public'},
-  ]},
-  {id:'lastfilm',meta:"Étape 7 — Référence (optionnel)",title:'Quel est ton dernier film coup de cœur ?',type:'text',placeholder:'Ex : Inception, Interstellar, Breaking Bad… (laisse vide si tu ne sais pas)'},
+  {
+    id:'lastfilm',
+    meta:"Étape 1 — Ton point de départ",
+    title:'Quel est ton dernier film ou série coup de cœur ?',
+    type:'text',
+    placeholder:'Ex : Inception, Breaking Bad, Parasite… (optionnel mais très utile)',
+    hint:'L\'IA s\'en sert pour calibrer précisément tes goûts'
+  },
+  {
+    id:'mood',
+    meta:"Étape 2 — État d'esprit",
+    title:'Comment tu te sens ce soir ?',
+    type:'grid',
+    opts:[
+      {v:'aventurier et énergique',i:'⚡',l:'Aventurier',s:"Envie d'action"},
+      {v:'mélancolique et nostalgique',i:'🌧',l:'Mélancolique',s:'Pensif, nostalgique'},
+      {v:'curieux et intellectuel',i:'🔍',l:'Curieux',s:'Envie de réfléchir'},
+      {v:'détendu et calme',i:'🌙',l:'Détendu',s:'Soirée tranquille'},
+      {v:"tendu, besoin d'adrénaline",i:'🔥',l:'Tendu',s:'Besoin de décharge'},
+      {v:"émotif, envie d'être touché",i:'💫',l:'Touché',s:"Envie d'être ému"},
+    ]
+  },
+  {
+    id:'depth',
+    meta:"Étape 3 — Niveau d'engagement",
+    title:'Tu veux quelque chose qui te demande quoi ?',
+    type:'grid',
+    opts:[
+      {v:'réflexion profonde et complexe',i:'🧠',l:'Réfléchir',s:'Prise de tête'},
+      {v:'narration captivante du début à la fin',i:'📖',l:'Être absorbé',s:'Bonne histoire'},
+      {v:'beauté visuelle et atmosphère',i:'🎨',l:'Contempler',s:'Beau à regarder'},
+      {v:'divertissement pur sans prise de tête',i:'🍿',l:'Se divertir',s:'Facile à regarder'},
+    ]
+  },
+  {
+    id:'theme',
+    meta:'Étape 4 — Univers',
+    title:'Dans quel univers tu veux plonger ?',
+    type:'grid',
+    opts:[
+      {v:'crime enquête thriller',i:'🕵',l:'Thriller',s:'Crime, suspense'},
+      {v:'science-fiction technologie futur',i:'🚀',l:'Sci-fi',s:'Futur, tech'},
+      {v:'drame humain relations émotions',i:'🎭',l:'Drame',s:'Émotions profondes'},
+      {v:'horreur psychologique angoisse',i:'👁',l:'Horreur',s:'Tension, peur'},
+      {v:'histoire vraie biopic faits réels',i:'📰',l:'Histoire vraie',s:'Basé sur des faits'},
+      {v:'fantastique mystère étrange',i:'🌀',l:'Fantastique',s:'Magie, mystère'},
+      {v:'comédie humour légèreté',i:'😂',l:'Comédie',s:'Rires garantis'},
+      {v:'romance amour relations',i:'💕',l:'Romance',s:'Amour, relations'},
+    ]
+  },
+  {
+    id:'tolerance',
+    meta:"Étape 5 — Tolérance",
+    title:'Ton niveau de tolérance aux scènes difficiles ?',
+    type:'grid',
+    opts:[
+      {v:'tout accepté, violence horreur gore ok',i:'💪',l:'Tout ok',s:'Aucune limite'},
+      {v:'violence modérée ok mais pas de gore',i:'👍',l:'Modéré',s:'Pas de gore'},
+      {v:'rien de choquant, contenu light uniquement',i:'🌸',l:'Light',s:'Rien de choquant'},
+      {v:'adapté à toute la famille sans violence',i:'👨‍👩‍👧',l:'Famille',s:'Tout public'},
+    ]
+  },
+  {
+    id:'surprise',
+    meta:"Étape 6 — Découverte",
+    title:'Tu veux être surpris ou rester dans ta zone de confort ?',
+    type:'grid',
+    opts:[
+      {v:'surprends-moi, je veux découvrir quelque chose de nouveau',i:'🎲',l:'Surprends-moi',s:'Nouveauté totale'},
+      {v:'quelque chose dans le même style que ce que j\'aime',i:'🎯',l:'Même style',s:'Valeur sûre'},
+      {v:'un mélange, dans mon genre mais avec une surprise',i:'⚖️',l:'Mélange',s:'Mi-chemin'},
+    ]
+  },
 ];
 let step=0; const ans={};
 
@@ -949,13 +992,20 @@ function renderStep(){
   document.getElementById('qtitle').textContent=q.title;
   const container=document.getElementById('qoptions'); container.innerHTML='';
   if(q.type==='text'){
+    if(q.hint){
+      const hint=document.createElement('div');
+      hint.style.cssText='font-size:13px;color:var(--text3);margin-bottom:1rem;background:var(--bg2);padding:10px 14px;border-radius:8px;border-left:3px solid var(--gold)';
+      hint.textContent='💡 '+q.hint;
+      container.appendChild(hint);
+    }
     const inp=document.createElement('input');
     inp.type='text'; inp.className='qinput';
     inp.placeholder=q.placeholder||'';
     inp.value=ans[q.id]||'';
     inp.oninput=()=>{ ans[q.id]=inp.value; };
+    inp.onkeydown=e=>{ if(e.key==='Enter') nextStep(); };
     container.appendChild(inp);
-    // Texte optionnel → toujours actif
+    // Champ texte = optionnel → toujours actif
     document.getElementById('bnxt').disabled=false;
   } else {
     const grid=document.createElement('div'); grid.className='ogrid';
@@ -979,20 +1029,18 @@ function nextStep(){
 async function launchQuiz(){
   document.getElementById('qform').style.display='none';
   document.getElementById('qload').style.display='block';
-  const isSerie=ans.media&&(ans.media.includes('série')||ans.media.includes('mini'));
-  const prompt=`Tu es un expert en cinéma et séries passionné. Profil détaillé de l'utilisateur :
+  // Nouvelles questions
+  const prompt=`Tu es un expert en cinéma et séries passionné. Profil précis :
+${ans.lastfilm?`- Film/série de référence : "${ans.lastfilm}" (calibre le niveau et le style)` : ''}
 - Humeur : ${ans.mood}
-- Format souhaité : ${ans.media}
 - Engagement : ${ans.depth}
 - Univers : ${ans.theme}
-- Époque : ${ans.era}
-- Contexte de visionnage : ${ans.alone}
-${ans.lastfilm?`- Dernier coup de cœur : ${ans.lastfilm} (utilise ça pour calibrer le niveau et le style)`:''} 
+- Tolérance : ${ans.tolerance}
+- Rapport nouveauté : ${ans.surprise}
 
-Propose exactement 4 ${isSerie?'séries ou mini-séries':'films'} parfaitement adaptés à ce profil précis. Tiens compte de TOUS les critères simultanément.
-Pour chaque titre : title (en français si possible), year, genre, duration (durée pour film, ou "X saisons" pour série), reason (2 phrases très personnalisées qui expliquent POURQUOI ce titre colle à CE profil précis), tags (3 mots-clés évocateurs).
-JSON strict sans markdown :
-{"intro":"...","films":[{"title":"","year":"","genre":"","duration":"","reason":"","tags":["",""]}]}`;
+Propose 4 films ou séries (choisis le format le plus adapté). Pour chaque :
+title (français si possible), year, genre, duration, media_type ("movie" ou "tv"), reason (2 phrases perso), tags (3 mots).
+JSON strict : {"intro":"...","films":[{"title":"","year":"","genre":"","duration":"","media_type":"movie","reason":"","tags":["",""]}]}`;
 
   let ai;
   try{
@@ -1002,39 +1050,84 @@ JSON strict sans markdown :
     ai=JSON.parse(raw);
   }catch(e){ document.getElementById('qload').style.display='none'; document.getElementById('qform').style.display='block'; showErr('qerr','Erreur IA. Réessaie.'); return; }
 
-  const st=isSerie?'tv':'movie';
   for(const f of ai.films){
     f.poster=null; f.tmdbId=null;
+    const st=f.media_type==='tv'?'tv':'movie';
     try{ const d=await tmdb(`/search/${st}?query=${enc(f.title)}&include_adult=false`); if(d.results&&d.results[0]){f.poster=d.results[0].poster_path;f.tmdbId=d.results[0].id;} }catch{}
   }
 
-  const moodTxt={'aventurier et énergique':'l\'aventure','mélancolique et nostalgique':'la mélancolie','curieux et intellectuel':'la réflexion',"tendu, besoin d'adrénaline":'l\'adrénaline',"émotif, envie d'être touché":'l\'émotion','détendu et calme':'la détente'};
-  const depthTxt={'réflexion profonde et complexe':'faire vraiment réfléchir','narration captivante du début à la fin':'captiver du début à la fin','beauté visuelle et atmosphère':'offrir un spectacle visuel','divertissement pur sans prise de tête':'divertir sans effort'};
+  const moodTxt={'aventurier et énergique':"l'aventure",'mélancolique et nostalgique':'la mélancolie','curieux et intellectuel':'la réflexion',"tendu, besoin d'adrénaline":"l'adrénaline","émotif, envie d'être touché":"l'émotion",'détendu et calme':'la détente'};
+  const depthTxt={'réflexion profonde et complexe':'qui te fasse vraiment réfléchir','narration captivante du début à la fin':'qui te capture du début à la fin','beauté visuelle et atmosphère':'visuellement fort','divertissement pur sans prise de tête':'facile et agréable'};
+  const surpriseTxt={'surprends-moi, je veux découvrir quelque chose de nouveau':"en dehors de ta zone habituelle","quelque chose dans le même style que ce que j'aime":'dans ton style habituel','un mélange, dans mon genre mais avec une surprise':'avec une petite touche inattendue'};
 
   document.getElementById('rintro').textContent=ai.intro;
   const list=document.getElementById('qflist'); list.innerHTML='';
   ai.films.forEach((f,i)=>{
     const card=document.createElement('div'); card.className='fcard';
+    const st=f.media_type==='tv'?'tv':'movie';
     if(f.tmdbId) card.onclick=()=>openModal(f.tmdbId,st);
-    const ph=f.poster?`<img class="fthumb" src="${IMGS}${f.poster}">`:`<div class="fthumb-ph">${isSerie?'📺':'🎬'}</div>`;
+    const ph=f.poster?`<img class="fthumb" src="${IMGS}${f.poster}">`:`<div class="fthumb-ph">${st==='tv'?'📺':'🎬'}</div>`;
     const tags=(f.tags||[]).map(t=>`<span class="ftag">${esc(t)}</span>`).join('');
     const mood=moodTxt[ans.mood]||ans.mood;
     const depth=depthTxt[ans.depth]||ans.depth;
-    const fmt=ans.media==='film'?'Ce film':ans.media&&ans.media.includes('mini')?'Cette mini-série':'Cette série';
-    const perfectText=`${fmt} est parfait pour toi ce soir : il va te donner ${mood} tout en ${depth}.${ans.alone&&!ans.alone.includes('seul')?` Idéal pour ${ans.alone}.`:''}`;
+    const surp=surpriseTxt[ans.surprise]||'';
+    const fmt=st==='tv'?'Cette série':'Ce film';
+    const perfectText=`${fmt} est fait pour toi ce soir : il apporte ${mood}, avec quelque chose ${depth}${surp?' — '+surp:''}.`;
+    const filmKey=(f.title||'').toLowerCase();
+    const aw=AWARDS_DB[filmKey]||[];
+    const awBadge=aw.length?`<span class="award-chip ${aw[0].cls}" style="display:inline-flex;align-items:center;gap:4px;margin-top:6px">${aw[0].ico} ${aw[0].t} ${aw[0].y}</span>`:'';
     card.innerHTML=ph+`<div class="fbody">
       <div class="fnum">Sélection ${i+1}</div>
       <div class="ftitle">${esc(f.title)}</div>
-      <div class="fmeta">${[f.year,f.genre,f.duration].filter(Boolean).join(' · ')}</div>
+      <div class="fmeta">${[f.year,f.genre,f.duration,st==='tv'?'📺 Série':'🎬 Film'].filter(Boolean).join(' · ')}</div>
       <div class="perfect-box"><div class="perfect-ico">✨</div><div><div class="perfect-title">Parfait pour toi ce soir</div><div class="perfect-text">${perfectText}</div></div></div>
       <div class="freason">${esc(f.reason)}</div>
-      <div class="ftags">${tags}</div>
+      <div class="ftags">${tags}${awBadge}</div>
       ${f.tmdbId?'<div class="fhint" style="margin-top:8px">Cliquer pour la fiche complète →</div>':''}
     </div>`;
     list.appendChild(card);
   });
   document.getElementById('qload').style.display='none';
   document.getElementById('qres').style.display='block';
+}
+
+/* ══ 10 FILMS SIMILAIRES triés par note & récompenses ══ */
+async function loadSimilar(movieId, title, media='movie'){
+  clearSearch();
+  document.getElementById('sload').style.display='block';
+  try{
+    const ep=media==='tv'?'tv':'movie';
+    const [similar, reco, det]=await Promise.all([
+      tmdb(`/${ep}/${movieId}/similar`),
+      tmdb(`/${ep}/${movieId}/recommendations`),
+      tmdb(`/${ep}/${movieId}`)
+    ]);
+    const seen=new Set();
+    let combined=[];
+    [...(similar.results||[]),...(reco.results||[])].forEach(r=>{
+      if(!seen.has(r.id)&&r.poster_path){ seen.add(r.id); combined.push({...r,_t:media}); }
+    });
+    // Tri : récompensés d'abord, puis par note
+    combined.sort((a,b)=>{
+      const aAw=(AWARDS_DB[(a.title||a.name||'').toLowerCase()]||[]).length;
+      const bAw=(AWARDS_DB[(b.title||b.name||'').toLowerCase()]||[]).length;
+      if(aAw!==bAw) return bAw-aAw;
+      return (b.vote_average||0)-(a.vote_average||0);
+    });
+    combined=combined.slice(0,10);
+    const dtitle=det.title||det.name||title;
+    document.getElementById('rlabel').textContent=`10 titres similaires à "${dtitle}" — triés par note & récompenses`;
+    const wrap=document.getElementById('flist-wrap'); wrap.innerHTML='';
+    if(combined.length){
+      const list=document.createElement('div'); list.className='flist';
+      combined.forEach(f=>list.appendChild(makeCard(f)));
+      wrap.appendChild(list);
+    } else {
+      wrap.innerHTML='<div class="nores"><span>🎞</span>Aucun titre similaire trouvé.</div>';
+    }
+    document.getElementById('rres').style.display='block';
+  }catch(e){ console.error(e); showErr('serr','❌ '+e.message); }
+  document.getElementById('sload').style.display='none';
 }
 
 function restartQuiz(){ step=0; Object.keys(ans).forEach(k=>delete ans[k]); document.getElementById('qres').style.display='none'; document.getElementById('qform').style.display='block'; renderStep(); }
