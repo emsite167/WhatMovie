@@ -866,17 +866,16 @@ function makeCard(f){
     + (ov ? '<div class="foverview">' + ov + '</div>' : '')
     + '<div class="fhint">Cliquer pour la fiche complète →</div>'
     + (chips ? '<div class="fchips">' + chips + '</div>' : '')
-    + '<div class="card-btns">'
-    + '<button class="cbtn like' + wOn + '" id="wl-' + f.id + '">'+wBtn+'</button>'
-    + '<button class="cbtn seen' + sOn + '" id="sl-' + f.id + '">'+sBtn+'</button>'
-    + '</div>'
     + '</div>'
     + (sc ? '<div class="fscore ' + cls + '">★ ' + sc + '</div>' : '');
-  // Events sur les boutons
-  const bL = card.querySelector('#wl-' + f.id);
-  const bS = card.querySelector('#sl-' + f.id);
-  if(bL) bL.onclick = e => { e.stopPropagation(); if(inWL(fData.id)){remWL(fData.id);bL.classList.remove('on');bL.innerHTML='❤️ À voir plus tard';}else{addWL(fData);bL.classList.add('on');bL.innerHTML='❤️ En liste';} };
-  if(bS) bS.onclick = e => { e.stopPropagation(); addSL(fData); bS.classList.add('on'); bS.innerHTML='✅ Vu !'; };
+  // Boutons créés en JS (évite les problèmes d'ID numérique en CSS)
+  const actDiv = document.createElement('div'); actDiv.className = 'card-btns';
+  const bL = document.createElement('button'); bL.className = 'cbtn like' + wOn; bL.textContent = wBtn;
+  const bS = document.createElement('button'); bS.className = 'cbtn seen' + sOn; bS.textContent = sBtn;
+  bL.onclick = e => { e.stopPropagation(); if(inWL(fData.id)){remWL(fData.id);bL.classList.remove('on');bL.textContent='❤️ À voir plus tard';}else{addWL(fData);bL.classList.add('on');bL.textContent='❤️ En liste';} };
+  bS.onclick = e => { e.stopPropagation(); addSL(fData); bS.classList.add('on'); bS.textContent='✅ Vu !'; };
+  actDiv.appendChild(bL); actDiv.appendChild(bS);
+  card.querySelector('.fbody').appendChild(actDiv);
   return card;
 }
 
