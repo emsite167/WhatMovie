@@ -264,6 +264,46 @@ h1.ptitle{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;co
 .perfect-title{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--gold);margin-bottom:3px}
 .perfect-text{font-size:13px;color:var(--text2);line-height:1.55}
 
+/* ══ CINÉMATHÈQUE ══ */
+.cine-tabs{display:flex;gap:0;margin-bottom:2rem;border:1px solid var(--border);border-radius:10px;overflow:hidden;width:fit-content;box-shadow:0 1px 4px var(--shadow)}
+.cine-tab{font-size:13px;font-family:inherit;font-weight:500;padding:9px 22px;border:none;background:#fff;color:var(--text3);cursor:pointer;transition:background .15s,color .15s}
+.cine-tab.active{background:var(--accent);color:#fff}
+.cine-empty{text-align:center;padding:4rem 2rem;color:var(--text3);font-size:14px;line-height:2}
+.cine-empty span{display:block;font-size:2.5rem;margin-bottom:.8rem}
+.cine-count{font-size:12px;font-weight:600;background:var(--accent);color:#fff;border-radius:20px;padding:2px 8px;margin-left:6px;vertical-align:middle}
+.movie-item{display:flex;gap:14px;background:#fff;border:1px solid var(--border);border-radius:14px;padding:14px;align-items:flex-start;box-shadow:0 2px 8px var(--shadow);animation:fup .3s ease both;transition:border-color .2s}
+.movie-item:hover{border-color:var(--border2)}
+.movie-item+.movie-item{margin-top:10px}
+.movie-thumb{width:54px;height:80px;border-radius:7px;object-fit:cover;flex-shrink:0;background:var(--bg3);border:1px solid var(--border);cursor:pointer;transition:transform .15s}
+.movie-thumb:hover{transform:scale(1.05)}
+.movie-thumb-ph{width:54px;height:80px;border-radius:7px;background:var(--bg3);border:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:var(--text3);cursor:pointer}
+.movie-body{flex:1;min-width:0}
+.movie-title{font-family:'Playfair Display',serif;font-weight:700;font-size:1rem;color:var(--text);margin-bottom:2px;cursor:pointer}
+.movie-title:hover{color:var(--accent)}
+.movie-meta{font-size:12px;color:var(--text3);margin-bottom:8px}
+.movie-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn-remove{font-size:12px;color:var(--text3);background:none;border:1px solid var(--border);border-radius:6px;padding:4px 10px;cursor:pointer;font-family:inherit;transition:all .15s}
+.btn-remove:hover{border-color:var(--accent);color:var(--accent)}
+.btn-mark-seen{font-size:12px;color:#fff;background:var(--green);border:none;border-radius:6px;padding:4px 10px;cursor:pointer;font-family:inherit;transition:background .15s}
+.btn-mark-seen:hover{background:#1a5e38}
+/* Notes étoiles cinémathèque */
+.cine-stars{display:flex;gap:2px}
+.cine-star{font-size:18px;cursor:pointer;color:var(--border2);transition:color .1s,transform .1s;line-height:1}
+.cine-star:hover,.cine-star.on{color:var(--gold);transform:scale(1.15)}
+/* Textarea avis */
+.avis-wrap{margin-top:8px}
+.avis-input{width:100%;font-family:inherit;font-size:13px;color:var(--text);background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;resize:none;outline:none;transition:border-color .15s;min-height:60px}
+.avis-input:focus{border-color:var(--accent)}
+.avis-saved{font-size:11px;color:var(--green);margin-top:4px;display:none}
+/* Bouton like/vu flottant sur les cartes */
+.fcard-actions{display:flex;gap:6px;margin-top:8px}
+.btn-like{font-size:12px;font-family:inherit;font-weight:500;padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:#fff;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:4px}
+.btn-like:hover{border-color:var(--accent);color:var(--accent);background:var(--abg)}
+.btn-like.liked{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-seen{font-size:12px;font-family:inherit;font-weight:500;padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:#fff;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:4px}
+.btn-seen:hover{border-color:var(--green);color:var(--green);background:rgba(42,122,78,.08)}
+.btn-seen.seen{background:var(--green);color:#fff;border-color:var(--green)}
+
 footer{text-align:center;padding:2rem;font-size:11px;color:var(--text3);border-top:1px solid var(--border);margin-top:3rem}
 footer a{color:var(--text3);text-decoration:underline}
 .vbadge{display:inline-block;background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:3px 10px;font-size:11px;color:var(--text3);margin-bottom:.5rem}
@@ -276,6 +316,7 @@ footer a{color:var(--text3);text-decoration:underline}
   <nav>
     <button class="tab active" id="tab-search" onclick="switchTab('search')">🔍 Recherche</button>
     <button class="tab"        id="tab-quiz"   onclick="switchTab('quiz')">✦ Trouve ton film</button>
+    <button class="tab"        id="tab-cine"   onclick="switchTab('cine')">🎬 Ma Cinémathèque</button>
   </nav>
 </header>
 
@@ -343,6 +384,41 @@ footer a{color:var(--text3);text-decoration:underline}
       <button class="bres" onclick="restartQuiz()">↺ Recommencer</button>
     </div>
   </div>
+  <!-- PAGE CINÉMATHÈQUE -->
+  <div class="page" id="page-cine">
+    <h1 class="ptitle">Ma Cinémathèque</h1>
+    <p class="psub">Tes films à voir et ceux que tu as vus — ton carnet de bord personnel.</p>
+
+    <div class="cine-tabs">
+      <button class="cine-tab active" id="cine-tab-watchlist" onclick="switchCine('watchlist')">
+        ❤️ À voir <span class="cine-count" id="count-watchlist">0</span>
+      </button>
+      <button class="cine-tab" id="cine-tab-seen" onclick="switchCine('seen')">
+        ✅ Films vus <span class="cine-count" id="count-seen">0</span>
+      </button>
+    </div>
+
+    <!-- WATCHLIST -->
+    <div id="cine-watchlist">
+      <div class="cine-empty" id="watchlist-empty">
+        <span>❤️</span>
+        Ta liste "À voir" est vide.<br>
+        Clique sur <strong>❤️ À voir plus tard</strong> sur n'importe quel film pour l'ajouter ici.
+      </div>
+      <div id="watchlist-items"></div>
+    </div>
+
+    <!-- FILMS VUS -->
+    <div id="cine-seen" style="display:none">
+      <div class="cine-empty" id="seen-empty">
+        <span>✅</span>
+        Aucun film marqué comme vu.<br>
+        Clique sur <strong>✅ Je l'ai vu</strong> sur n'importe quel film pour l'ajouter ici.
+      </div>
+      <div id="seen-items"></div>
+    </div>
+  </div>
+
 </main>
 
 <!-- MODAL -->
@@ -557,6 +633,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const gk = localStorage.getItem('wm_groq') || '';
   if(gk) document.getElementById('groq-inp').value = gk;
   if(k && gk) document.getElementById('setup-banner').style.display = 'none';
+  updateCineCounts();
   renderStep();
   document.addEventListener('click', e => { if(!document.getElementById('swrap').contains(e.target)) closeDrop(); });
 });
@@ -796,6 +873,19 @@ function makeCard(f){
   if(f.genre_ids) f.genre_ids.slice(0,2).forEach(id=>{ if(gmap[id]) chips+=`<span class="chip genre">${gmap[id]}</span>`; });
   filmAw.slice(0,1).forEach(a=>{ chips+=`<span class="award-chip ${a.cls}">${a.ico} ${a.t} — ${a.y}</span>`; });
   card.innerHTML=ph+`<div class="fbody"><div class="ftitle">${esc(title)}</div><div class="fmeta">${yr}</div>${ov?`<div class="foverview">${ov}</div>`:''}<div class="fhint">Cliquer pour la fiche complète →</div>${chips?`<div class="fchips">${chips}</div>`:''}</div>${sc?`<div class="fscore ${cls}">★ ${sc}</div>`:''}`;
+  // Boutons ❤️ À voir + ✅ Vu
+  const filmD = {id: f.id, title, poster: f.poster_path||null, year: yr, genre: '', media};
+  const acts = document.createElement('div'); acts.className='fcard-actions';
+  const bL = document.createElement('button');
+  bL.className='btn-like'+(isInWatchlist(f.id)?' liked':'');
+  bL.innerHTML=isInWatchlist(f.id)?'❤️ Déjà en liste':'❤️ À voir plus tard';
+  bL.onclick=e=>{e.stopPropagation();if(isInWatchlist(f.id)){removeFromWatchlist(f.id);bL.classList.remove('liked');bL.innerHTML='❤️ À voir plus tard';}else{addToWatchlist(filmD);bL.classList.add('liked');bL.innerHTML='❤️ Déjà en liste';}};
+  const bS = document.createElement('button');
+  bS.className='btn-seen'+(isInSeen(f.id)?' seen':'');
+  bS.innerHTML=isInSeen(f.id)?'✅ Vu !':"✅ Je l'ai vu";
+  bS.onclick=e=>{e.stopPropagation();addToSeen(filmD);bS.classList.add('seen');bS.innerHTML='✅ Vu !';};
+  acts.appendChild(bL); acts.appendChild(bS);
+  card.querySelector('.fbody').appendChild(acts);
   return card;
 }
 
@@ -1272,6 +1362,14 @@ async function launchQuiz(){
   document.getElementById('rintro').textContent = ai.intro;
   const list = document.getElementById('qflist'); list.innerHTML = '';
 
+  // Trie par récompenses d'abord, puis par note TMDB si dispo
+  ai.films.sort((a, b) => {
+    const aAw = (AWARDS_DB[(a.title||'').toLowerCase()] || []).length;
+    const bAw = (AWARDS_DB[(b.title||'').toLowerCase()] || []).length;
+    if(aAw !== bAw) return bAw - aAw;
+    return 0; // conserve l'ordre IA si pas de récompenses
+  });
+
   ai.films.forEach((f, i) => {
     const card = document.createElement('div'); card.className = 'fcard';
     const st = f.media_type === 'tv' ? 'tv' : 'movie';
@@ -1339,6 +1437,185 @@ async function loadSimilar(movieId, title, media='movie'){
 }
 
 function restartQuiz(){ step=0; Object.keys(ans).forEach(k=>delete ans[k]); document.getElementById('qres').style.display='none'; document.getElementById('qform').style.display='block'; renderStep(); }
+
+/* ══ CINÉMATHÈQUE ══ */
+let watchlist = JSON.parse(localStorage.getItem('wm_watchlist') || '[]');
+let seenList  = JSON.parse(localStorage.getItem('wm_seen') || '[]');
+
+function saveWatchlist(){ localStorage.setItem('wm_watchlist', JSON.stringify(watchlist)); }
+function saveSeenList(){  localStorage.setItem('wm_seen',      JSON.stringify(seenList));  }
+
+function isInWatchlist(id){ return watchlist.some(f => String(f.id) === String(id)); }
+function isInSeen(id){      return seenList.some(f  => String(f.id) === String(id)); }
+
+function addToWatchlist(film){
+  if(isInWatchlist(film.id)) return;
+  watchlist.unshift(film);
+  saveWatchlist();
+  updateCineCounts();
+  renderWatchlist();
+  // Feedback visuel
+  showToast('❤️ Ajouté à "À voir" !');
+}
+
+function addToSeen(film){
+  // Retire de la watchlist si présent
+  watchlist = watchlist.filter(f => String(f.id) !== String(film.id));
+  saveWatchlist();
+  if(!isInSeen(film.id)){
+    seenList.unshift({...film, userNote: 0, userAvis: '', seenDate: new Date().toLocaleDateString('fr-FR')});
+    saveSeenList();
+  }
+  updateCineCounts();
+  renderWatchlist();
+  renderSeen();
+  showToast('✅ Ajouté aux films vus !');
+}
+
+function removeFromWatchlist(id){
+  watchlist = watchlist.filter(f => String(f.id) !== String(id));
+  saveWatchlist(); updateCineCounts(); renderWatchlist();
+}
+
+function removeFromSeen(id){
+  seenList = seenList.filter(f => String(f.id) !== String(id));
+  saveSeenList(); updateCineCounts(); renderSeen();
+}
+
+function updateCineCounts(){
+  document.getElementById('count-watchlist').textContent = watchlist.length;
+  document.getElementById('count-seen').textContent = seenList.length;
+}
+
+function switchCine(tab){
+  ['watchlist','seen'].forEach(t => {
+    document.getElementById('cine-'+t).style.display = t===tab ? 'block' : 'none';
+    document.getElementById('cine-tab-'+t).classList.toggle('active', t===tab);
+  });
+  if(tab==='watchlist') renderWatchlist();
+  else renderSeen();
+}
+
+function renderWatchlist(){
+  const el = document.getElementById('watchlist-items');
+  const empty = document.getElementById('watchlist-empty');
+  if(!watchlist.length){ empty.style.display='block'; el.innerHTML=''; return; }
+  empty.style.display='none';
+  el.innerHTML='';
+  watchlist.forEach(f => el.appendChild(makeMovieItem(f, 'watchlist')));
+}
+
+function renderSeen(){
+  const el = document.getElementById('seen-items');
+  const empty = document.getElementById('seen-empty');
+  if(!seenList.length){ empty.style.display='block'; el.innerHTML=''; return; }
+  empty.style.display='none';
+  el.innerHTML='';
+  seenList.forEach(f => el.appendChild(makeMovieItem(f, 'seen')));
+}
+
+function makeMovieItem(f, type){
+  const wrap = document.createElement('div');
+  wrap.className = 'movie-item';
+  const ph = f.poster
+    ? '<img class="movie-thumb" src="'+IMGS+f.poster+'" onclick="openModal('+f.id+',''+(f.media||'movie')+'')">'
+    : '<div class="movie-thumb-ph" onclick="openModal('+f.id+',''+(f.media||'movie')+'')">🎬</div>';
+
+  let extraHtml = '';
+  if(type === 'seen'){
+    const note = f.userNote || 0;
+    const stars = [1,2,3,4,5].map(s =>
+      '<span class="cine-star'+(note>=s?' on':'')+'" onclick="setCineNote(''+f.id+'','+s+',this)">★</span>'
+    ).join('');
+    extraHtml = '<div class="cine-stars" style="margin-bottom:6px">'+stars+'</div>'
+      +'<div class="avis-wrap">'
+      +'<textarea class="avis-input" placeholder="Ton avis en quelques mots..." onchange="saveAvis(''+f.id+'',this.value)">'+esc(f.userAvis||'')+'</textarea>'
+      +'<div class="avis-saved" id="avis-saved-'+f.id+'">✓ Avis sauvegardé</div>'
+      +'</div>'
+      +'<div style="font-size:11px;color:var(--text3);margin-top:4px">Vu le '+esc(f.seenDate||'')+'</div>';
+  }
+
+  const btnRemove = type==='watchlist'
+    ? '<button class="btn-remove" onclick="removeFromWatchlist(''+f.id+'')">✕ Retirer</button>'
+      +'<button class="btn-mark-seen" onclick="moveToSeen(''+f.id+'')">✅ Je l'ai vu !</button>'
+    : '<button class="btn-remove" onclick="removeFromSeen(''+f.id+'')">✕ Retirer</button>';
+
+  wrap.innerHTML = ph + '<div class="movie-body">'
+    +'<div class="movie-title" onclick="openModal('+f.id+',''+(f.media||'movie')+'')">'+esc(f.title)+'</div>'
+    +'<div class="movie-meta">'+[f.year,f.genre].filter(Boolean).join(' · ')+'</div>'
+    +extraHtml
+    +'<div class="movie-actions">'+btnRemove+'</div>'
+    +'</div>';
+  return wrap;
+}
+
+function moveToSeen(id){
+  const f = watchlist.find(x => String(x.id) === String(id));
+  if(f) addToSeen(f);
+}
+
+function setCineNote(id, val, el){
+  const f = seenList.find(x => String(x.id) === String(id));
+  if(f){ f.userNote = val; saveSeenList(); }
+  // Met à jour les étoiles visuellement
+  const stars = el.parentElement.querySelectorAll('.cine-star');
+  stars.forEach((s, i) => s.classList.toggle('on', i < val));
+}
+
+function saveAvis(id, val){
+  const f = seenList.find(x => String(x.id) === String(id));
+  if(f){ f.userAvis = val; saveSeenList(); }
+  const saved = document.getElementById('avis-saved-'+id);
+  if(saved){ saved.style.display='block'; setTimeout(()=>saved.style.display='none', 2000); }
+}
+
+/* Toast notification */
+function showToast(msg){
+  let toast = document.getElementById('wm-toast');
+  if(!toast){
+    toast = document.createElement('div');
+    toast.id = 'wm-toast';
+    toast.style.cssText = 'position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:var(--text);color:var(--bg);font-size:14px;font-weight:500;padding:10px 22px;border-radius:30px;z-index:1000;box-shadow:0 4px 20px rgba(0,0,0,.2);transition:opacity .3s;pointer-events:none';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = msg;
+  toast.style.opacity = '1';
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => toast.style.opacity='0', 2200);
+}
+
+/* Boutons ❤️ et ✅ sur une fiche film (appelés depuis openModal) */
+function buildCineButtons(film){
+  const inW = isInWatchlist(film.id);
+  const inS = isInSeen(film.id);
+  const btnW = '<button id="modal-btn-like" class="btn-like'+(inW?' liked':'')+'" onclick="toggleWatchlist('+JSON.stringify(film).replace(/"/g,'&quot;')+')">'+(inW?'❤️ Dans "À voir"':'❤️ À voir plus tard')+'</button>';
+  const btnS = '<button id="modal-btn-seen" class="btn-seen'+(inS?' seen':'')+'" onclick="toggleSeen('+JSON.stringify(film).replace(/"/g,'&quot;')+')">'+(inS?'✅ Vu !':'✅ Je l'ai vu')+'</button>';
+  return '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:1rem;margin-bottom:.5rem">'+btnW+btnS+'</div>';
+}
+
+function toggleWatchlist(film){
+  if(isInWatchlist(film.id)){
+    removeFromWatchlist(film.id);
+    const btn = document.getElementById('modal-btn-like');
+    if(btn){ btn.classList.remove('liked'); btn.textContent='❤️ À voir plus tard'; }
+  } else {
+    addToWatchlist(film);
+    const btn = document.getElementById('modal-btn-like');
+    if(btn){ btn.classList.add('liked'); btn.textContent='❤️ Dans "À voir"'; }
+  }
+}
+
+function toggleSeen(film){
+  if(isInSeen(film.id)){
+    removeFromSeen(film.id);
+    const btn = document.getElementById('modal-btn-seen');
+    if(btn){ btn.classList.remove('seen'); btn.textContent='✅ Je l'ai vu'; }
+  } else {
+    addToSeen(film);
+    const btn = document.getElementById('modal-btn-seen');
+    if(btn){ btn.classList.add('seen'); btn.textContent='✅ Vu !'; }
+  }
+}
 
 /* ══ UTILS ══ */
 function showErr(id,msg){ const e=document.getElementById(id); e.textContent=msg; e.style.display='block'; }
