@@ -1226,7 +1226,7 @@ async function launchQuiz(){
       if(titles.length < 2) throw new Error('Réponse IA illisible, réessaie');
       ai = {
         intro: rawText.match(/"intro"\s*:\s*"([^"]+)"/)?.[1] || 'Voici mes sélections pour toi :',
-        films: titles.slice(0,4).map((t,i) => ({
+        films: titles.slice(0,10).map((t,i) => ({
           title: t,
           year: years[i]||'',
           genre: genres[i]||'',
