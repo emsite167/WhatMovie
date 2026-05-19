@@ -1131,6 +1131,13 @@ function renderStep(){
     container.appendChild(wrap);
     container.appendChild(preview);
 
+    // Bouton "Passer cette étape"
+    const skipBtn = document.createElement('button');
+    skipBtn.textContent = 'Je n\'ai pas de film en tête → Passer cette étape ⏭';
+    skipBtn.style.cssText = 'margin-top:8px;font-family:inherit;font-size:13px;color:var(--text3);background:none;border:none;cursor:pointer;padding:0;text-decoration:underline;display:block';
+    skipBtn.onclick = () => { ans[q.id] = ''; step++; renderStep(); };
+    container.appendChild(skipBtn);
+
     // Champ texte = optionnel → toujours actif
     document.getElementById('bnxt').disabled=false;
   } else {
@@ -1190,8 +1197,8 @@ async function launchQuiz(){
     + '- Univers : ' + theme + '\n'
     + '- Tolérance : ' + tolerance + '\n'
     + '- Rapport nouveauté : ' + surprise + '\n\n'
-    + 'Propose 4 films ou séries adaptés (choisis toi-même film ou série). title, year, genre, duration, media_type ("movie"/"tv"), reason (2 phrases perso), tags (3 mots).\n'
-    + 'IMPORTANT : Réponds UNIQUEMENT avec le JSON brut. Aucun texte avant ou après. Dans les valeurs JSON, utilise uniquement des guillemets doubles et n\'utilise jamais d\'apostrophes dans les textes. Remplace les apostrophes par des espaces.\n'
+    + 'Propose exactement 10 films ou series adaptes au profil. ' + (refFilm ? 'EXCLUSION ABSOLUE : ne propose JAMAIS "' + refFilm + '" ni aucun de ses suites ou remakes. ' : '') + 'Pour chaque : title, year, genre, duration, media_type (movie ou tv), reason (2 phrases perso sans apostrophes), tags (3 mots).\n'
+    + 'IMPORTANT : JSON brut uniquement, zero texte avant ou apres, guillemets doubles uniquement, ZERO apostrophe dans les valeurs.\n'
     + '{"intro":"...","films":[{"title":"","year":"","genre":"","duration":"","media_type":"movie","reason":"","tags":["",""]}]}';
 
   let ai;
@@ -1201,7 +1208,7 @@ async function launchQuiz(){
     const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + groqKey },
-      body: JSON.stringify({ model: 'llama-3.3-70b-versatile', max_tokens: 1400, temperature: 0.7, messages: [{ role: 'user', content: prompt }] })
+      body: JSON.stringify({ model: 'llama-3.3-70b-versatile', max_tokens: 3000, temperature: 0.7, messages: [{ role: 'user', content: prompt }] })
     });
     if(!r.ok) throw new Error('HTTP ' + r.status);
     const j = await r.json();
