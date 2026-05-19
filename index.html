@@ -280,10 +280,16 @@ footer a{color:var(--text3);text-decoration:underline}
 </header>
 
 <div id="setup-banner">
-  <div class="setup-text"><strong>⚙️ Configuration</strong> — Entre ta clé API TMDB gratuite. Crée-la sur <a href="https://www.themoviedb.org/settings/api" target="_blank">themoviedb.org/settings/api</a></div>
-  <div class="setup-row">
-    <input class="setup-inp" id="tmdb-inp" type="text" placeholder="Colle ta clé TMDB ici…"/>
-    <button class="btn-save" onclick="saveKey()">Enregistrer</button>
+  <div class="setup-text"><strong>⚙️ Configuration</strong> — Entre tes clés API gratuites pour activer toutes les fonctionnalités.</div>
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <div class="setup-row">
+      <input class="setup-inp" id="tmdb-inp" type="text" placeholder="Clé TMDB (themoviedb.org/settings/api)"/>
+      <button class="btn-save" onclick="saveKey()">💾 TMDB</button>
+    </div>
+    <div class="setup-row">
+      <input class="setup-inp" id="groq-inp" type="text" placeholder="Clé Groq (console.groq.com) — pour le quiz IA"/>
+      <button class="btn-save" onclick="saveGroqKey()">💾 Groq</button>
+    </div>
   </div>
   <span class="key-ok" id="key-ok">✓ Enregistrée !</span>
 </div>
@@ -518,7 +524,23 @@ function saveKey(){
   if(!k) return;
   localStorage.setItem('wm_k', k);
   document.getElementById('key-ok').style.display = 'inline';
-  setTimeout(() => document.getElementById('setup-banner').style.display = 'none', 1200);
+  document.getElementById('key-ok').textContent = '✓ Clé TMDB enregistrée !';
+  checkBanner();
+}
+
+function saveGroqKey(){
+  const k = document.getElementById('groq-inp').value.trim();
+  if(!k) return;
+  localStorage.setItem('wm_groq', k);
+  document.getElementById('key-ok').style.display = 'inline';
+  document.getElementById('key-ok').textContent = '✓ Clé Groq enregistrée !';
+  checkBanner();
+}
+
+function checkBanner(){
+  if(localStorage.getItem('wm_k') && localStorage.getItem('wm_groq')){
+    setTimeout(() => document.getElementById('setup-banner').style.display = 'none', 1200);
+  }
 }
 async function tmdb(path, lang='fr-FR'){
   const k = getKey(); if(!k) throw new Error('Clé TMDB manquante');
@@ -531,7 +553,10 @@ async function tmdb(path, lang='fr-FR'){
 /* ══ INIT ══ */
 window.addEventListener('DOMContentLoaded', () => {
   const k = getKey();
-  if(k){ document.getElementById('tmdb-inp').value=k; document.getElementById('setup-banner').style.display='none'; }
+  if(k) document.getElementById('tmdb-inp').value = k;
+  const gk = localStorage.getItem('wm_groq') || '';
+  if(gk) document.getElementById('groq-inp').value = gk;
+  if(k && gk) document.getElementById('setup-banner').style.display = 'none';
   renderStep();
   document.addEventListener('click', e => { if(!document.getElementById('swrap').contains(e.target)) closeDrop(); });
 });
@@ -1170,15 +1195,18 @@ async function launchQuiz(){
 
   let ai;
   try{
-    const r = await fetch('/api/ai', {
+    const groqKey = localStorage.getItem('wm_groq') || '';
+    if(!groqKey){ throw new Error('Clé Groq manquante — entre ta clé dans la configuration'); }
+    const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1400, messages: [{ role: 'user', content: prompt }] })
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + groqKey },
+      body: JSON.stringify({ model: 'llama-3.3-70b-versatile', max_tokens: 1400, temperature: 0.7, messages: [{ role: 'user', content: prompt }] })
     });
     if(!r.ok) throw new Error('HTTP ' + r.status);
     const j = await r.json();
     if(j.error) throw new Error(j.error.message || 'Erreur API');
-    const raw = j.content.map(b => b.text || '').join('').replace(/```json|```/g, '').trim();
+    // Groq retourne format OpenAI
+    const raw = (j.choices?.[0]?.message?.content || j.content?.map?.(b=>b.text||'')?.join?.('')||'').replace(/```json|```/g, '').trim();
     ai = JSON.parse(raw);
     if(!ai.films || !Array.isArray(ai.films)) throw new Error('JSON invalide');
   } catch(e) {
