@@ -559,7 +559,6 @@ const IMGB = 'https://image.tmdb.org/t/p/w780';
 const LOGO = 'https://image.tmdb.org/t/p/w45';
 
 let trailerKey = null;
-let userRatings = JSON.parse(localStorage.getItem('wm_r') || '{}');
 
 const GM = {28:'Action',12:'Aventure',16:'Animation',35:'Comédie',80:'Crime',99:'Documentaire',18:'Drame',10751:'Famille',14:'Fantastique',36:'Histoire',27:'Horreur',10402:'Musique',9648:'Mystère',10749:'Romance',878:'Sci-fi',53:'Thriller',10752:'Guerre',37:'Western'};
 const GT = {10759:'Action',16:'Animation',35:'Comédie',80:'Crime',99:'Documentaire',18:'Drame',10751:'Famille',9648:'Mystère',10765:'Sci-fi',37:'Western'};
@@ -1040,9 +1039,7 @@ async function openModal(id,media='movie'){
     // NOTES
     const sc=det.vote_average?(Math.round(det.vote_average*10)/10).toFixed(1):null;
     const cls=sc>=7?'green':sc>=5?'gold':'red';
-    const ur=userRatings[id]||0;
-    let rh=sc?`<div class="rbox"><div class="rsrc">TMDB</div><div class="rval ${cls}">★ ${sc}</div>${det.vote_count?`<div class="rsub">${det.vote_count.toLocaleString('fr-FR')} votes</div>`:''}</div>`:'';
-    rh+=`<div class="rbox"><div class="rsrc">Ma note</div><div class="stars" id="stars">${[1,2,3,4,5].map(s=>`<span class="star${ur>=s?' on':''}" onclick="setRating('${id}',${s})">★</span>`).join('')}</div><div class="rsub" id="rlbl">${ur?ur+' / 5':'Non noté'}</div></div>`;
+    const rh = sc ? '<div class="rbox"><div class="rsrc">TMDB</div><div class="rval '+cls+'">★ '+sc+'</div>'+(det.vote_count?'<div class="rsub">'+det.vote_count.toLocaleString('fr-FR')+' votes</div>':'')+'</div>' : '';
     document.getElementById('mratings').innerHTML=rh;
 
     document.getElementById('msynopsis').textContent=det.overview||'Aucun synopsis disponible.';
@@ -1218,11 +1215,7 @@ function buildPlatforms(data, movieTitle){
 }
 
 
-function setRating(mid,v){
-  userRatings[mid]=v; localStorage.setItem('wm_r',JSON.stringify(userRatings));
-  document.querySelectorAll('#stars .star').forEach((s,i)=>s.classList.toggle('on',i<v));
-  document.getElementById('rlbl').textContent=v+' / 5';
-}
+
 function openTrailer(){ if(trailerKey) window.open(`https://www.youtube.com/watch?v=${trailerKey}`,'_blank'); }
 function closeModal(){ document.getElementById('overlay').style.display='none'; document.body.style.overflow=''; }
 function overlayClick(e){ if(e.target===document.getElementById('overlay')) closeModal(); }
