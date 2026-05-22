@@ -531,59 +531,76 @@ footer a{color:var(--text3);text-decoration:underline}
 
   <!-- PAGE PROFIL -->
   <div class="page" id="page-profile">
-    <h1 class="ptitle">Mon Profil</h1>
-    <p class="psub">Ton code personnel pour retrouver ta cinémathèque sur n'importe quel appareil.</p>
 
-    <div id="profile-create" style="display:none">
-      <div class="session-box" style="max-width:440px">
-        <div class="coop-step-label">Crée ton profil WhatMovie</div>
-        <p style="font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:1.5rem">
-          Un code unique à 8 caractères sera généré. <strong>Note-le bien</strong> — il te permettra de retrouver ta liste "À voir", tes films vus et tes notes sur n'importe quel appareil.
-        </p>
+    <!-- CRÉER PROFIL -->
+    <div id="profile-create" style="display:none;max-width:480px">
+      <h1 class="ptitle">Créer mon profil</h1>
+      <p class="psub">Choisis ton avatar et ton pseudo — ton profil sera accessible sur tous tes appareils.</p>
+      <div class="session-box">
+        <div class="coop-step-label">Choisis ton avatar</div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:1.5rem" id="avatar-grid"></div>
+        <div class="coop-step-label">Ton pseudo</div>
+        <input id="inp-pseudo" type="text" class="qinput" placeholder="Ex : Martin, Cinéphile, FilmFan…" maxlength="20" style="margin-bottom:1.5rem"/>
+        <div class="coop-step-label">Ton code unique sera généré automatiquement</div>
+        <p style="font-size:13px;color:var(--text3);margin-bottom:1rem;line-height:1.6">Un code à 8 caractères unique sera créé. <strong>Note-le</strong> pour retrouver ton profil sur n'importe quel appareil ou navigateur.</p>
         <button class="btn-coop" onclick="createProfile()">✨ Créer mon profil</button>
       </div>
     </div>
 
-    <div id="profile-view" style="display:none">
-      <div class="session-box" style="max-width:440px">
-        <div class="coop-step-label">Ton code profil</div>
-        <div class="session-code" id="profile-code-disp" style="font-size:2rem;letter-spacing:.25em"></div>
-        <p style="font-size:13px;color:var(--text3);text-align:center;margin-top:.5rem">📋 Clique pour copier</p>
-        <button class="btn-coop-sec" onclick="copyProfileCode()">📋 Copier le code</button>
-        <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border)">
-          <div class="coop-step-label">Statistiques</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:.8rem">
-            <div style="background:var(--abg);border:1px solid rgba(196,75,43,.2);border-radius:12px;padding:16px;text-align:center">
-              <div style="font-size:2rem;font-weight:700;color:var(--accent)" id="stat-wl">0</div>
-              <div style="font-size:12px;color:var(--text3);margin-top:4px">Films à voir</div>
-            </div>
-            <div style="background:rgba(42,122,78,.08);border:1px solid rgba(42,122,78,.2);border-radius:12px;padding:16px;text-align:center">
-              <div style="font-size:2rem;font-weight:700;color:var(--green)" id="stat-sl">0</div>
-              <div style="font-size:12px;color:var(--text3);margin-top:4px">Films vus</div>
-            </div>
-          </div>
+    <!-- VUE PROFIL -->
+    <div id="profile-view" style="display:none;max-width:480px">
+      <!-- Header profil -->
+      <div style="display:flex;align-items:center;gap:20px;background:#fff;border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:1.5rem;box-shadow:0 2px 12px var(--shadow)">
+        <div id="profile-avatar-disp" style="font-size:3.5rem;width:80px;height:80px;background:var(--bg2);border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid var(--border);flex-shrink:0"></div>
+        <div style="flex:1;min-width:0">
+          <div id="profile-pseudo-disp" style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:4px"></div>
+          <div style="font-size:12px;color:var(--text3);margin-bottom:8px">Membre WhatMovie</div>
+          <div class="session-code" id="profile-code-disp" style="font-size:1.1rem;letter-spacing:.2em;padding:6px 14px;display:inline-block;border-radius:8px;cursor:pointer" onclick="copyProfileCode()" title="Cliquer pour copier"></div>
         </div>
-        <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border)">
-          <div class="coop-step-label">Changer d'appareil</div>
-          <p style="font-size:13px;color:var(--text2);margin-bottom:.8rem">Entre ton code sur un autre appareil pour retrouver ton profil.</p>
-          <div style="display:flex;gap:8px">
-            <input class="join-inp" id="restore-inp" maxlength="8" placeholder="ABCD1234" style="font-size:1.2rem;letter-spacing:.15em;margin:0;flex:1" oninput="this.value=this.value.toUpperCase()"/>
-            <button class="btn-coop" style="width:auto;padding:10px 18px;margin:0" onclick="restoreProfile()">Restaurer</button>
-          </div>
+      </div>
+      <!-- Stats -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.5rem">
+        <div style="background:var(--abg);border:1px solid rgba(196,75,43,.2);border-radius:14px;padding:18px;text-align:center;cursor:pointer" onclick="switchTab('cine')">
+          <div style="font-size:2.2rem;font-weight:700;color:var(--accent)" id="stat-wl">0</div>
+          <div style="font-size:13px;color:var(--text2);margin-top:4px">❤️ À voir</div>
         </div>
-        <button class="btn-coop-sec" style="margin-top:1rem;color:var(--accent);border-color:rgba(196,75,43,.3)" onclick="deleteProfile()">🗑 Supprimer mon profil</button>
+        <div style="background:rgba(42,122,78,.08);border:1px solid rgba(42,122,78,.2);border-radius:14px;padding:18px;text-align:center;cursor:pointer" onclick="switchTab('cine')">
+          <div style="font-size:2.2rem;font-weight:700;color:var(--green)" id="stat-sl">0</div>
+          <div style="font-size:13px;color:var(--text2);margin-top:4px">✅ Films vus</div>
+        </div>
+      </div>
+      <!-- Modifier pseudo/avatar -->
+      <div class="session-box" style="margin-bottom:1rem">
+        <div class="coop-step-label">Modifier mon profil</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1rem" id="avatar-edit-grid"></div>
+        <input id="edit-pseudo" type="text" class="qinput" placeholder="Ton pseudo…" maxlength="20" style="margin-bottom:.8rem"/>
+        <button class="btn-coop-sec" onclick="saveProfileEdit()">💾 Enregistrer les modifications</button>
+      </div>
+      <!-- Changer d'appareil -->
+      <div class="session-box" style="margin-bottom:1rem">
+        <div class="coop-step-label">Retrouver mon profil sur un autre appareil</div>
+        <p style="font-size:13px;color:var(--text3);margin-bottom:.8rem">Entre ton code sur le nouvel appareil.</p>
+        <button class="btn-coop-sec" onclick="copyProfileCode()">📋 Copier mon code</button>
+        <div style="display:flex;gap:8px;margin-top:.8rem">
+          <input class="join-inp" id="restore-inp" maxlength="8" placeholder="ABCD1234" style="font-size:1.1rem;letter-spacing:.15em;margin:0;flex:1" oninput="this.value=this.value.toUpperCase()"/>
+          <button class="btn-coop" style="width:auto;padding:10px 16px;margin:0" onclick="restoreProfile()">Restaurer</button>
+        </div>
+      </div>
+      <button class="btn-coop-sec" style="color:var(--accent);border-color:rgba(196,75,43,.3)" onclick="deleteProfile()">🚪 Se déconnecter</button>
+    </div>
+
+    <!-- PAS DE PROFIL → LOGIN -->
+    <div id="profile-login" style="display:none;max-width:440px">
+      <h1 class="ptitle">Mon Profil</h1>
+      <p class="psub">Connecte-toi avec ton code ou crée un nouveau profil.</p>
+      <div class="session-box">
+        <div class="coop-step-label">Entre ton code à 8 caractères</div>
+        <input class="join-inp" id="login-inp" maxlength="8" placeholder="ABCD1234" style="font-size:1.4rem;letter-spacing:.2em" oninput="this.value=this.value.toUpperCase()"/>
+        <button class="btn-coop" onclick="restoreProfile()">Retrouver mon profil →</button>
+        <button class="btn-coop-sec" onclick="showProfileCreate()">✨ Créer un nouveau profil</button>
       </div>
     </div>
 
-    <div id="profile-login" style="display:none">
-      <div class="session-box" style="max-width:440px">
-        <div class="coop-step-label">Retrouve ton profil</div>
-        <p style="font-size:14px;color:var(--text2);margin-bottom:1rem">Entre ton code à 8 caractères pour retrouver ta cinémathèque.</p>
-        <input class="join-inp" id="login-inp" maxlength="8" placeholder="ABCD1234" style="font-size:1.4rem;letter-spacing:.2em" oninput="this.value=this.value.toUpperCase()"/>
-        <button class="btn-coop" onclick="restoreProfile()">Retrouver mon profil →</button>
-        <button class="btn-coop-sec" onclick="createProfile()">Créer un nouveau profil</button>
-      </div>
-    </div>
   </div>
 
 </main>
@@ -2220,28 +2237,58 @@ async function initProfile() {
   var local = localStorage.getItem(PROFILE_KEY);
   if(local) {
     currentProfile = JSON.parse(local);
+    // Sync depuis Supabase (données fraîches)
+    try {
+      var profiles = await supaFetch('profiles', 'GET', null, 'code=eq.' + currentProfile.code);
+      if(profiles.length > 0) {
+        currentProfile.pseudo = profiles[0].pseudo || currentProfile.pseudo || 'Cinéphile';
+        currentProfile.avatar = profiles[0].avatar || currentProfile.avatar || '🎬';
+        localStorage.setItem(PROFILE_KEY, JSON.stringify(currentProfile));
+      }
+    } catch(e) {}
     await syncFromSupabase(currentProfile.code);
     renderProfileView(currentProfile);
   } else {
-    document.getElementById('profile-create').style.display = 'block';
-    document.getElementById('profile-view').style.display   = 'none';
-    document.getElementById('profile-login').style.display  = 'none';
+    showProfileCreate();
   }
 }
 
 /* ── Crée un nouveau profil ── */
 async function createProfile() {
-  var code = genCode();
-  try {
-    await supaFetch('profiles', 'POST', { code: code });
-    var profile = { code: code, created: new Date().toLocaleDateString('fr-FR') };
-    localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
-    currentProfile = profile;
-    renderProfileView(profile);
-    toast('✨ Profil créé ! Ton code : ' + code);
-  } catch(e) {
-    toast('❌ Erreur création profil : ' + e.message);
+  // Vérifie qu'un profil n'existe pas déjà
+  var existing = localStorage.getItem(PROFILE_KEY);
+  if(existing) {
+    currentProfile = JSON.parse(existing);
+    renderProfileView(currentProfile);
+    toast('⚠️ Tu as déjà un profil : ' + currentProfile.code);
+    return;
   }
+  // Génère un code unique
+  var code = genCode();
+  var attempt = 0;
+  while(attempt < 5) {
+    try {
+      await supaFetch('profiles', 'POST', { code: code });
+      break; // succès
+    } catch(e) {
+      code = genCode(); // code déjà pris, réessaie
+      attempt++;
+    }
+  }
+  var pseudo = document.getElementById('inp-pseudo') ? document.getElementById('inp-pseudo').value.trim() : '';
+  var avatar = window._selectedAvatar || '🎬';
+  var profile = {
+    code: code,
+    pseudo: pseudo || 'Cinéphile',
+    avatar: avatar,
+    created: new Date().toLocaleDateString('fr-FR')
+  };
+  localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+  currentProfile = profile;
+  // Met à jour le pseudo/avatar dans Supabase
+  try { await supaFetch('profiles', 'PATCH', { pseudo: profile.pseudo, avatar: profile.avatar }, 'code=eq.' + code); } catch(e) {}
+  renderProfileView(profile);
+  toast('✨ Profil créé ! Ton code : ' + code);
 }
 
 /* ── Affiche la vue profil ── */
@@ -2250,6 +2297,16 @@ function renderProfileView(p) {
   document.getElementById('profile-login').style.display  = 'none';
   document.getElementById('profile-view').style.display   = 'block';
   document.getElementById('profile-code-disp').textContent = p.code;
+  // Pseudo + avatar
+  var avEl = document.getElementById('profile-avatar-disp');
+  var psEl = document.getElementById('profile-pseudo-disp');
+  if(avEl) avEl.textContent = p.avatar || '🎬';
+  if(psEl) psEl.textContent = p.pseudo || 'Cinéphile';
+  // Champs d'édition
+  var eiPseudo = document.getElementById('edit-pseudo');
+  if(eiPseudo) eiPseudo.value = p.pseudo || '';
+  _selectedAvatar = p.avatar || '🎬';
+  renderAvatarGrid('avatar-edit-grid', p.avatar || '🎬');
   updateProfileStats();
 }
 
@@ -2348,6 +2405,49 @@ function deleteProfile() {
   document.getElementById('profile-view').style.display   = 'none';
   document.getElementById('profile-create').style.display = 'block';
   toast('👋 Déconnecté. Entre ton code pour te reconnecter.');
+}
+
+
+/* ══ AVATARS & ÉDITION PROFIL ══ */
+var AVATARS = ['🎬','🎭','🎥','🍿','⭐','🏆','👁','🎞','🌙','🔥','💫','🎲','🦁','🐺','🦊','🐉','🚀','🌊','🌴','⚡'];
+var _selectedAvatar = '🎬';
+
+function renderAvatarGrid(containerId, selected) {
+  var el = document.getElementById(containerId);
+  if(!el) return;
+  el.innerHTML = '';
+  AVATARS.forEach(function(av) {
+    var btn = document.createElement('button');
+    btn.textContent = av;
+    btn.style.cssText = 'font-size:1.6rem;width:48px;height:48px;border-radius:50%;border:2px solid '+(av===selected?'var(--accent)':'var(--border)')+';background:'+(av===selected?'var(--abg)':'#fff')+';cursor:pointer;transition:all .15s';
+    btn.onclick = function() {
+      _selectedAvatar = av;
+      renderAvatarGrid(containerId, av);
+    };
+    el.appendChild(btn);
+  });
+}
+
+function showProfileCreate() {
+  document.getElementById('profile-create').style.display = 'block';
+  document.getElementById('profile-login').style.display  = 'none';
+  document.getElementById('profile-view').style.display   = 'none';
+  _selectedAvatar = '🎬';
+  renderAvatarGrid('avatar-grid', '🎬');
+}
+
+async function saveProfileEdit() {
+  if(!currentProfile) return;
+  var pseudo = document.getElementById('edit-pseudo').value.trim() || currentProfile.pseudo || 'Cinéphile';
+  var avatar = _selectedAvatar || currentProfile.avatar || '🎬';
+  currentProfile.pseudo = pseudo;
+  currentProfile.avatar = avatar;
+  localStorage.setItem(PROFILE_KEY, JSON.stringify(currentProfile));
+  try {
+    await supaFetch('profiles', 'PATCH', { pseudo: pseudo, avatar: avatar }, 'code=eq.' + currentProfile.code);
+    toast('✅ Profil mis à jour !');
+  } catch(e) { toast('❌ Erreur : ' + e.message); }
+  renderProfileView(currentProfile);
 }
 
 /* ══ UTILS ══ */
