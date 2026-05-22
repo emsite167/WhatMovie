@@ -2380,7 +2380,12 @@ async function syncFromSupabase(code) {
 
 /* ── Restaure un profil avec son code ── */
 async function restoreProfile() {
-  var inp = document.getElementById('restore-inp') || document.getElementById('login-inp');
+  // Prend le champ visible : login-inp si page login, restore-inp si page profil
+  var loginInp   = document.getElementById('login-inp');
+  var restoreInp = document.getElementById('restore-inp');
+  var loginVisible   = loginInp   && document.getElementById('profile-login').style.display !== 'none';
+  var restoreVisible = restoreInp && document.getElementById('profile-view').style.display  !== 'none';
+  var inp = loginVisible ? loginInp : restoreVisible ? restoreInp : loginInp || restoreInp;
   if(!inp) return;
   var code = inp.value.trim().toUpperCase();
   if(code.length !== 8) { toast('⚠️ Le code fait 8 caractères'); return; }
