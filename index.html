@@ -352,6 +352,108 @@ h1.ptitle{font-family:'Playfair Display',serif;font-size:2.1rem;font-weight:700;
 .qr-wrap{text-align:center;margin:1rem 0}
 @media(max-width:480px){.quiz-mode-select{grid-template-columns:1fr}}
 
+/* ══ RESPONSIVE MOBILE ══ */
+@media (max-width: 768px) {
+
+  /* Header */
+  header {
+    padding: 0 1rem;
+    height: auto;
+    min-height: 56px;
+    flex-wrap: wrap;
+    gap: 0;
+  }
+  .logo { font-size: 1.4rem; padding: 10px 0; }
+  nav {
+    width: 100%;
+    overflow-x: auto;
+    padding: 6px 0 8px;
+    gap: 2px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  nav::-webkit-scrollbar { display: none; }
+  .tab {
+    font-size: 12px;
+    padding: 6px 11px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* Main */
+  main { padding: 1.5rem 1rem 4rem; }
+  h1.ptitle { font-size: 1.6rem; }
+
+  /* Barre de recherche */
+  .sbar { flex-direction: column; gap: 8px; }
+  .sbtn { width: 100%; padding: 13px; }
+  .search-tags { display: none; }
+
+  /* Cards */
+  .fcard { padding: 13px; gap: 12px; }
+  .fthumb { width: 54px; height: 80px; }
+  .fthumb-ph { width: 54px; height: 80px; }
+  .ftitle { font-size: .95rem; }
+  .foverview { display: none; }
+  .card-btns { gap: 5px; }
+  .cbtn { font-size: 11px; padding: 4px 10px; }
+
+  /* Modal */
+  #overlay { padding: .5rem; }
+  .modal { border-radius: 16px; }
+  .mban { height: 180px; }
+  .mbody { padding: 60px 16px 24px; }
+  .mtitle { font-size: 1.35rem; }
+  .mpwrap { left: 16px; bottom: -46px; }
+  .mposter { width: 78px; height: 116px; }
+  .mposter-ph { width: 78px; height: 116px; }
+  .mpills { gap: 5px; }
+  .mpill { font-size: 11px; padding: 3px 9px; }
+  .platforms { gap: 6px; }
+  .platform { padding: 6px 10px; font-size: 12px; }
+
+  /* Quiz */
+  .qtitle { font-size: 1.4rem; margin-bottom: 1.5rem; }
+  .ogrid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .opt { padding: .9rem .7rem; }
+  .oicon { font-size: 1.4rem; }
+  .olab { font-size: 12px; }
+  .osub { font-size: 10px; }
+
+  /* Mode coop */
+  .quiz-mode-select { grid-template-columns: 1fr; gap: 10px; }
+  .session-code { font-size: 2rem; letter-spacing: .15em; }
+  .participants-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Cinémathèque */
+  .cine-tabs { width: 100%; }
+  .cine-tab { flex: 1; text-align: center; padding: 9px 8px; font-size: 12px; }
+  .mitem { padding: 12px; gap: 10px; }
+  .mthumb { width: 44px; height: 65px; }
+
+  /* Profil */
+  #profile-view, #profile-create, #profile-login { max-width: 100%; }
+
+  /* Actor card */
+  .actor-top { flex-direction: column; align-items: center; text-align: center; }
+  .actor-photo, .actor-photo-ph { width: 90px; height: 90px; }
+  .actor-pills { justify-content: center; }
+
+  /* Fiche acteur dans modal */
+  .crew-row { gap: 8px; }
+  .crew-card { padding: 7px 10px; }
+
+  /* Dropdown suggestions */
+  .sdrop { max-height: 280px; }
+}
+
+@media (max-width: 400px) {
+  .ogrid { grid-template-columns: repeat(2, 1fr); }
+  .tab { font-size: 11px; padding: 5px 9px; }
+  .fcard { padding: 11px; gap: 10px; }
+  .fthumb { width: 48px; height: 72px; }
+}
+
 
 footer{text-align:center;padding:2.5rem 2rem;font-size:11px;color:var(--text3);border-top:1px solid rgba(120,80,40,.08);margin-top:4rem;letter-spacing:.02em}
 footer a{color:var(--text3);text-decoration:underline}
