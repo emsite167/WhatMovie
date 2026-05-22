@@ -1310,8 +1310,11 @@ async function openModal(id,media='movie'){
       return `<div class="castcard" onclick="byPerson(${a.id},'actor')">${ph}<div class="caname">${esc(a.name)}</div><div class="cachar">${esc(a.character||'')}</div></div>`;
     }).join('');
 
-    // Bouton films similaires
+    // Bouton films similaires — supprime l'ancien d'abord
+    var oldSimBtn = document.getElementById('sim-btn');
+    if(oldSimBtn) oldSimBtn.remove();
     const simBtn = document.createElement('button');
+    simBtn.id = 'sim-btn';
     simBtn.style.cssText='margin-top:1.5rem;width:100%;font-family:inherit;font-size:14px;font-weight:500;color:var(--accent);background:var(--abg);border:1.5px solid rgba(196,75,43,.25);border-radius:10px;padding:12px;cursor:pointer;transition:background .15s';
     simBtn.textContent='🎬 Voir 10 films similaires →';
     simBtn.onmouseover=()=>simBtn.style.background='rgba(196,75,43,.14)';
