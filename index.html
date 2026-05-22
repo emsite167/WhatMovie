@@ -2026,8 +2026,20 @@ var coopStep = 0;
 var coopAns  = {};
 var coopVetos = {};
 var coopFilms = [];
-var COOP_PREF = 'wm_coop_';
 
+/* ── Supabase helpers coop ── */
+async function coopGet(code) {
+  var data = await supaFetch('coop_sessions', 'GET', null, 'code=eq.' + code);
+  return data.length ? data[0] : null;
+}
+async function coopCreate(sess) {
+  return await supaFetch('coop_sessions', 'POST', sess);
+}
+async function coopUpdate(code, patch) {
+  return await supaFetch('coop_sessions', 'PATCH', patch, 'code=eq.' + code);
+}
+
+/* ── Navigation modes ── */
 function showPage(id) {
   var pages = ['quiz-mode-pick','qform','qres','qload',
     'coop-create','coop-host','coop-join','coop-quiz',
@@ -2044,65 +2056,73 @@ function startSolo() {
   showPage('qform');
   renderStep();
 }
+function startCoop() { showPage('coop-create'); }
+function showCoopCreate() { showPage('coop-create'); }
+function showCoopJoin() { showPage('coop-join'); }
 
-function startCoop() {
-  showPage('coop-create');
-}
-
-function showCoopCreate() {
-  showPage('coop-create');
-}
-
-function showCoopJoin() {
-  showPage('coop-join');
-}
-
+/* ── Nombre de participants ── */
 function setCoopCount(n) {
   coopCnt = n;
   [2,3,4,5,6].forEach(function(i) {
     var b = document.getElementById('ccnt-' + i);
     if (!b) return;
-    b.style.background = i === n ? 'var(--accent)' : '';
-    b.style.color = i === n ? '#fff' : '';
-    b.style.borderColor = i === n ? 'var(--accent)' : '';
+    b.style.background = i===n ? 'var(--accent)' : '';
+    b.style.color      = i===n ? '#fff' : '';
+    b.style.borderColor= i===n ? 'var(--accent)' : '';
   });
   var btn = document.getElementById('btn-gen-sess');
   if (btn) btn.disabled = false;
 }
 
-function generateSession() {
+/* ── Génère une session (stockée dans Supabase) ── */
+async function generateSession() {
+  var btn = document.getElementById('btn-gen-sess');
+  if (btn) { btn.disabled = true; btn.textContent = 'Création…'; }
+
   var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
   var code = '';
-  for (var i = 0; i < 4; i++) code += chars[Math.floor(Math.random() * chars.length)];
+  for (var i=0;i<4;i++) code += chars[Math.floor(Math.random()*chars.length)];
+
   coopSess = code;
   coopRole = 'host';
   coopName = 'Organisateur';
 
   var sess = {
-    code: code, count: coopCnt, ts: Date.now(),
-    answers: [], films: [], vetos: {},
+    code: code,
+    count: coopCnt,
+    answers: [],
+    films: [],
+    intro: '',
     participants: [{ name: 'Organisateur', done: false }]
   };
-  localStorage.setItem(COOP_PREF + code, JSON.stringify(sess));
+
+  try {
+    await coopCreate(sess);
+  } catch(e) {
+    toast('❌ Erreur création session : ' + e.message);
+    if (btn) { btn.disabled = false; btn.textContent = 'Créer la session →'; }
+    return;
+  }
+
   showCoopHost(sess);
 }
 
+/* ── Affiche la page hôte ── */
 function showCoopHost(sess) {
   showPage('coop-host');
-  var code = sess.code;
-  document.getElementById('sc-disp').textContent = code;
-  var url = window.location.origin + window.location.pathname + '?join=' + code;
+  document.getElementById('sc-disp').textContent = sess.code;
+  var url = window.location.origin + window.location.pathname + '?join=' + sess.code;
   var suEl = document.getElementById('su-disp');
   suEl.textContent = url;
   suEl._url = url;
 
-  // QR via API externe (pas de dépendance)
   var qrWrap = document.getElementById('qr-wrap');
   qrWrap.innerHTML = '';
   var img = document.createElement('img');
-  img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + encodeURIComponent(url) + '&color=2c1f0e&bgcolor=faf7f2&margin=10';
-  img.style.cssText = 'border-radius:10px;border:2px solid var(--bg2)';
-  img.alt = 'QR Code session ' + code;
+  img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=160x160&data='
+    + encodeURIComponent(url) + '&color=1c120a&bgcolor=faf7f3&margin=12';
+  img.style.cssText = 'border-radius:12px;border:2px solid var(--bg2);display:block;margin:0 auto';
+  img.alt = 'QR Code ' + sess.code;
   qrWrap.appendChild(img);
 
   renderCoopParticipants(sess);
@@ -2111,20 +2131,19 @@ function showCoopHost(sess) {
 function copyUrl() {
   var el = document.getElementById('su-disp');
   if (!el) return;
-  navigator.clipboard.writeText(el._url || el.textContent).then(function() {
-    toast('🔗 Lien copié !');
-  });
+  navigator.clipboard.writeText(el._url || el.textContent)
+    .then(function(){ toast('🔗 Lien copié !'); });
 }
 
 function renderCoopParticipants(sess) {
   var grid = document.getElementById('part-grid');
   if (!grid) return;
   grid.innerHTML = '';
-  for (var i = 0; i < sess.count; i++) {
+  for (var i=0; i<sess.count; i++) {
     var p = (sess.participants || [])[i];
     var slot = document.createElement('div');
     if (p) {
-      slot.className = 'part-slot' + (i === 0 ? ' me' : p.done ? ' done' : '');
+      slot.className = 'part-slot' + (i===0 ? ' me' : (p.done ? ' done' : ''));
       slot.textContent = (p.done ? '✅ ' : '⏳ ') + p.name;
     } else {
       slot.className = 'part-slot';
@@ -2141,67 +2160,88 @@ function renderCoopParticipants(sess) {
     prog.style.color = done >= sess.count ? 'var(--green)' : '';
   }
   var btn = document.getElementById('btn-host-start');
-  if (btn && done >= sess.count) btn.textContent = '🎬 Lancer les recommandations →';
-}
-
-function refreshCoop() {
-  if (!coopSess) return;
-  var raw = localStorage.getItem(COOP_PREF + coopSess);
-  if (!raw) { toast('Session introuvable'); return; }
-  var sess = JSON.parse(raw);
-  if (coopRole === 'host') {
-    renderCoopParticipants(sess);
-  } else if (sess.films && sess.films.length > 0) {
-    // Films prêts : affiche le vote
-    coopFilms = sess.films;
-    showPage('coop-veto');
-    renderVeto(sess.films, sess.intro || '');
+  if (btn) {
+    btn.textContent = done >= sess.count
+      ? '🎬 Lancer les recommandations →'
+      : 'Répondre en premier →';
   }
 }
 
-function hostStartQuiz() {
+/* ── Actualise depuis Supabase ── */
+async function refreshCoop() {
   if (!coopSess) return;
-  var raw = localStorage.getItem(COOP_PREF + coopSess);
-  var sess = JSON.parse(raw);
-  // Si tout le monde a répondu, lance l'IA
-  if ((sess.answers || []).length >= sess.count) {
-    launchCoopAI(sess);
-    return;
-  }
-  // Sinon, l'hôte répond en premier
-  coopStep = 0; coopAns = {};
-  document.getElementById('cq-code').textContent = coopSess;
-  document.getElementById('cq-name').textContent = coopName;
-  showPage('coop-quiz');
-  renderCoopStep();
+  toast('🔄 Actualisation…');
+  try {
+    var sess = await coopGet(coopSess);
+    if (!sess) { toast('Session introuvable'); return; }
+    if (coopRole === 'host') {
+      renderCoopParticipants(sess);
+    } else {
+      // Guest : vérifie si les films sont prêts pour le vote
+      if (sess.films && sess.films.length > 0) {
+        coopFilms = sess.films;
+        showPage('coop-veto');
+        renderVeto(sess.films, sess.intro);
+        return;
+      }
+    }
+    toast('');
+  } catch(e) { toast('❌ ' + e.message); }
 }
 
-function joinSession() {
+/* ── Hôte : démarre ou lance l'IA ── */
+async function hostStartQuiz() {
+  if (!coopSess) return;
+  try {
+    var sess = await coopGet(coopSess);
+    if (!sess) { toast('Session introuvable'); return; }
+    if ((sess.answers || []).length >= sess.count) {
+      await launchCoopAI(sess);
+      return;
+    }
+    // L'hôte répond en premier
+    coopStep = 0; coopAns = {};
+    document.getElementById('cq-code').textContent = coopSess;
+    document.getElementById('cq-name').textContent = coopName;
+    showPage('coop-quiz');
+    renderCoopStep();
+  } catch(e) { toast('❌ ' + e.message); }
+}
+
+/* ── Rejoindre via code ── */
+async function joinSession() {
   var code = (document.getElementById('join-inp').value || '').trim().toUpperCase();
   if (code.length !== 4) { toast('⚠️ Code à 4 lettres requis'); return; }
-  var raw = localStorage.getItem(COOP_PREF + code);
-  if (!raw) { toast('❌ Session introuvable — vérifie le code'); return; }
-  var sess = JSON.parse(raw);
-  if ((sess.answers || []).length >= sess.count) { toast('⚠️ Session complète'); return; }
-  coopSess = code;
-  coopRole = 'guest';
-  var num = (sess.participants || []).length + 1;
-  coopName = 'Participant ' + num;
-  sess.participants = sess.participants || [];
-  sess.participants.push({ name: coopName, done: false });
-  localStorage.setItem(COOP_PREF + code, JSON.stringify(sess));
-  coopStep = 0; coopAns = {};
-  document.getElementById('cq-code').textContent = coopSess;
-  document.getElementById('cq-name').textContent = coopName;
-  showPage('coop-quiz');
-  renderCoopStep();
+
+  toast('🔄 Recherche de la session…');
+  try {
+    var sess = await coopGet(code);
+    if (!sess) { toast('❌ Session introuvable — vérifie le code'); return; }
+    if ((sess.answers || []).length >= sess.count) { toast('⚠️ Session complète'); return; }
+
+    coopSess = code;
+    coopRole = 'guest';
+    var num = (sess.participants || []).length + 1;
+    coopName = 'Participant ' + num;
+
+    // Ajoute le participant dans Supabase
+    var parts = sess.participants || [];
+    parts.push({ name: coopName, done: false });
+    await coopUpdate(code, { participants: parts });
+
+    coopStep = 0; coopAns = {};
+    document.getElementById('cq-code').textContent = coopSess;
+    document.getElementById('cq-name').textContent = coopName;
+    showPage('coop-quiz');
+    renderCoopStep();
+  } catch(e) { toast('❌ ' + e.message); }
 }
 
+/* ── Quiz coopératif ── */
 function renderCoopStep() {
   var q = QS[coopStep];
-  var stepsEl = document.getElementById('coop-steps');
-  stepsEl.innerHTML = QS.map(function(_, i) {
-    return '<div class="sdot ' + (i === coopStep ? 'active' : i < coopStep ? 'done' : '') + '"></div>';
+  document.getElementById('coop-steps').innerHTML = QS.map(function(_, i) {
+    return '<div class="sdot ' + (i===coopStep?'active':i<coopStep?'done':'') + '"></div>';
   }).join('');
   document.getElementById('coop-qmeta').textContent  = coopName + ' — ' + q.meta;
   document.getElementById('coop-qtitle').textContent = q.title;
@@ -2212,27 +2252,26 @@ function renderCoopStep() {
 
   if (q.type === 'text') {
     var inp = document.createElement('input');
-    inp.type = 'text'; inp.className = 'qinput';
+    inp.type='text'; inp.className='qinput';
     inp.placeholder = q.placeholder || '';
     inp.value = coopAns[q.id] || '';
     inp.oninput = function() { coopAns[q.id] = this.value; };
-    inp.onkeydown = function(e) { if (e.key === 'Enter') coopNext(); };
+    inp.onkeydown = function(e) { if(e.key==='Enter') coopNext(); };
     var skip = document.createElement('button');
     skip.style.cssText = 'margin-top:8px;font-family:inherit;font-size:13px;color:var(--text3);background:none;border:none;cursor:pointer;padding:0;text-decoration:underline;display:block';
     skip.textContent = "Passer cette étape ⏭";
-    skip.onclick = function() { coopAns[q.id] = ''; coopStep++; renderCoopStep(); };
+    skip.onclick = function() { coopAns[q.id]=''; coopStep++; renderCoopStep(); };
     container.appendChild(inp);
     container.appendChild(skip);
     if (bnxt) bnxt.disabled = false;
   } else {
-    var grid = document.createElement('div');
-    grid.className = 'ogrid';
+    var grid = document.createElement('div'); grid.className='ogrid';
     q.opts.forEach(function(o) {
       if (o.v && o.v.includes && o.v.includes('même style') && !coopAns.lastfilm) return;
       var d = document.createElement('div');
-      d.className = 'opt' + (coopAns[q.id] === o.v ? ' sel' : '');
-      d.innerHTML = '<span class="oicon">' + o.i + '</span><span class="olab">' + o.l + '</span><span class="osub">' + o.s + '</span>';
-      d.onclick = function() { coopAns[q.id] = o.v; renderCoopStep(); };
+      d.className = 'opt' + (coopAns[q.id]===o.v ? ' sel' : '');
+      d.innerHTML = '<span class="oicon">'+o.i+'</span><span class="olab">'+o.l+'</span><span class="osub">'+o.s+'</span>';
+      d.onclick = function() { coopAns[q.id]=o.v; renderCoopStep(); };
       grid.appendChild(d);
     });
     container.appendChild(grid);
@@ -2240,147 +2279,154 @@ function renderCoopStep() {
   }
 
   var bbk = document.getElementById('coop-bbk');
-  if (bbk) bbk.style.visibility = coopStep === 0 ? 'hidden' : 'visible';
-  if (bnxt) bnxt.textContent = coopStep === QS.length - 1 ? 'Valider ✓' : 'Suivant →';
+  if (bbk) bbk.style.visibility = coopStep===0 ? 'hidden' : 'visible';
+  if (bnxt) bnxt.textContent = coopStep===QS.length-1 ? 'Valider ✓' : 'Suivant →';
 }
 
-function coopPrev() { if (coopStep > 0) { coopStep--; renderCoopStep(); } }
-
+function coopPrev() { if(coopStep>0){coopStep--;renderCoopStep();} }
 function coopNext() {
   var q = QS[coopStep];
-  if (q.type !== 'text' && !coopAns[q.id]) return;
-  if (coopStep < QS.length - 1) { coopStep++; renderCoopStep(); }
+  if (q.type!=='text' && !coopAns[q.id]) return;
+  if (coopStep < QS.length-1) { coopStep++; renderCoopStep(); }
   else saveCoopAnswers();
 }
 
-function saveCoopAnswers() {
-  var raw = localStorage.getItem(COOP_PREF + coopSess);
-  if (!raw) { toast('Session introuvable'); return; }
-  var sess = JSON.parse(raw);
-  sess.answers = sess.answers || [];
-  sess.answers.push({ name: coopName, ans: coopAns });
-  var p = (sess.participants || []).find(function(x) { return x.name === coopName; });
-  if (p) p.done = true;
-  localStorage.setItem(COOP_PREF + coopSess, JSON.stringify(sess));
-  toast('✅ Préférences enregistrées !');
+/* ── Sauvegarde les réponses dans Supabase ── */
+async function saveCoopAnswers() {
+  toast('💾 Sauvegarde…');
+  try {
+    var sess = await coopGet(coopSess);
+    if (!sess) { toast('Session introuvable'); return; }
 
-  if (coopRole === 'host') {
-    showCoopHost(sess);
-    renderCoopParticipants(sess);
-  } else {
-    showPage('coop-wait');
-  }
+    var answers = sess.answers || [];
+    answers.push({ name: coopName, ans: coopAns });
+
+    var parts = sess.participants || [];
+    var p = parts.find(function(x){ return x.name===coopName; });
+    if (p) p.done = true;
+
+    await coopUpdate(coopSess, { answers: answers, participants: parts });
+    toast('✅ Réponses enregistrées !');
+
+    if (coopRole === 'host') {
+      var sess2 = await coopGet(coopSess);
+      showCoopHost(sess2);
+    } else {
+      showPage('coop-wait');
+    }
+  } catch(e) { toast('❌ ' + e.message); }
 }
 
+/* ── IA groupe ── */
 async function launchCoopAI(sess) {
   showPage('qload');
   var profiles = (sess.answers || []).map(function(a) {
-    return '- ' + a.name + ' : humeur=' + (a.ans.mood||'?') + ', engagement=' + (a.ans.depth||'?') + ', univers=' + (a.ans.theme||'?') + ', tolerance=' + (a.ans.tolerance||'?') + (a.ans.lastfilm ? ', ref=' + a.ans.lastfilm : '');
+    return '- ' + a.name
+      + ' : humeur=' + (a.ans.mood||'?')
+      + ', engagement=' + (a.ans.depth||'?')
+      + ', univers=' + (a.ans.theme||'?')
+      + ', tolerance=' + (a.ans.tolerance||'?')
+      + (a.ans.lastfilm ? ', ref=' + a.ans.lastfilm : '');
   }).join('\n');
 
   var prompt = 'Tu es expert cinema. Groupe de ' + sess.count + ' personnes :\n' + profiles
-    + '\n\nPropose 8 films qui conviennent a TOUT le groupe. Cherche le terrain commun. '
-    + 'title, year, genre, duration, media_type (movie/tv), reason (pourquoi ca convient au groupe), tags (3 mots). '
+    + '\n\nPropose 8 films qui conviennent a TOUT le groupe. '
+    + 'Cherche le terrain commun. title, year, genre, duration, media_type (movie/tv), '
+    + 'reason (pourquoi ca convient au groupe), tags (3 mots). '
     + 'JSON uniquement : {"intro":"...","films":[{"title":"","year":"","genre":"","duration":"","media_type":"movie","reason":"","tags":["",""]}]}';
 
   var ai;
   try {
     var gk = localStorage.getItem('wm_groq') || '';
-    if (!gk) throw new Error('Cle Groq manquante');
+    if (!gk) throw new Error('Clé Groq manquante');
     var r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + gk },
-      body: JSON.stringify({ model: 'llama-3.3-70b-versatile', max_tokens: 3000, temperature: 0.7, messages: [{ role: 'user', content: prompt }] })
+      headers: { 'Content-Type':'application/json', 'Authorization':'Bearer '+gk },
+      body: JSON.stringify({ model:'llama-3.3-70b-versatile', max_tokens:3000, temperature:0.7, messages:[{role:'user',content:prompt}] })
     });
     var j = await r.json();
-    var txt = (j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content) || '';
+    var txt = (j.choices&&j.choices[0]&&j.choices[0].message&&j.choices[0].message.content)||'';
     var m = txt.match(/\{[\s\S]*\}/);
     if (!m) throw new Error('JSON introuvable');
     ai = JSON.parse(m[0]);
   } catch(e) {
-    toast('Erreur IA : ' + e.message);
-    showPage('coop-host');
+    toast('❌ Erreur IA : ' + e.message);
+    var sess2 = await coopGet(coopSess);
+    showCoopHost(sess2);
     return;
   }
 
-  for (var fi = 0; fi < ai.films.length; fi++) {
+  // Affiches TMDB
+  for (var fi=0; fi<ai.films.length; fi++) {
     var f = ai.films[fi];
-    f.poster = null; f.tmdbId = null;
+    f.poster=null; f.tmdbId=null;
     try {
-      var st = f.media_type === 'tv' ? 'tv' : 'movie';
-      var d = await tmdb('/search/' + st + '?query=' + enc(f.title) + '&include_adult=false');
-      if (d.results && d.results[0]) { f.poster = d.results[0].poster_path; f.tmdbId = d.results[0].id; }
-    } catch(e2) {}
+      var st = f.media_type==='tv'?'tv':'movie';
+      var d = await tmdb('/search/'+st+'?query='+enc(f.title)+'&include_adult=false');
+      if (d.results&&d.results[0]) { f.poster=d.results[0].poster_path; f.tmdbId=d.results[0].id; }
+    } catch(e2){}
   }
 
-  // Sauve les films
-  sess.films = ai.films; sess.intro = ai.intro;
-  localStorage.setItem(COOP_PREF + coopSess, JSON.stringify(sess));
+  // Sauve les films dans Supabase pour que les guests puissent voter
+  await coopUpdate(coopSess, { films: ai.films, intro: ai.intro });
   coopFilms = ai.films;
 
   showPage('coop-veto');
   renderVeto(ai.films, ai.intro);
 }
 
+/* ── Vote veto ── */
 function renderVeto(films, intro) {
   coopVetos = {};
-  document.getElementById('veto-sub').textContent = intro || 'Votez pour chaque film : ✅ OK · ❌ Veto';
+  document.getElementById('veto-sub').textContent = intro || '✅ OK pour toi · ❌ Veto';
   var grid = document.getElementById('veto-grid');
   grid.innerHTML = '';
   films.forEach(function(f, i) {
-    var item = document.createElement('div');
-    item.className = 'veto-item';
+    var item = document.createElement('div'); item.className='veto-item';
     var ph = f.poster
-      ? '<img class="veto-poster" src="' + IMGS + f.poster + '">'
+      ? '<img class="veto-poster" src="'+IMGS+f.poster+'">'
       : '<div class="veto-poster-ph">🎬</div>';
     item.innerHTML = ph
       + '<div class="veto-info">'
-      + '<div class="veto-title">' + esc(f.title) + '</div>'
-      + '<div class="veto-meta">' + esc([f.year, f.genre, f.duration].filter(Boolean).join(' · ')) + '</div>'
+      + '<div class="veto-title">'+esc(f.title)+'</div>'
+      + '<div class="veto-meta">'+esc([f.year,f.genre,f.duration].filter(Boolean).join(' · '))+'</div>'
       + '</div>'
       + '<div class="veto-btns">'
-      + '<button class="vbtn ok" id="vok-' + i + '" onclick="setVeto(' + i + ',\'ok\')">✅</button>'
-      + '<button class="vbtn no" id="vno-' + i + '" onclick="setVeto(' + i + ',\'no\')">❌</button>'
+      + '<button class="vbtn ok on" id="vok-'+i+'" onclick="setVeto('+i+',\'ok\')">✅</button>'
+      + '<button class="vbtn no"    id="vno-'+i+'" onclick="setVeto('+i+',\'no\')">❌</button>'
       + '</div>';
     grid.appendChild(item);
-    // OK par défaut
-    setVeto(i, 'ok');
+    coopVetos[i] = 'ok'; // OK par défaut
   });
 }
 
 function setVeto(idx, val) {
   coopVetos[idx] = val;
-  var ok = document.getElementById('vok-' + idx);
-  var no = document.getElementById('vno-' + idx);
-  if (ok) ok.classList.toggle('on', val === 'ok');
-  if (no) no.classList.toggle('on', val === 'no');
+  var ok = document.getElementById('vok-'+idx);
+  var no = document.getElementById('vno-'+idx);
+  if (ok) ok.classList.toggle('on', val==='ok');
+  if (no) no.classList.toggle('on', val==='no');
 }
 
 function submitVeto() {
-  var winners = coopFilms.filter(function(_, i) { return coopVetos[i] !== 'no'; });
-  var toShow = winners.length > 0 ? winners : coopFilms;
+  var winners = coopFilms.filter(function(_, i){ return coopVetos[i]!=='no'; });
+  var toShow  = winners.length > 0 ? winners : coopFilms;
 
   showPage('coop-res');
   document.getElementById('coop-intro').textContent = winners.length > 0
-    ? '🎉 ' + winners.length + ' film' + (winners.length > 1 ? 's' : '') + ' validé' + (winners.length > 1 ? 's' : '') + ' par le groupe !'
+    ? '🎉 ' + winners.length + ' film' + (winners.length>1?'s':'') + ' validé' + (winners.length>1?'s':'') + ' par le groupe !'
     : '⚠️ Aucun consensus — voici tous les films proposés.';
 
-  var list = document.getElementById('coop-films');
-  list.innerHTML = '';
+  var list = document.getElementById('coop-films'); list.innerHTML='';
   toShow.forEach(function(f) {
     var fake = {
-      id: f.tmdbId || 0,
-      poster_path: f.poster,
-      title: f.title,
-      overview: f.reason,
-      release_date: (f.year || '') + '-01-01',
-      vote_average: 0,
-      _t: f.media_type || 'movie'
+      id: f.tmdbId||0, poster_path: f.poster, title: f.title,
+      overview: f.reason, release_date: (f.year||'')+'-01-01',
+      vote_average: 0, _t: f.media_type||'movie'
     };
     list.appendChild(makeCard(fake));
   });
 }
-
 
 /* ══ PROFIL UTILISATEUR + SUPABASE ══ */
 var SUPA_URL = 'https://xvgjkrlvkgdmsuvnctdf.supabase.co';
