@@ -2405,8 +2405,10 @@ function deleteProfile() {
   localStorage.setItem('wm_wl', '[]');
   localStorage.setItem('wm_sl', '[]');
   updateCounts();
+  updateTabLabel();
   document.getElementById('profile-view').style.display   = 'none';
-  document.getElementById('profile-create').style.display = 'block';
+  document.getElementById('profile-create').style.display = 'none';
+  document.getElementById('profile-login').style.display  = 'block';
   toast('👋 Déconnecté. Entre ton code pour te reconnecter.');
 }
 
