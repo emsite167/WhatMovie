@@ -2182,39 +2182,69 @@ function submitVeto() {
 }
 
 
-/* ══ PROFIL UTILISATEUR ══ */
+/* ══ PROFIL UTILISATEUR + SUPABASE ══ */
+var SUPA_URL = 'https://xvgjkrlvkgdmsuvnctdf.supabase.co';
+var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh2Z2prcmx2a2dkbXN1dm5jdGRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0MTc5NjcsImV4cCI6MjA5NDk5Mzk2N30.mVBSyXxnj-8QVqWfVKCLe1nko92hGi9eW5qt1OIIQrA';
 var PROFILE_KEY = 'wm_profile';
+var currentProfile = null;
 
-function genProfileCode() {
+/* ── Requêtes Supabase ── */
+async function supaFetch(table, method, body, params) {
+  var url = SUPA_URL + '/rest/v1/' + table + (params ? '?' + params : '');
+  var opts = {
+    method: method || 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': SUPA_KEY,
+      'Authorization': 'Bearer ' + SUPA_KEY,
+      'Prefer': method === 'POST' ? 'return=representation' : ''
+    }
+  };
+  if(body) opts.body = JSON.stringify(body);
+  var r = await fetch(url, opts);
+  if(!r.ok) { var e = await r.text(); throw new Error(e); }
+  var txt = await r.text();
+  return txt ? JSON.parse(txt) : [];
+}
+
+/* ── Génère un code 8 chars ── */
+function genCode() {
   var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   var code = '';
   for(var i=0;i<8;i++) code += chars[Math.floor(Math.random()*chars.length)];
   return code;
 }
 
-function initProfile() {
-  var p = getProfile();
-  if(p) {
-    renderProfileView(p);
+/* ── Init profil au démarrage ── */
+async function initProfile() {
+  var local = localStorage.getItem(PROFILE_KEY);
+  if(local) {
+    currentProfile = JSON.parse(local);
+    await syncFromSupabase(currentProfile.code);
+    renderProfileView(currentProfile);
   } else {
     document.getElementById('profile-create').style.display = 'block';
+    document.getElementById('profile-view').style.display   = 'none';
+    document.getElementById('profile-login').style.display  = 'none';
   }
-  updateProfileStats();
 }
 
-function getProfile() {
-  var raw = localStorage.getItem(PROFILE_KEY);
-  return raw ? JSON.parse(raw) : null;
+/* ── Crée un nouveau profil ── */
+async function createProfile() {
+  var code = genCode();
+  try {
+    await supaFetch('profiles', 'POST', { code: code });
+    var profile = { code: code, created: new Date().toLocaleDateString('fr-FR') };
+    localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+    currentProfile = profile;
+    renderProfileView(profile);
+    toast('✨ Profil créé ! Ton code : ' + code);
+  } catch(e) {
+    toast('❌ Erreur création profil : ' + e.message);
+  }
 }
 
-function createProfile() {
-  var code = genProfileCode();
-  var profile = { code: code, created: new Date().toLocaleDateString('fr-FR') };
-  localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
-  renderProfileView(profile);
-  toast('✨ Profil créé ! Note bien ton code : ' + code);
-}
-
+/* ── Affiche la vue profil ── */
 function renderProfileView(p) {
   document.getElementById('profile-create').style.display = 'none';
   document.getElementById('profile-login').style.display  = 'none';
@@ -2223,6 +2253,7 @@ function renderProfileView(p) {
   updateProfileStats();
 }
 
+/* ── Stats ── */
 function updateProfileStats() {
   var wlEl = document.getElementById('stat-wl');
   var slEl = document.getElementById('stat-sl');
@@ -2230,53 +2261,93 @@ function updateProfileStats() {
   if(slEl) slEl.textContent = sl.length;
 }
 
+/* ── Copie le code ── */
 function copyProfileCode() {
-  var p = getProfile();
+  var p = currentProfile || JSON.parse(localStorage.getItem(PROFILE_KEY)||'null');
   if(!p) return;
-  navigator.clipboard.writeText(p.code).then(function(){
-    toast('📋 Code copié : ' + p.code);
-  });
+  navigator.clipboard.writeText(p.code).then(function(){ toast('📋 Code copié : ' + p.code); });
 }
 
-function restoreProfile() {
-  // Fonctionne depuis la page profil ou depuis login
+/* ── Sauvegarde auto vers Supabase ── */
+async function autoSaveProfile() {
+  var p = currentProfile || JSON.parse(localStorage.getItem(PROFILE_KEY)||'null');
+  if(!p) return;
+  // Sauvegarde locale aussi
+  localStorage.setItem('wm_wl_' + p.code, JSON.stringify(wl));
+  localStorage.setItem('wm_sl_' + p.code, JSON.stringify(sl));
+  updateProfileStats();
+  // Sync Supabase en arrière-plan (non bloquant)
+  syncToSupabase(p.code).catch(function(){});
+}
+
+async function syncToSupabase(code) {
+  // Supprime et réinsère watchlist
+  await supaFetch('watchlist', 'DELETE', null, 'profile_code=eq.' + code);
+  if(wl.length > 0) {
+    var rows = wl.map(function(f) {
+      return { profile_code: code, film_id: String(f.id), title: f.title||'', poster: f.poster||'', year: f.year||'', genre: f.genre||'', media: f.media||'movie' };
+    });
+    await supaFetch('watchlist', 'POST', rows);
+  }
+  // Supprime et réinsère seen
+  await supaFetch('seen', 'DELETE', null, 'profile_code=eq.' + code);
+  if(sl.length > 0) {
+    var rows2 = sl.map(function(f) {
+      return { profile_code: code, film_id: String(f.id), title: f.title||'', poster: f.poster||'', year: f.year||'', genre: f.genre||'', media: f.media||'movie', note: f.note||0, avis: f.avis||'', seen_date: f.date||'' };
+    });
+    await supaFetch('seen', 'POST', rows2);
+  }
+}
+
+async function syncFromSupabase(code) {
+  try {
+    var wlData = await supaFetch('watchlist', 'GET', null, 'profile_code=eq.' + code + '&order=added_at.desc');
+    var slData = await supaFetch('seen',      'GET', null, 'profile_code=eq.' + code + '&order=added_at.desc');
+    if(wlData.length > 0) {
+      wl = wlData.map(function(r) { return { id: r.film_id, title: r.title, poster: r.poster, year: r.year, genre: r.genre, media: r.media }; });
+      localStorage.setItem('wm_wl', JSON.stringify(wl));
+    }
+    if(slData.length > 0) {
+      sl = slData.map(function(r) { return { id: r.film_id, title: r.title, poster: r.poster, year: r.year, genre: r.genre, media: r.media, note: r.note, avis: r.avis, date: r.seen_date }; });
+      localStorage.setItem('wm_sl', JSON.stringify(sl));
+    }
+    updateCounts();
+  } catch(e) { /* silencieux */ }
+}
+
+/* ── Restaure un profil avec son code ── */
+async function restoreProfile() {
   var inp = document.getElementById('restore-inp') || document.getElementById('login-inp');
   if(!inp) return;
   var code = inp.value.trim().toUpperCase();
   if(code.length !== 8) { toast('⚠️ Le code fait 8 caractères'); return; }
-
-  // Cherche une sauvegarde dans localStorage avec ce code
-  var savedWL  = localStorage.getItem('wm_wl_' + code);
-  var savedSL  = localStorage.getItem('wm_sl_' + code);
-
-  if(savedWL || savedSL) {
-    // Restaure les données
-    if(savedWL) { localStorage.setItem('wm_wl', savedWL); wl = JSON.parse(savedWL); }
-    if(savedSL) { localStorage.setItem('wm_sl', savedSL); sl = JSON.parse(savedSL); }
+  toast('🔄 Recherche du profil…');
+  try {
+    var profiles = await supaFetch('profiles', 'GET', null, 'code=eq.' + code);
+    if(!profiles.length) { toast('❌ Aucun profil trouvé avec ce code.'); return; }
     var profile = { code: code, created: 'Restauré' };
     localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+    currentProfile = profile;
+    await syncFromSupabase(code);
     updateCounts();
     renderProfileView(profile);
+    renderWL(); renderSL();
     toast('✅ Profil restauré ! ' + wl.length + ' films à voir, ' + sl.length + ' films vus.');
-  } else {
-    toast('❌ Aucun profil trouvé avec ce code.');
-  }
+  } catch(e) { toast('❌ Erreur : ' + e.message); }
 }
 
+/* ── Supprime le profil local ── */
 function deleteProfile() {
-  if(!confirm('Supprimer ton profil ? Tes films sauvegardés resteront sur cet appareil.')) return;
+  if(!confirm('Déconnecter ce profil ? Tes données restent sauvegardées sur Supabase.')) return;
   localStorage.removeItem(PROFILE_KEY);
-  document.getElementById('profile-view').style.display  = 'none';
+  currentProfile = null;
+  wl = []; sl = [];
+  localStorage.setItem('wm_wl', '[]');
+  localStorage.setItem('wm_sl', '[]');
+  updateCounts();
+  document.getElementById('profile-view').style.display   = 'none';
   document.getElementById('profile-create').style.display = 'block';
-  toast('🗑 Profil supprimé');
-}
-
-// Sauvegarde automatique liée au code profil
-function autoSaveProfile() {
-  var p = getProfile();
-  if(!p) return;
-  localStorage.setItem('wm_wl_' + p.code, JSON.stringify(wl));
-  localStorage.setItem('wm_sl_' + p.code, JSON.stringify(sl));
+  toast('👋 Déconnecté. Entre ton code pour te reconnecter.');
 }
 
 /* ══ UTILS ══ */
