@@ -2250,7 +2250,10 @@ async function initProfile() {
     await syncFromSupabase(currentProfile.code);
     renderProfileView(currentProfile);
   } else {
-    showProfileCreate();
+    // Pas de profil local → affiche login (avec option de créer)
+    document.getElementById('profile-create').style.display = 'none';
+    document.getElementById('profile-view').style.display   = 'none';
+    document.getElementById('profile-login').style.display  = 'block';
   }
 }
 
@@ -2414,7 +2417,17 @@ function deleteProfile() {
 
 
 /* ══ AVATARS & ÉDITION PROFIL ══ */
-var AVATARS = ['🎬','🎭','🎥','🍿','⭐','🏆','👁','🎞','🌙','🔥','💫','🎲','🦁','🐺','🦊','🐉','🚀','🌊','🌴','⚡'];
+var AVATARS = [
+  // Cinéma culte
+  '🧙','⚔️','🚀','🦕','🦈','👽','🤖','🧟','🧛','🕵️',
+  '🥷','🧝','🧜','🦸','🦹','🪄','💣','🔫','🩸','👻',
+  // Univers films
+  '🎬','🎭','🎥','🍿','⭐','🏆','👁','🎞','🌙','🔥',
+  // Personnages / ambiances
+  '💫','🎲','🦁','🐺','🦊','🐉','🌊','🌴','⚡','🎸',
+  // Bonus geek/cinéphile
+  '🪖','🛸','🌋','💀','🗡️','🔮','🎭','📽️','🎫','🌟'
+];
 var _selectedAvatar = '🎬';
 
 function renderAvatarGrid(containerId, selected) {
