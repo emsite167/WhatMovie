@@ -954,7 +954,8 @@ window.addEventListener('DOMContentLoaded', async () => {
   updateCounts();
   document.getElementById('qform').style.display='none';
   renderStep();
-  initProfile();
+  await initProfile();
+  updateTabLabel();
   document.addEventListener('click', e => { if(!document.getElementById('swrap').contains(e.target)) closeDrop(); });
   // Vérifie si join= dans l'URL (mode coop)
   var urlParams = new URLSearchParams(window.location.search);
@@ -963,7 +964,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 });
 
 function goHome(){ clearSearch(); document.getElementById('sinp').value=''; document.getElementById('sbtn').disabled=true; }
-function switchTab(n){ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); document.getElementById('page-'+n).classList.add('active'); document.getElementById('tab-'+n).classList.add('active'); if(n==='profile') initProfile(); }
+function switchTab(n){ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); document.getElementById('page-'+n).classList.add('active'); document.getElementById('tab-'+n).classList.add('active'); if(n==='profile') initProfile(); updateTabLabel(); }
 
 /* ══ AUTOCOMPLETE ══ */
 let sugT=null, sugI=-1, sugL=[];
@@ -2288,6 +2289,7 @@ async function createProfile() {
   // Met à jour le pseudo/avatar dans Supabase
   try { await supaFetch('profiles', 'PATCH', { pseudo: profile.pseudo, avatar: profile.avatar }, 'code=eq.' + code); } catch(e) {}
   renderProfileView(profile);
+  updateTabLabel();
   toast('✨ Profil créé ! Ton code : ' + code);
 }
 
@@ -2308,6 +2310,7 @@ function renderProfileView(p) {
   _selectedAvatar = p.avatar || '🎬';
   renderAvatarGrid('avatar-edit-grid', p.avatar || '🎬');
   updateProfileStats();
+  updateTabLabel();
 }
 
 /* ── Stats ── */
@@ -2433,7 +2436,7 @@ function showProfileCreate() {
   document.getElementById('profile-login').style.display  = 'none';
   document.getElementById('profile-view').style.display   = 'none';
   _selectedAvatar = '🎬';
-  renderAvatarGrid('avatar-grid', '🎬');
+  setTimeout(function(){ renderAvatarGrid('avatar-grid', '🎬'); }, 50);
 }
 
 async function saveProfileEdit() {
@@ -2448,6 +2451,18 @@ async function saveProfileEdit() {
     toast('✅ Profil mis à jour !');
   } catch(e) { toast('❌ Erreur : ' + e.message); }
   renderProfileView(currentProfile);
+}
+
+
+function updateTabLabel() {
+  var tabEl = document.getElementById('tab-profile');
+  if(!tabEl) return;
+  var p = currentProfile || JSON.parse(localStorage.getItem(PROFILE_KEY)||'null');
+  if(p && p.pseudo) {
+    tabEl.textContent = (p.avatar||'👤') + ' ' + p.pseudo;
+  } else {
+    tabEl.textContent = '👤 Mon Profil';
+  }
 }
 
 /* ══ UTILS ══ */
