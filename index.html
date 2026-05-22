@@ -347,18 +347,19 @@ footer a{color:var(--text3);text-decoration:underline}
     <button class="tab active" id="tab-search" onclick="switchTab('search')">🔍 Recherche</button>
     <button class="tab"        id="tab-quiz"   onclick="switchTab('quiz')">✦ Trouve ton film</button>
     <button class="tab" id="tab-cine" onclick="switchTab('cine')">🎬 Ma Cinémathèque</button>
+    <button class="tab" id="tab-profile" onclick="switchTab('profile')">👤 Mon Profil</button>
   </nav>
 </header>
 
-<div id="setup-banner">
-  <div class="setup-text"><strong>⚙️ Configuration</strong> — Entre tes clés API gratuites pour activer toutes les fonctionnalités.</div>
+<div id="setup-banner" style="display:none">
+  <div class="setup-text"><strong>⚙️ Configuration manuelle</strong> — Les clés API n'ont pas pu être chargées automatiquement.</div>
   <div style="display:flex;flex-direction:column;gap:8px">
     <div class="setup-row">
       <input class="setup-inp" id="tmdb-inp" type="text" placeholder="Clé TMDB (themoviedb.org/settings/api)"/>
       <button class="btn-save" onclick="saveKey()">💾 TMDB</button>
     </div>
     <div class="setup-row">
-      <input class="setup-inp" id="groq-inp" type="text" placeholder="Clé Groq (console.groq.com) — pour le quiz IA"/>
+      <input class="setup-inp" id="groq-inp" type="text" placeholder="Clé Groq (console.groq.com)"/>
       <button class="btn-save" onclick="saveGroqKey()">💾 Groq</button>
     </div>
   </div>
@@ -527,6 +528,64 @@ footer a{color:var(--text3);text-decoration:underline}
       <div id="items-s"></div>
     </div>
   </div>
+
+  <!-- PAGE PROFIL -->
+  <div class="page" id="page-profile">
+    <h1 class="ptitle">Mon Profil</h1>
+    <p class="psub">Ton code personnel pour retrouver ta cinémathèque sur n'importe quel appareil.</p>
+
+    <div id="profile-create" style="display:none">
+      <div class="session-box" style="max-width:440px">
+        <div class="coop-step-label">Crée ton profil WhatMovie</div>
+        <p style="font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:1.5rem">
+          Un code unique à 8 caractères sera généré. <strong>Note-le bien</strong> — il te permettra de retrouver ta liste "À voir", tes films vus et tes notes sur n'importe quel appareil.
+        </p>
+        <button class="btn-coop" onclick="createProfile()">✨ Créer mon profil</button>
+      </div>
+    </div>
+
+    <div id="profile-view" style="display:none">
+      <div class="session-box" style="max-width:440px">
+        <div class="coop-step-label">Ton code profil</div>
+        <div class="session-code" id="profile-code-disp" style="font-size:2rem;letter-spacing:.25em"></div>
+        <p style="font-size:13px;color:var(--text3);text-align:center;margin-top:.5rem">📋 Clique pour copier</p>
+        <button class="btn-coop-sec" onclick="copyProfileCode()">📋 Copier le code</button>
+        <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border)">
+          <div class="coop-step-label">Statistiques</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:.8rem">
+            <div style="background:var(--abg);border:1px solid rgba(196,75,43,.2);border-radius:12px;padding:16px;text-align:center">
+              <div style="font-size:2rem;font-weight:700;color:var(--accent)" id="stat-wl">0</div>
+              <div style="font-size:12px;color:var(--text3);margin-top:4px">Films à voir</div>
+            </div>
+            <div style="background:rgba(42,122,78,.08);border:1px solid rgba(42,122,78,.2);border-radius:12px;padding:16px;text-align:center">
+              <div style="font-size:2rem;font-weight:700;color:var(--green)" id="stat-sl">0</div>
+              <div style="font-size:12px;color:var(--text3);margin-top:4px">Films vus</div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border)">
+          <div class="coop-step-label">Changer d'appareil</div>
+          <p style="font-size:13px;color:var(--text2);margin-bottom:.8rem">Entre ton code sur un autre appareil pour retrouver ton profil.</p>
+          <div style="display:flex;gap:8px">
+            <input class="join-inp" id="restore-inp" maxlength="8" placeholder="ABCD1234" style="font-size:1.2rem;letter-spacing:.15em;margin:0;flex:1" oninput="this.value=this.value.toUpperCase()"/>
+            <button class="btn-coop" style="width:auto;padding:10px 18px;margin:0" onclick="restoreProfile()">Restaurer</button>
+          </div>
+        </div>
+        <button class="btn-coop-sec" style="margin-top:1rem;color:var(--accent);border-color:rgba(196,75,43,.3)" onclick="deleteProfile()">🗑 Supprimer mon profil</button>
+      </div>
+    </div>
+
+    <div id="profile-login" style="display:none">
+      <div class="session-box" style="max-width:440px">
+        <div class="coop-step-label">Retrouve ton profil</div>
+        <p style="font-size:14px;color:var(--text2);margin-bottom:1rem">Entre ton code à 8 caractères pour retrouver ta cinémathèque.</p>
+        <input class="join-inp" id="login-inp" maxlength="8" placeholder="ABCD1234" style="font-size:1.4rem;letter-spacing:.2em" oninput="this.value=this.value.toUpperCase()"/>
+        <button class="btn-coop" onclick="restoreProfile()">Retrouver mon profil →</button>
+        <button class="btn-coop-sec" onclick="createProfile()">Créer un nouveau profil</button>
+      </div>
+    </div>
+  </div>
+
 </main>
 
 <!-- MODAL -->
@@ -568,13 +627,14 @@ footer a{color:var(--text3);text-decoration:underline}
 
 let wl = JSON.parse(localStorage.getItem('wm_wl')||'[]');
 let sl = JSON.parse(localStorage.getItem('wm_sl')||'[]');
-function saveWL(){ localStorage.setItem('wm_wl',JSON.stringify(wl)); }
-function saveSL(){ localStorage.setItem('wm_sl',JSON.stringify(sl)); }
+function saveWL(){ localStorage.setItem('wm_wl',JSON.stringify(wl)); autoSaveProfile(); }
+function saveSL(){ localStorage.setItem('wm_sl',JSON.stringify(sl)); autoSaveProfile(); }
 function inWL(id){ return wl.some(function(f){return String(f.id)===String(id);}); }
 function inSL(id){ return sl.some(function(f){return String(f.id)===String(id);}); }
 function updateCounts(){
   document.getElementById('cnt-w').textContent = wl.length;
   document.getElementById('cnt-s').textContent = sl.length;
+  updateProfileStats();
 }
 function toast(msg){
   var t=document.getElementById('wm-toast');
@@ -855,20 +915,38 @@ async function tmdb(path, lang='fr-FR'){
 }
 
 /* ══ INIT ══ */
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async () => {
+  // Charge les clés depuis Vercel en priorité
+  try {
+    var kr = await fetch('/api/keys');
+    if(kr.ok) {
+      var kdata = await kr.json();
+      if(kdata.tmdb) { localStorage.setItem('wm_k', kdata.tmdb); }
+      if(kdata.groq) { localStorage.setItem('wm_groq', kdata.groq); }
+    }
+  } catch(e) {}
+
+  // Fallback : clés locales
   const k = getKey();
-  if(k) document.getElementById('tmdb-inp').value = k;
   const gk = localStorage.getItem('wm_groq') || '';
-  if(gk) document.getElementById('groq-inp').value = gk;
-  if(k && gk) document.getElementById('setup-banner').style.display = 'none';
+  if(k) { document.getElementById('tmdb-inp').value = k; }
+  if(gk) { document.getElementById('groq-inp').value = gk; }
+  // Montre le banner seulement si aucune clé disponible
+  if(!k && !gk) document.getElementById('setup-banner').style.display = 'flex';
+
   updateCounts();
   document.getElementById('qform').style.display='none';
   renderStep();
+  initProfile();
   document.addEventListener('click', e => { if(!document.getElementById('swrap').contains(e.target)) closeDrop(); });
+  // Vérifie si join= dans l'URL (mode coop)
+  var urlParams = new URLSearchParams(window.location.search);
+  var joinCode = urlParams.get('join');
+  if(joinCode) { switchTab('quiz'); showCoopJoin(); document.getElementById('join-inp').value = joinCode.toUpperCase(); }
 });
 
 function goHome(){ clearSearch(); document.getElementById('sinp').value=''; document.getElementById('sbtn').disabled=true; }
-function switchTab(n){ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); document.getElementById('page-'+n).classList.add('active'); document.getElementById('tab-'+n).classList.add('active'); }
+function switchTab(n){ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); document.getElementById('page-'+n).classList.add('active'); document.getElementById('tab-'+n).classList.add('active'); if(n==='profile') initProfile(); }
 
 /* ══ AUTOCOMPLETE ══ */
 let sugT=null, sugI=-1, sugL=[];
@@ -2101,6 +2179,104 @@ function submitVeto() {
     };
     list.appendChild(makeCard(fake));
   });
+}
+
+
+/* ══ PROFIL UTILISATEUR ══ */
+var PROFILE_KEY = 'wm_profile';
+
+function genProfileCode() {
+  var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  var code = '';
+  for(var i=0;i<8;i++) code += chars[Math.floor(Math.random()*chars.length)];
+  return code;
+}
+
+function initProfile() {
+  var p = getProfile();
+  if(p) {
+    renderProfileView(p);
+  } else {
+    document.getElementById('profile-create').style.display = 'block';
+  }
+  updateProfileStats();
+}
+
+function getProfile() {
+  var raw = localStorage.getItem(PROFILE_KEY);
+  return raw ? JSON.parse(raw) : null;
+}
+
+function createProfile() {
+  var code = genProfileCode();
+  var profile = { code: code, created: new Date().toLocaleDateString('fr-FR') };
+  localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+  renderProfileView(profile);
+  toast('✨ Profil créé ! Note bien ton code : ' + code);
+}
+
+function renderProfileView(p) {
+  document.getElementById('profile-create').style.display = 'none';
+  document.getElementById('profile-login').style.display  = 'none';
+  document.getElementById('profile-view').style.display   = 'block';
+  document.getElementById('profile-code-disp').textContent = p.code;
+  updateProfileStats();
+}
+
+function updateProfileStats() {
+  var wlEl = document.getElementById('stat-wl');
+  var slEl = document.getElementById('stat-sl');
+  if(wlEl) wlEl.textContent = wl.length;
+  if(slEl) slEl.textContent = sl.length;
+}
+
+function copyProfileCode() {
+  var p = getProfile();
+  if(!p) return;
+  navigator.clipboard.writeText(p.code).then(function(){
+    toast('📋 Code copié : ' + p.code);
+  });
+}
+
+function restoreProfile() {
+  // Fonctionne depuis la page profil ou depuis login
+  var inp = document.getElementById('restore-inp') || document.getElementById('login-inp');
+  if(!inp) return;
+  var code = inp.value.trim().toUpperCase();
+  if(code.length !== 8) { toast('⚠️ Le code fait 8 caractères'); return; }
+
+  // Cherche une sauvegarde dans localStorage avec ce code
+  var savedWL  = localStorage.getItem('wm_wl_' + code);
+  var savedSL  = localStorage.getItem('wm_sl_' + code);
+
+  if(savedWL || savedSL) {
+    // Restaure les données
+    if(savedWL) { localStorage.setItem('wm_wl', savedWL); wl = JSON.parse(savedWL); }
+    if(savedSL) { localStorage.setItem('wm_sl', savedSL); sl = JSON.parse(savedSL); }
+    var profile = { code: code, created: 'Restauré' };
+    localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+    updateCounts();
+    renderProfileView(profile);
+    toast('✅ Profil restauré ! ' + wl.length + ' films à voir, ' + sl.length + ' films vus.');
+  } else {
+    toast('❌ Aucun profil trouvé avec ce code.');
+  }
+}
+
+function deleteProfile() {
+  if(!confirm('Supprimer ton profil ? Tes films sauvegardés resteront sur cet appareil.')) return;
+  localStorage.removeItem(PROFILE_KEY);
+  document.getElementById('profile-view').style.display  = 'none';
+  document.getElementById('profile-create').style.display = 'block';
+  toast('🗑 Profil supprimé');
+}
+
+// Sauvegarde automatique liée au code profil
+function autoSaveProfile() {
+  var p = getProfile();
+  if(!p) return;
+  localStorage.setItem('wm_wl_' + p.code, JSON.stringify(wl));
+  localStorage.setItem('wm_sl_' + p.code, JSON.stringify(sl));
 }
 
 /* ══ UTILS ══ */
